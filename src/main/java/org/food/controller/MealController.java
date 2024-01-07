@@ -38,7 +38,7 @@ public class MealController {
         mealService.deleteMealById(id);
     }
 
-    @PutMapping("/{id]")
+    @PutMapping("/{id}")
     void update(@RequestBody MealDto mealDto){
 
         mealService.update(mealDto);

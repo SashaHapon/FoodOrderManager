@@ -34,14 +34,14 @@ public class OrderController {
         orderService.addMeals(orderId, mealsId);
     }
 
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     public void removeMeals(@RequestParam("id") Integer orderId,
                             @RequestBody Integer[] mealsId) {
 
         orderService.removeMeals(orderId, mealsId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/")
     public List<MealDto> getAllMeals(@RequestParam("id") Integer id) {
 
         return orderService.getAllMeals(id);
