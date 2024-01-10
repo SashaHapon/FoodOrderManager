@@ -1,9 +1,6 @@
 package org.food.exception;
 
-import org.food.exception.classes.BadRequestException;
-import org.food.exception.classes.ErrorMessage;
-import org.food.exception.classes.ResourceNotFoundException;
-import org.food.exception.classes.TokenRefreshException;
+import org.food.exception.classes.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,6 +48,16 @@ public class ControllerExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
                 badRequestException.getMessage(),
+                request.getDescription(false));
+    }
+
+    @ExceptionHandler(value = RottenTokenException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorMessage rottenTokenException(RottenTokenException rottenTokenException, WebRequest request){
+        return new ErrorMessage(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                new Date(),
+                rottenTokenException.getMessage(),
                 request.getDescription(false));
     }
 }
