@@ -1,11 +1,12 @@
 package org.food.security.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.food.security.payload.request.RefreshTokenRequest;
 import org.food.security.payload.request.SignInRequest;
 import org.food.security.payload.request.SignUpRequest;
 import org.food.security.service.AuthenticationService;
-import org.food.security.service.UserDetailsImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +32,10 @@ public class AuthController {
         return authenticationService.signIn(request);
     }
 
-    @GetMapping("/refreshToken")
-    public ResponseEntity refreshToken(String refreshToken, UserDetailsImpl userDetails) {
-        return authenticationService.refreshToken(refreshToken, userDetails);
+    @Transactional
+    @PostMapping("/refresh")
+    public ResponseEntity refreshToken(@RequestBody @Valid RefreshTokenRequest refreshToken) {
+        System.out.println("/auth");
+        return authenticationService.refreshToken(refreshToken);
     }
 }

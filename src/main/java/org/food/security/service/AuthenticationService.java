@@ -2,11 +2,12 @@ package org.food.security.service;
 
 import lombok.RequiredArgsConstructor;
 import org.food.exception.classes.TokenRefreshException;
-import org.food.security.dto.UserInfoResponce;
+import org.food.security.dto.UserInfo;
 import org.food.security.model.RefreshToken;
 import org.food.security.model.Role;
 import org.food.security.model.User;
 
+import org.food.security.payload.request.RefreshTokenRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.food.security.payload.request.SignInRequest;
 import org.food.security.payload.request.SignUpRequest;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -48,11 +48,11 @@ public class AuthenticationService {
         userService.create(user);
 
         String accessToken = jwtService.generateToken(user);
-        String refreshToken = refreshTokenService.createRefreshToken(user.getId()).getToken();
+        String refreshToken = refreshTokenService.createRefreshToken(request).getToken();
 
         return ResponseEntity.ok().header("AccessToken", accessToken)
                 .header("RefreshToken", refreshToken)
-                .body(new UserInfoResponce(user.getId(),
+                .body(new UserInfo(user.getId(),
                         user.getUsername(),
                         user.getEmail(),
                         user.getRole()));
@@ -80,15 +80,19 @@ public class AuthenticationService {
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity refreshToken(String refreshToken, UserDetailsImpl userDetails){
-        Optional<?> refreshedToken = refreshTokenService.findByToken(refreshToken);
+    public ResponseEntity refreshToken(RefreshTokenRequest request){
+        Optional<?> refreshedToken = refreshTokenService.findByToken(request.getRefreshToken());
         if (refreshedToken != null) {
-            refreshTokenService.deleteByUserId(userDetails.getId());
-            String newAuthToken = jwtService.generateToken(userDetails);
-            RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-            return ResponseEntity.ok().header("").build();
+            User user = userService.getByUsername(request.getUserInfo().getUsername());
+
+            String newAuthToken = jwtService.generateToken(user);
+            RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user);
+
+            return ResponseEntity.ok().header("accessToken", newAuthToken)
+                    .header("refreshToken", newRefreshToken.getToken())
+                    .build();
         } else {
-            throw new TokenRefreshException(refreshToken, "RefreshTokenError");
+            throw new TokenRefreshException(request.getUserInfo().getUsername(), ":RefreshTokenError");
         }
     }
 }
