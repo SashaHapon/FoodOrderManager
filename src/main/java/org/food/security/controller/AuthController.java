@@ -1,43 +1,47 @@
 package org.food.security.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import org.food.security.payload.request.LoginRequest;
-import org.food.security.payload.request.SignupRequest;
-import org.food.security.payload.response.MessageResponse;
-import org.food.security.security.service.api.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.food.security.dto.UserDto;
+import org.food.security.payload.request.RefreshTokenRequest;
+import org.food.security.payload.request.SignInRequest;
+import org.food.security.payload.request.SignUpRequest;
+import org.food.security.payload.responce.JwtAuthenticationResponse;
+import org.food.security.service.AuthenticationService;
+import org.food.security.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private UserService userService;
+    private final AuthenticationService authenticationService;
+    private  final UserService userService;
 
-    @Autowired
-    private AuthController(UserService userService){
-        this.userService = userService;
+    @PostMapping("/sign-up")
+    public ResponseEntity signUp(@RequestBody @Valid SignUpRequest request) {
+
+
+        JwtAuthenticationResponse response = authenticationService.signUp(request);
+        UserDto userDto = userService.getUserDtoByUsername(response.getUserName());
+        return ResponseEntity.ok().header("AccessToken", response.getAccessToken())
+                .header("RefreshToken", response.getRefreshToken())
+                .body(userDto);
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-        return userService.authenticateUser(loginRequest);
+    @PostMapping("/sign-in")
+    public ResponseEntity signIn(@RequestBody @Valid SignInRequest request) {
+        JwtAuthenticationResponse response = authenticationService.signIn(request);
+        return ResponseEntity.ok().header("accessToken", response.getAccessToken()).build();
     }
 
-    @PostMapping("/signup")
-    public MessageResponse registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        return userService.registerUser(signUpRequest);
-     }
-
-    @PostMapping("/signout")
-    public ResponseEntity<?> logoutUser() {
-        return userService.logoutUser();
-    }
-
-    @PostMapping("/refreshtoken")
-    public ResponseEntity<?> refreshtoken(HttpServletRequest request) {
-        return  userService.refreshToken(request);
+    @Transactional
+    @PostMapping("/refresh")
+    public ResponseEntity refreshToken(@RequestBody @Valid RefreshTokenRequest refreshToken) {
+        JwtAuthenticationResponse response = authenticationService.refreshToken(refreshToken);
+        return ResponseEntity.ok().header("RefreshToken", response.getRefreshToken()).build();
     }
 }

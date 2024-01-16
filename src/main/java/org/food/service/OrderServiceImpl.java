@@ -1,131 +1,113 @@
 package org.food.service;
 
-import org.food.api.repository.GenericDao;
+import lombok.RequiredArgsConstructor;
+import org.food.api.repository.AccountRepository;
+import org.food.api.repository.MealRepository;
+import org.food.api.repository.OrderRepository;
 import org.food.api.service.OrderService;
-import org.food.dao.OrderRepositoryImpl;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
-import org.food.model.Account;
 import org.food.model.Meal;
 import org.food.model.Order;
-import org.food.utils.MyException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    private GenericDao abstractDao;
+    private final OrderRepository orderRepository;
 
-    @Autowired
-    public OrderServiceImpl(ModelMapper modelMapper, OrderRepositoryImpl orderRepository) {
+    private final AccountRepository accountRepository;
 
-        this.modelMapper = modelMapper;
-        this.abstractDao = orderRepository;
-    }
-
+    private final MealRepository mealRepository;
 
     @Override
-    @Transactional
-    public void createOrder(OrderDto orderDto) {
+    public void createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
-            Order order = new Order();
-            order.setAccount(modelMapper.map(orderDto.getAccountDto(), Account.class));
-            order.setMeals(orderDto.getMeals());
-            abstractDao.create(order);
-    }
+        Order order = new Order();
+        order.setAccount(accountRepository.findById(accountId));
+        Type listType = new TypeToken<List<Meal>>() {
+        }.getType();
+        List<Meal> meals = modelMapper.map(mealDtoList, listType);
 
-    @Override
-    @Transactional
-    public OrderDto getOrder(OrderDto orderDto) {
-
-        return modelMapper.map(abstractDao.findById(orderDto.getId()), OrderDto.class);
+        orderPriceSum(meals);
+        order.setMeals(meals);
+        order.setOrderSum(orderPriceSum(meals));
+        order.setCookingTimeSum(cookingTimeSum(meals));
+        orderRepository.create(order);
     }
 
     @Override
-    @Transactional
-    public void addMeal(OrderDto orderDto) {
+    public OrderDto getOrder(Integer id) {
 
-        Meal meal = modelMapper.map(orderDto.getMealDto(), Meal.class);
-        Order order = (Order) abstractDao.findById(orderDto.getId());
-
-        order.getMeals().add(meal);
-        order.setOrderSum(order.getOrderSum() + meal.getPrice());
-        order.setCookingTimeSum(order.getCookingTimeSum() + meal.getTime());
-        abstractDao.update(order);
+        return modelMapper.map(orderRepository.findById(id), OrderDto.class);
     }
 
     @Override
-    @Transactional
-    public void removeMeal(OrderDto orderDto) {
+    public void addMeals(Integer orderId, Integer[] mealsId) {
 
-        Meal meal = modelMapper.map(orderDto.getMealDto(), Meal.class);
-        Order order = (Order) abstractDao.findById(orderDto.getId());
+        Order order = orderRepository.findById(orderId);
+        List<Meal> meals = orderRepository.findById(orderId).getMeals();
 
-        order.getMeals().remove(meal);
-        order.setCookingTimeSum(order.getCookingTimeSum() - meal.getTime());
-        abstractDao.update(order);
+        for (int mealId : mealsId) {
+            meals.add(mealRepository.findById(mealId));
+        }
+
+        order.setOrderSum(orderPriceSum(meals));
+        order.setMeals(meals);
+        order.setCookingTimeSum(cookingTimeSum(meals));
+        orderRepository.update(order);
     }
 
     @Override
-    @Transactional
-    public List<MealDto> getAllMeals(OrderDto orderDto) {
+    public void removeMeals(Integer orderId, Integer[] mealsId) {
 
-        Type listType = new TypeToken<List<MealDto>>(){}.getType();
-        List<MealDto> mealsDtoList = modelMapper.map(abstractDao.findById(orderDto.getId()), listType);
-        return mealsDtoList;
+        Order order = orderRepository.findById(orderId);
+        List<Meal> meals = orderRepository.findById(orderId).getMeals();
+
+        for (int mealId : mealsId) {
+            meals.remove(mealRepository.findById(mealId));
+        }
+
+        order.setMeals(meals);
+        order.setOrderSum(orderPriceSum(meals));
+        order.setCookingTimeSum(cookingTimeSum(meals));
+        orderRepository.update(order);
     }
 
-    @Transactional
-    private int cookingTimeSum(OrderDto orderDto) {
+    @Override
+    public List<MealDto> getAllMeals(Integer orderId) {
+        Order order = orderRepository.findOrderByIdWithEntityGraph(orderId);
+        Type listType = new TypeToken<List<MealDto>>() {
+        }.getType();
+        return modelMapper.map(order.getMeals(), listType);
+    }
 
-        Order order = (Order) abstractDao.findById(orderDto.getId());
+    private int cookingTimeSum(List<Meal> mealList) {
+
         int cookingTimeSum = 0;
-        for (Meal meal : order.getMeals()) {
+        for (Meal meal : mealList) {
             cookingTimeSum += meal.getTime();
         }
-        order.setCookingTimeSum(cookingTimeSum);
         return cookingTimeSum;
     }
 
-    @Transactional
-    private double orderSum(OrderDto orderDto) {
+    private BigDecimal orderPriceSum(List<Meal> mealList) {
 
-        Order order = (Order) abstractDao.findById(orderDto.getId());
-
-        double orderSum = 0;
-        for (int i = 0; i < order.getMeals().size(); i++) {
-            orderSum += order.getMeals().get(i).getPrice();
+        BigDecimal price = null;
+        for (Meal meal : mealList) {
+            price = price.add(meal.getPrice());
         }
-        order.setOrderSum(orderSum);
-        return orderSum;
+        return price;
     }
-
-    @Transactional
-    @Override
-    public double applyDiscount(OrderDto orderDto) {
-
-        double discountPrise = (double) abstractDao.findById(orderDto.getId());
-        discountPrise *= 84.4;
-        abstractDao.findById(orderDto.getId());
-        return discountPrise;
-    }
-
-    @Transactional
-    @Override
-    public void checkPayment(OrderDto orderDto) throws MyException {
-
-        if (abstractDao.findById(orderDto.getId()) == abstractDao.findById(orderDto.getId()))
-
-            throw new MyException("Not enought money");
-    }
-
 }

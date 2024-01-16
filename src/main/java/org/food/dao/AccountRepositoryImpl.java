@@ -1,11 +1,11 @@
 package org.food.dao;
 
-import org.food.api.repository.GenericDao;
+import org.food.api.repository.AccountRepository;
 import org.food.model.Account;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AccountRepositoryImpl extends AbstractDao implements GenericDao {
+public class AccountRepositoryImpl extends AbstractDao<Account> implements AccountRepository {
 
     public AccountRepositoryImpl() {
         super(Account.class);

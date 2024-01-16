@@ -1,17 +1,29 @@
 package org.food.model;
 
 
-import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+//@Entity
 @Table(name = "order", schema = "mydb")
-@Data
+@Getter
+@Setter
+//@NamedEntityGraph(name = "order_entity_graph", attributeNodes = {
+//        @NamedAttributeNode("account"),
+//        @NamedAttributeNode("meals")
+//})
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Meal.class)
@@ -19,20 +31,11 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
     private Account account;
-    @Column(name = "account_Id")
-    private String accountId;
-    private double orderSum;
+
+    private BigDecimal orderSum;
+
     private int cookingTimeSum;
 
-    @Column(name = "meal_Id")
+//    @Column(name = "meal_Id")
     private String mealId;
-
-    public Order(){};
-    public Order(String id){
-        this.id = id;
-    }
-
-
-
-
 }

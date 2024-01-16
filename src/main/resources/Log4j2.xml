@@ -15,7 +15,6 @@
     </Console>
 
   <Loggers>
-    <!-- avoid duplicated logs with additivity=false -->
     <Logger name="web" level="debug" additivity="false">
       <AppenderRef ref="LogToFile"/>
     </Logger>

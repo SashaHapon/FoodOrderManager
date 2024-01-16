@@ -1,13 +1,12 @@
 package org.food.service;
 
-import org.food.api.repository.GenericDao;
+import lombok.RequiredArgsConstructor;
+import org.food.api.repository.MealRepository;
 import org.food.api.service.MealService;
-import org.food.dao.MealRepositoryImpl;
 import org.food.dto.MealDto;
 import org.food.model.Meal;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,54 +14,45 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class MealServiceImpl implements MealService {
 
-        private ModelMapper modelMapper;
+        private final ModelMapper modelMapper;
 
-        private GenericDao<Meal> mealDao;
-
-        @Autowired
-        public MealServiceImpl(ModelMapper modelMapper, MealRepositoryImpl mealRepository){
-                this.modelMapper = modelMapper;
-                this.mealDao = mealRepository;
-        }
+        private final MealRepository mealRepository;
 
         @Override
-        @Transactional
-        public List<MealDto> getAll(){
+        public List<MealDto> getAllMeals(int id, int limit){
 
                 Type listType = new TypeToken<List<MealDto>>(){}.getType();
-                List<MealDto> mealsDtoList = modelMapper.map(mealDao.findAll(),listType);
-                return mealsDtoList;
+                return modelMapper.map(mealRepository.findAll(id, limit),listType);
         }
 
         @Override
-        @Transactional
-        public void addMeal(MealDto mealDto){
+        public MealDto addMeal(MealDto mealDto){
 
-                mealDao.create(new Meal(mealDto.getName(), mealDto.getPrice(), mealDto.getTime()));
+                Meal meal = modelMapper.map(mealDto, Meal.class);
+                return modelMapper.map(mealRepository.create(meal), MealDto.class);
         }
 
         @Override
-        @Transactional
-        public MealDto getMeal(MealDto mealDto){
+        public MealDto getMeal(Integer id){
 
-                return modelMapper.map(mealDao.findById(mealDto.getId()), MealDto.class);
+                return modelMapper.map(mealRepository.findById(id), MealDto.class);
         }
 
         @Override
-        public void deleteMealById(MealDto mealDto) {
+        public void deleteMealById(Integer id) {
 
-                mealDao.delete(modelMapper.map(mealDto, Meal.class));
+                Meal meal = mealRepository.findById(id);
+                mealRepository.delete(meal);
         }
 
 
         @Override
-        @Transactional
         public void update(MealDto mealDto) {
-                mealDao.update(modelMapper.map(mealDto, Meal.class));
+
+                mealRepository.update(modelMapper.map(mealDto, Meal.class));
         }
-
-
-
 }

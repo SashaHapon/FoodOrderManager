@@ -1,32 +1,27 @@
 package org.food.model;
 
 
-import javax.persistence.*;
-import lombok.Data;
+import jakarta.persistence.*;
+
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Table(name = "account", schema = "mydb")
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String name;
 
-    private Double money;
+    private BigDecimal money;
 
     @Column(name = "phone_number")
     private String phoneNumber;
-
-    public Account(){};
-    public Account(int id){
-        this.id = id;
-    };
-
-    public Account(String accountName, double moneyOnCard, String phoneNumber){
-        this.name = accountName;
-        this.money = moneyOnCard;
-        this.phoneNumber = phoneNumber;
-    }
 }

@@ -1,24 +1,19 @@
 package org.food.api.service;
+
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
-import org.food.utils.MyException;
 
 import java.util.List;
 
 public interface OrderService {
 
-    void createOrder(OrderDto orderDto);
+    void createOrder(Integer accountId, List<MealDto> mealDtoList);
 
-    OrderDto getOrder(OrderDto orderDto);
+    OrderDto getOrder(Integer accountId);
 
-    void addMeal(OrderDto orderDto);
+    void addMeals(Integer orderId, Integer[] mealsId);
 
-    void removeMeal(OrderDto orderDto);
+    void removeMeals(Integer orderId, Integer[] mealsId);
 
-    List<MealDto> getAllMeals(OrderDto orderDto);
-
-    double applyDiscount(OrderDto orderDto);
-
-    void checkPayment(OrderDto orderDto) throws MyException;
-
+    List<MealDto> getAllMeals(Integer orderId);
 }

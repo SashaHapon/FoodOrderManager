@@ -1,70 +1,49 @@
 package org.food.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.food.utils.MyException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
-    OrderService orderService;
+    private final OrderService orderService;
 
-    ObjectMapper objectMapper;
+    @PostMapping("/{id}")
+    public void createOrder(@RequestParam("id") Integer accountId,
+                            @RequestBody List<MealDto> mealDtoList) {
 
-    @Autowired
-    public OrderController(OrderService orderService, ObjectMapper objectMapper){
-
-        this.orderService = orderService;
-        this.objectMapper = objectMapper;
+        orderService.createOrder(accountId, mealDtoList);
     }
 
-    public OrderDto createOrder(String json) throws JsonProcessingException {
+    @GetMapping("/{id}")
+    public OrderDto getOrder(@RequestParam("id") Integer id) {
 
-        OrderDto orderDto = objectMapper.readValue(json, OrderDto.class);
-        orderService.createOrder(orderDto);
-        return orderDto;
+        return orderService.getOrder(id);
     }
 
-    public OrderDto getOrder(String json) throws JsonProcessingException {
+    @PutMapping("/{id}")
+    public void addMeals(@RequestParam("id") Integer orderId, @RequestBody Integer[] mealsId) {
 
-        OrderDto orderDto = objectMapper.readValue(json, OrderDto.class);
-        orderService.getOrder(orderDto);
-        return orderDto;
+        orderService.addMeals(orderId, mealsId);
     }
 
-    public void addMeal(String json) throws JsonProcessingException {
+    @DeleteMapping("/{id}")
+    public void removeMeals(@RequestParam("id") Integer orderId,
+                            @RequestBody Integer[] mealsId) {
 
-        OrderDto orderDto = objectMapper.readValue(json, OrderDto.class);
-        orderService.addMeal(orderDto);
+        orderService.removeMeals(orderId, mealsId);
     }
 
-    public void remove(String json) throws JsonProcessingException {
+    @GetMapping("/")
+    public List<MealDto> getAllMeals(@RequestParam("id") Integer id) {
 
-        OrderDto orderDto = objectMapper.readValue(json, OrderDto.class);
-        orderService.removeMeal(orderDto);
-    };
-
-    public List<MealDto> getAllMeals(String json) throws JsonProcessingException {
-
-        OrderDto orderDto = objectMapper.readValue(json, OrderDto.class);
-        return orderService.getAllMeals(orderDto);
-    };
-
-    public void applyDiscount(String json) throws JsonProcessingException {
-
-        OrderDto orderDto = objectMapper.readValue(json, OrderDto.class);
-        orderService.applyDiscount(orderDto);
-    }
-
-    public void checkPayment(String json) throws MyException, JsonProcessingException {
-
-        OrderDto orderDto = objectMapper.readValue(json, OrderDto.class);
-        orderService.applyDiscount(orderDto);
-
+        return orderService.getAllMeals(id);
     }
 }

@@ -1,54 +1,46 @@
 package org.food.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/meals")
+@RequiredArgsConstructor
 public class MealController {
 
-    private MealService mealService;
+    private final MealService mealService;
 
-    private ObjectMapper objectMapper;
+    public List<MealDto> getAll(@RequestParam(defaultValue = "1", required = false) int id,
+                                @RequestParam(defaultValue = "10", required = false) int limit) {
 
-    @Autowired
-    public MealController(MealService mealService, ObjectMapper objectMapper){
-
-        this.mealService = mealService;
-        this.objectMapper = objectMapper;
+        return mealService.getAllMeals(id, limit);
     }
 
-    public List<MealDto> getAll(){
+    @PostMapping("/")
+    public MealDto addMeal(MealDto mealDto) {
 
-        List<MealDto> mealDtoList = mealService.getAll();
-        return mealDtoList;
-    };
+        return mealService.addMeal(mealDto);
+    }
 
-    public MealDto addMeal(String json) throws JsonProcessingException {
-        MealDto mealDto = objectMapper.readValue(json, MealDto.class);
-        mealService.addMeal(mealDto);
-        return mealDto;
-    };
+    @GetMapping("/{id}")
+    public MealDto getMeal(@PathVariable("id") Integer id){
 
-    public MealDto getMeal(String json) throws JsonProcessingException {
-        MealDto mealDto = objectMapper.readValue(json, MealDto.class);
-        mealService.getMeal(mealDto);
-        return mealDto;
-    };
+        return mealService.getMeal(id);
+    }
 
-    public void deleteMealById(String json) throws JsonProcessingException {
-        MealDto mealDto = objectMapper.readValue(json, MealDto.class);
-        mealService.deleteMealById(mealDto);
-    };
+    @DeleteMapping("/{id}")
+    public void deleteMealById(@PathVariable("id") Integer id){
 
-    void update(String json) throws JsonProcessingException {
+        mealService.deleteMealById(id);
+    }
 
-        MealDto mealDto = objectMapper.readValue(json, MealDto.class);
+    @PutMapping("/{id}")
+    void update(@RequestBody MealDto mealDto){
+
         mealService.update(mealDto);
-    };
+    }
 }

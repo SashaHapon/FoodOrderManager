@@ -1,4 +1,4 @@
-package org.food;
+package org.food.config;
 
 import org.food.config.PersistenceContext;
 import org.food.config.WebBeansConfig;

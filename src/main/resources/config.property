@@ -1,5 +1,0 @@
-discount = 0.9
-k = 1
-url = jdbc:mysql://localhost:3306/mydb
-user = root
-password = 12345

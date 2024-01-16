@@ -8,14 +8,14 @@ import java.util.List;
 @Data
 public class OrderDto {
 
-    int id;
+    private Integer id;
 
-    public List<Meal> meals;
+    private List<Meal> meals;
 
-    public String accountId;
+    private String accountId;
 
-    AccountDto accountDto;
+    private AccountDto accountDto;
 
-    MealDto mealDto;
+    private MealDto mealDto;
 
 }

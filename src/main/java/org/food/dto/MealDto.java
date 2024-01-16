@@ -2,18 +2,20 @@ package org.food.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MealDto {
-    int id;
 
-    String name;
+    private Integer id;
 
-    Double price;
+    private String name;
 
-    int time;
+    private BigDecimal price;
 
-    String date;
+    private int time;
+
 }
 
