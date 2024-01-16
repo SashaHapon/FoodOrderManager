@@ -52,7 +52,7 @@ public class ControllerExceptionHandler {
     }
 
     @ExceptionHandler(value = RottenTokenException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorMessage rottenTokenException(RottenTokenException rottenTokenException, WebRequest request){
         return new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
