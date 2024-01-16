@@ -9,7 +9,4 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    // TODO: 07.01.2024 checkTokenTime 
-    // TODO: 07.01.2024 response refreshToken when sign-in 
-    
 }
