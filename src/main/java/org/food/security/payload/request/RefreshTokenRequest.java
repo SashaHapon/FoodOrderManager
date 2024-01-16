@@ -1,10 +1,10 @@
 package org.food.security.payload.request;
 
 import lombok.Data;
-import org.food.security.dto.UserInfo;
+import org.food.security.dto.UserDto;
 
 @Data
 public class RefreshTokenRequest {
-    private UserInfo userInfo;
+    private UserDto userDto;
     private String refreshToken;
 }
