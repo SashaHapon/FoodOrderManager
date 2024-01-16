@@ -1,8 +1,10 @@
 package org.food.security.service;
 
 import lombok.RequiredArgsConstructor;
+import org.food.security.dto.UserDto;
 import org.food.security.model.User;
 import org.food.security.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
-
+    private  final ModelMapper mapper;
     /**
      * Сохранение пользователя
      *
@@ -46,12 +48,20 @@ public class UserService {
      *
      * @return пользователь
      */
-    public User getByUsername(String username) {
-        return repository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+    public UserDto getUserDtoByUsername(String username) {
 
+        User user = repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        UserDto userDto = mapper.map(user, UserDto.class);
+        return  userDto;
     }
 
+    public User getByUsername(String username) {
+
+        User user = repository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        return  user;
+    }
     /**
      * Получение пользователя по имени пользователя
      * <p>
