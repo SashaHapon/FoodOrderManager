@@ -5,15 +5,15 @@ import lombok.Data;
 
 import java.time.Instant;
 
-@Entity(name = "refreshtoken")
+@Entity(name = "accesstoken")
 @Data
-public class RefreshToken {
+public class AccessToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @OneToOne
-    @JoinColumn(name = "users_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(nullable = false, unique = true)

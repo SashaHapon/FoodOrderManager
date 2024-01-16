@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.food.api.repository.GenericDao;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
+import jakarta.persistence.*;
 import java.util.List;
 
 
