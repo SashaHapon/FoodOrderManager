@@ -2,7 +2,6 @@ package org.food.security.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.food.security.dto.UserInfo;
 
 import java.time.Instant;
 
