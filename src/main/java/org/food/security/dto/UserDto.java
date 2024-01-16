@@ -8,7 +8,7 @@ import org.food.security.model.Role;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserInfo {
+public class UserDto {
     private Long id;
     private String username;
     private String email;
