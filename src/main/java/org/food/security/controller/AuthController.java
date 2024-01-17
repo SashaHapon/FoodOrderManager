@@ -22,8 +22,7 @@ public class AuthController {
     private  final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(@RequestBody @Valid SignUpRequest request) {
-
+    public ResponseEntity <UserDto> signUp(@RequestBody @Valid SignUpRequest request) {
 
         JwtAuthenticationResponse response = authenticationService.signUp(request);
         UserDto userDto = userService.getUserDtoByUsername(response.getUserName());
@@ -33,14 +32,14 @@ public class AuthController {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity signIn(@RequestBody @Valid SignInRequest request) {
+    public ResponseEntity <UserDto> signIn(@RequestBody @Valid SignInRequest request) {
         JwtAuthenticationResponse response = authenticationService.signIn(request);
         return ResponseEntity.ok().header("accessToken", response.getAccessToken()).build();
     }
 
     @Transactional
     @PostMapping("/refresh")
-    public ResponseEntity refreshToken(@RequestBody @Valid RefreshTokenRequest refreshToken) {
+    public ResponseEntity <UserDto> refreshToken(@RequestBody @Valid RefreshTokenRequest refreshToken) {
         JwtAuthenticationResponse response = authenticationService.refreshToken(refreshToken);
         return ResponseEntity.ok().header("RefreshToken", response.getRefreshToken()).build();
     }
