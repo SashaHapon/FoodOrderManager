@@ -6,8 +6,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+    ddl-auto: update
     show-sql: true
+
+server:
+  port: 8080
+  address=my_custom_ip: 127.0.0.1
 
 token:
   tokenLifetime: 144000000
