@@ -27,7 +27,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: Make executeable
+      - name: Make executable
         run: chmod +x ./mvnw
       - name: Build with Maven
         run: ./mvnw -B package --file pom.xml
