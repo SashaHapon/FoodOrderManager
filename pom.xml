@@ -12,7 +12,7 @@
     <groupId>org.food</groupId>
     <artifactId>order_2</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>foods</name>
 
     <properties>
