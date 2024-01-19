@@ -27,11 +27,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+      - name: Make executable
+        run: chmod +x ./mvnw
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: ./mvnw -B package --file pom.xml
 
       - name: Run Tests
-        run: mvn test
+        run: ./mvnw test
 
       - name: Upload Test Results
         if: always()
