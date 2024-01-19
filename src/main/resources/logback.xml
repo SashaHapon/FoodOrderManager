@@ -1,0 +1,24 @@
+<configuration>
+
+    <!-- Appenders -->
+    <appender name="File" class="ch.qos.logback.core.FileAppender">
+        <file>log4j.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Console Appender -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root Logger -->
+    <root level="info">
+        <appender-ref ref="File"/>
+        <appender-ref ref="Console"/>
+    </root>
+
+</configuration>
