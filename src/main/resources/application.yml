@@ -10,8 +10,7 @@ spring:
     show-sql: true
 
 server:
-  port: 8080
-  address=my_custom_ip: 127.0.0.1
+  address: 127.0.0.1
 
 token:
   tokenLifetime: 144000000
