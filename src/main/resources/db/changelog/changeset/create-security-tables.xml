@@ -25,7 +25,7 @@
         <sqlFile path="classpath:db/changelog/sql/users.sql"></sqlFile>
     </changeSet>
 
-    <changeSet id="2" author="Alexandr Hapon" labels="example-label" context="example-context">
+    <changeSet id="2-1" author="Alexandr Hapon" labels="example-label" context="example-context">
         <comment>example-comment</comment>
         <createTable tableName="accesstoken">
             <column name="id" type="bigint">
@@ -35,13 +35,13 @@
             <column name="token" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="BIGINT">
-                <constraints foreignKeyName="user_id"/>
+            <column name="users_id" type="BIGINT">
+                <constraints foreignKeyName="fk_access_token_user" referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="3-1" author="Alexandr Hapon" labels="example-label" context="example-context">
+    <changeSet id="3-6" author="Alexandr Hapon" labels="example-label" context="example-context">
         <comment>example-comment</comment>
         <createTable tableName="refreshtoken">
             <column name="id" type="bigint">
@@ -51,11 +51,26 @@
             <column name="token" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="BIGINT">
-                <constraints foreignKeyName="user_id"
-                referencedTableName="users"
-                referencedColumnNames="id"/>
+            <column name="users_id" type="BIGINT">
+                <constraints foreignKeyName="fk_refresh_token_user" referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>
     </changeSet>
+    
+    <changeSet id="4" author="Alexander Hapon">
+        <createTable tableName="accesstoken_seq">
+            <column name="next_val" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Alexander Hapon">
+        <createTable tableName="refreshtoken_seq">
+            <column name="next_val" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

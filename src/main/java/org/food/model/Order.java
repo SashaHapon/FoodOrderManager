@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
+@Entity
 @Table(name = "order", schema = "mydb")
 @Getter
 @Setter
@@ -24,7 +24,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Meal.class)
     private List<Meal> meals = new ArrayList<>();
@@ -34,8 +34,9 @@ public class Order {
 
     private BigDecimal orderSum;
 
+//    @Column(name = "cooking_time_sum")
     private int cookingTimeSum;
 
-//    @Column(name = "meal_Id")
+    @Column(name = "meal_Id")
     private String mealId;
 }
