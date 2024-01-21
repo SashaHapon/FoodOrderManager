@@ -1,4 +1,5 @@
 /target
 /.idea
 
+/src/main/resources/db/changelog/sql
 log4j.log

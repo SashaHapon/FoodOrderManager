@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-2" author="Alexandr Hapon" labels="example-label" context="example-context">
+        <comment>example-comment</comment>
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(225)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)"/>
+            <column name="role" type="enum('ROLE_USER', 'ROLE_ADMIN')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <sqlFile path="classpath:db/changelog/sql/users.sql"></sqlFile>
+    </changeSet>
+
+    <changeSet id="2" author="Alexandr Hapon" labels="example-label" context="example-context">
+        <comment>example-comment</comment>
+        <createTable tableName="accesstoken">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="expiry_date" type="DATETIME(6)"/>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="user_id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3-1" author="Alexandr Hapon" labels="example-label" context="example-context">
+        <comment>example-comment</comment>
+        <createTable tableName="refreshtoken">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="expiry_date" type="DATETIME(6)"/>
+            <column name="token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints foreignKeyName="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
