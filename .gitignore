@@ -2,3 +2,4 @@
 /.idea
 
 log4j.log
+/src/main/resources/db/changelog/sql
