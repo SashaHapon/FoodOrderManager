@@ -15,10 +15,6 @@ import java.util.List;
 @Table(name = "order", schema = "mydb")
 @Getter
 @Setter
-//@NamedEntityGraph(name = "order_entity_graph", attributeNodes = {
-//        @NamedAttributeNode("account"),
-//        @NamedAttributeNode("meals")
-//})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
@@ -26,7 +22,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Meal.class)
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Meal.class)
     private List<Meal> meals = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
