@@ -52,7 +52,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="7-5" author="Alexandr Hapon">
+    <changeSet id="7-6" author="Alexandr Hapon">
         <createTable tableName="order_meals">
             <column name="order_id" type="int">
                 <constraints foreignKeyName="fk_order_meal_order" referencedTableName="order" referencedColumnNames="id"/>
@@ -61,12 +61,12 @@
                 <constraints foreignKeyName="fk_order_meal_meal" referencedTableName="meal" referencedColumnNames="id"/>
             </column>
         </createTable>
-    </changeSet>
 
-    <changeSet id="8-1" author="Alexander Hapon">
         <createIndex tableName="order_meals" indexName="idx_order_meal_meal_id">
             <column name="meals_id"></column>
         </createIndex>
+        <createIndex tableName="order_meals" indexName="idx_order_meal_order_id">
+            <column name="order_id"></column>
+        </createIndex>
     </changeSet>
-
 </databaseChangeLog>

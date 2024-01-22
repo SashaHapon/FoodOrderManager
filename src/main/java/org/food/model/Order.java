@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "order", schema = "mydb")
+@Table(name = "\"order\"", schema = "mydb")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,7 +30,6 @@ public class Order {
 
     private BigDecimal orderSum;
 
-//    @Column(name = "cooking_time_sum")
     private int cookingTimeSum;
 
     @Column(name = "meal_Id")

@@ -22,6 +22,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <createIndex tableName="users" indexName="idx_users_username">
+            <column name="username"></column>
+        </createIndex>
     </changeSet>
 
     <changeSet id="2-1" author="Alexandr Hapon" labels="example-label" context="example-context">
@@ -38,6 +42,10 @@
                 <constraints foreignKeyName="fk_access_token_user" referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>
+
+        <createIndex tableName="accesstoken" indexName="idx_access_token_id">
+            <column name="users_id"></column>
+        </createIndex>
     </changeSet>
 
     <changeSet id="3-7" author="Alexandr Hapon" labels="example-label" context="example-context">
@@ -54,39 +62,9 @@
                 <constraints foreignKeyName="fk_refresh_token_user" referencedTableName="users" referencedColumnNames="id"/>
             </column>
         </createTable>
-    </changeSet>
 
-    <changeSet id="4" author="Alexander Hapon">
-        <createTable tableName="accesstoken_seq">
-            <column name="next_val" type="BIGINT">
-                <constraints nullable="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="5" author="Alexander Hapon">
-        <createTable tableName="refreshtoken_seq">
-            <column name="next_val" type="BIGINT">
-                <constraints nullable="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="6-1" author="Alexandr Hapon">
-        <createIndex tableName="accesstoken" indexName="idx_refresh_token_id">
-            <column name="users_id"></column>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="7-1" author="Alexandr Hapon">
         <createIndex tableName="refreshtoken" indexName="idx_refresh_token_id">
             <column name="users_id"></column>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="8-1" author="Alexandr Hapon">
-        <createIndex tableName="users" indexName="idx_users_username">
-            <column name="username"></column>
         </createIndex>
     </changeSet>
 </databaseChangeLog>
