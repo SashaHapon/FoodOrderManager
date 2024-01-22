@@ -22,8 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceImplTest {
@@ -58,37 +57,32 @@ public class AccountServiceImplTest {
     }
 
     @Test
+    @DisplayName("add account")
     public void addAccount() {
 
-        AccountDto accountDto = new AccountDto("","","","");
-
-        // Создаем мок для объекта Account, который будет возвращен при вызове modelMapper.map
+        AccountDto accountDto = new AccountDto();
         Account mappedAccount = new Account();
-        when(modelMapper.map(accountDTO, Account.class)).thenReturn(mappedAccount);
+        AccountDto expectedAccountDtoOutput = new AccountDto();
 
-        // Создаем мок для объекта AccountDto, который будет возвращен при вызове modelMapper.map после создания учетной записи
-        AccountDto expectedAccountDtoOutput = new AccountDto(/*...*/);
-        when(modelMapper.map(mappedAccount, AccountDto.class)).thenReturn(expectedAccountDtoOutput);
+        when(modelMapper.map(accountDto, Account.class)).thenReturn(mappedAccount);
+        when(modelMapper.map(accountRepository.create(mappedAccount), AccountDto.class)).thenReturn(expectedAccountDtoOutput);
 
         // Создаем мок для объекта Account, который будет возвращен при вызове accountRepository.create
-        Account createdAccount = new Account();
-        lenient().when(accountRepository.create(mappedAccount)).thenReturn(createdAccount);
+        AccountDto createdAccountDto = accountService.addAccount(accountDto);
 
-        // Act
-        System.out.println(accountService.addAccount(accountDtoInput));
-
-        // Assert
-        assertEquals(expectedAccountDtoOutput, accountDtoInput);
-
-        // Проверяем, что методы были вызваны с правильными аргументами
-//        verify(modelMapper, times(1)).map(accountDtoInput, Account.class);
-//        verify(accountRepository, times(1)).create(mappedAccount);
-//        verify(modelMapper, times(1)).map(createdAccount, AccountDto.class);
+        assertEquals(expectedAccountDtoOutput, createdAccountDto);
     }
 
-    public AccountDto getAccount(Integer id) {
+    @Test
+    @DisplayName("get account")
+    public void getAccount() {
+        int id = 1;
+        AccountDto expectedAccountDtoOutput = new AccountDto();
 
-        return modelMapper.map(accountRepository.findById(id), AccountDto.class);
+        when(modelMapper.map(accountRepository.findById(id), AccountDto.class)).thenReturn(expectedAccountDtoOutput);
+        AccountDto createdAccountDto = accountService.getAccount(id);
+
+        assertEquals(expectedAccountDtoOutput, createdAccountDto);
     }
 
     public void deleteAccountById(Integer id) {
