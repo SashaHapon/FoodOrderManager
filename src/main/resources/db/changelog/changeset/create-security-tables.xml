@@ -22,7 +22,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <sqlFile path="classpath:db/changelog/sql/users.sql"></sqlFile>
     </changeSet>
 
     <changeSet id="2-1" author="Alexandr Hapon" labels="example-label" context="example-context">
