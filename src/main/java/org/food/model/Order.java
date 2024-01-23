@@ -31,7 +31,4 @@ public class Order {
     private BigDecimal orderSum;
 
     private int cookingTimeSum;
-
-    @Column(name = "meal_Id")
-    private String mealId;
 }
