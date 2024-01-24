@@ -1,9 +1,9 @@
 package org.food.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.food.api.repository.AccountRepository;
 import org.food.dto.AccountDto;
 import org.food.model.Account;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,14 +14,12 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,7 +38,7 @@ public class AccountServiceImplTest {
 
     @Test
     @DisplayName("return all AccountDto")
-    public void getAllAccounts(){
+    public void testGetAllAccounts(){
 
         int id = 1;
         int limit = 10;
@@ -53,46 +51,132 @@ public class AccountServiceImplTest {
         when(modelMapper.map(accountRepository.findAll(id, limit), listType)).thenReturn(mockAccountDtos);
 
         List<AccountDto> accountDtos = accountService.getAllAccounts(id,limit);
-        assertEquals(accountDtos, mockAccountDtos);
+
+        assertThat(accountDtos).isEqualTo(mockAccountDtos);
+    }
+
+  //  @Test
+  //  @DisplayName("return all AccountDto")
+    public void testGetAllAccount_throwException(){
+        int id = 1;
+        int limit = 10;
+
+        List<Account> mockAccounts = Arrays.asList(new Account(), new Account(), new Account());
+
+        when(accountRepository.findAll(id, limit)).thenReturn(mockAccounts);
+        Type listType = new TypeToken<List<AccountDto>>() {}.getType();
+        when(modelMapper.map(accountRepository.findAll(id, limit), listType)).thenThrow();
+        // ???
+        accountService.getAllAccounts(id,limit);
+
+     //   assertThatExceptionOfType().isThrownBy(accountService.getAllAccounts(id,limit));
     }
 
     @Test
-    @DisplayName("add account")
-    public void addAccount() {
-
+    @DisplayName("addAccount() creating account and return Account")
+    public void testAddAccount_ReturnAccount() {
         AccountDto accountDto = new AccountDto();
         Account mappedAccount = new Account();
+        Account returnAccount = new Account();
         AccountDto expectedAccountDtoOutput = new AccountDto();
 
         when(modelMapper.map(accountDto, Account.class)).thenReturn(mappedAccount);
-        when(modelMapper.map(accountRepository.create(mappedAccount), AccountDto.class)).thenReturn(expectedAccountDtoOutput);
+        when(accountRepository.create(mappedAccount)).thenReturn(returnAccount);
+        when(modelMapper.map(returnAccount, AccountDto.class)).thenReturn(expectedAccountDtoOutput);
 
-        // Создаем мок для объекта Account, который будет возвращен при вызове accountRepository.create
         AccountDto createdAccountDto = accountService.addAccount(accountDto);
 
-        assertEquals(expectedAccountDtoOutput, createdAccountDto);
+        assertThat(expectedAccountDtoOutput).isEqualTo(createdAccountDto);
     }
 
     @Test
-    @DisplayName("get account")
-    public void getAccount() {
+    @DisplayName("addAccount() try to create account and throw exception")
+    public void testAddAccount_throwException() {
+        AccountDto accountDto = new AccountDto();
+        Account mappedAccount = new Account();
+
+        when(modelMapper.map(accountDto, Account.class)).thenReturn(mappedAccount);
+        when(accountRepository.create(mappedAccount)).thenThrow(IllegalArgumentException.class);
+
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> accountService.addAccount(accountDto));
+    }
+
+    @Test
+    @DisplayName("getAccount() getting account and return account ")
+    public void testGetAccount_returnAccount() {
         int id = 1;
         AccountDto expectedAccountDtoOutput = new AccountDto();
+        Account testAccount = new Account();
 
-        when(modelMapper.map(accountRepository.findById(id), AccountDto.class)).thenReturn(expectedAccountDtoOutput);
+        when(accountRepository.findById(id)).thenReturn(testAccount);
+        when(modelMapper.map(testAccount, AccountDto.class)).thenReturn(expectedAccountDtoOutput);
+
         AccountDto createdAccountDto = accountService.getAccount(id);
 
-        assertEquals(expectedAccountDtoOutput, createdAccountDto);
+        assertThat(expectedAccountDtoOutput).isEqualTo(createdAccountDto);
     }
 
-    public void deleteAccountById(Integer id) {
+    @Test
+    @DisplayName("getAccount() try to get account and throw exception")
+    public void testGetAccount_throwException() {
+        int id = 1;
 
-        Account account = accountRepository.findById(id);
-        accountRepository.delete(account);
+        when(accountRepository.findById(id)).thenThrow(EntityNotFoundException.class);
+
+        assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(() -> accountService.getAccount(id));
     }
 
-    public void update(AccountDto accountDTO) {
+    @Test
+    public void testDeleteAccountById_returnAccount() {
 
-        accountRepository.update(modelMapper.map(accountDTO, Account.class));
+        Account testAccount = new Account();
+        testAccount.setId(1);
+        testAccount.setName("Dave");
+
+        when(accountRepository.findById(1)).thenReturn(testAccount);
+
+        accountService.deleteAccountById(1);
+
+        verify(accountRepository, times(1)).delete(testAccount);
+    }
+
+    @Test
+    public void testDeleteAccountById_andThrowException() {
+        Integer id = 1;
+
+        when(accountRepository.findById(id)).thenThrow(EntityNotFoundException.class);
+
+        assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(() -> accountService.deleteAccountById(id));
+    }
+
+    @Test
+    public void update() {
+
+        AccountDto accountDto = new AccountDto();
+        accountDto.setId(1);
+        accountDto.setName("Dave");
+
+        Account testAccount = new Account();
+        testAccount.setId(1);
+        testAccount.setName("Dave");
+
+        when(modelMapper.map(accountDto, Account.class)).thenReturn(testAccount);
+        when(accountRepository.update(testAccount)).thenReturn(testAccount);
+
+        accountService.update(accountDto);
+
+        verify(accountRepository, times(1)).update(testAccount);
+    }
+
+    @Test
+    public void update_throwException() {
+
+        AccountDto accountDto = new AccountDto();
+        Account testAccount = new Account();
+
+        when(modelMapper.map(accountDto, Account.class)).thenReturn(testAccount);
+        when(accountRepository.update(testAccount)).thenThrow(NullPointerException.class);
+
+        assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> accountService.update(accountDto));
     }
 }
