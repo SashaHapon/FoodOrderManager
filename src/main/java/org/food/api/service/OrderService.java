@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    void createOrder(Integer accountId, List<MealDto> mealDtoList);
+    OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList);
 
     OrderDto getOrder(Integer accountId);
 

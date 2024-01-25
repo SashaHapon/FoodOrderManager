@@ -5,15 +5,14 @@ import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
+import org.food.model.Account;
 import org.food.model.Meal;
 import org.food.model.Order;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCollection;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,23 +39,44 @@ public class OrderServiceImplTest {
     @InjectMocks
     private OrderServiceImpl orderService;
 
-    //@Test
+    @Test
     @DisplayName("should_returnOrder_whenTryToCreateOrder")
     public void should_returnOrder_whenTryToCreateOrder() {
 
-        OrderDto orderDto = new OrderDto();
-        Order mappedOrder = new Order();
-        Order returnOrder = new Order();
+        Order order = new Order();
+        List<Meal> mealList = new ArrayList<>();
         List<MealDto> mealDtoList = new ArrayList<>();
         OrderDto expectedOrderDtoOutput = new OrderDto();
+        Type listType = new TypeToken<List<Meal>>() {
+        }.getType();
 
-        when(modelMapper.map(orderDto, Order.class)).thenReturn(mappedOrder);
-        when(orderRepository.create(mappedOrder)).thenReturn(returnOrder);
-        when(modelMapper.map(returnOrder, OrderDto.class)).thenReturn(expectedOrderDtoOutput);
+        when(accountRepository.findById(1)).thenReturn(new Account());
+        when(modelMapper.map(mealDtoList, listType)).thenReturn(mealList);
+        when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenReturn(expectedOrderDtoOutput);
 
-        orderService.createOrder(1, mealDtoList);
+        OrderDto returnedOrderDto = orderService.createOrder(1, mealDtoList);
 
-//        assertThat(expectedOrderDtoOutput).isEqualTo(createdOrderDto);
+        assertThat(expectedOrderDtoOutput).isEqualTo(returnedOrderDto);
+    }
+
+
+    @DisplayName("throwException_whenTryToCreateOrder")
+    public void should_throwException_whenTryToCreateOrder() {
+
+        Order order = new Order();
+        Order order1 = null;
+        List<Meal> mealList = new ArrayList<>();
+        List<MealDto> mealDtoList = new ArrayList<>();
+        OrderDto expectedOrderDtoOutput = new OrderDto();
+        Type listType = new TypeToken<List<Meal>>() {}.getType();
+
+        when(accountRepository.findById(1)).thenReturn(new Account());
+        when(modelMapper.map(mealDtoList, listType)).thenReturn(mealList);
+        when(orderRepository.create(order)).thenReturn(order);
+        when(modelMapper.map(order, OrderDto.class)).thenThrow(IllegalArgumentException.class);
+
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> orderService.createOrder(1, mealDtoList));
     }
 
     @Test
@@ -72,6 +92,19 @@ public class OrderServiceImplTest {
         OrderDto createdOrderDto = orderService.getOrder(id);
 
         assertThat(expectedOrderDtoOutput).isEqualTo(createdOrderDto);
+    }
+
+    @Test
+    @DisplayName("throwException_when_getOrderById")
+    public void should_throwException_when_TryToGetOrder() {
+        int id = 1;
+        Order testOrder = null;
+
+        when(orderRepository.findById(id)).thenReturn(testOrder);
+        when(modelMapper.map(testOrder, OrderDto.class)).thenThrow(IllegalArgumentException.class);
+
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> orderService.getOrder(id));
     }
 
     @Test
@@ -126,7 +159,7 @@ public class OrderServiceImplTest {
         assertThat(order.getMeals()).isEqualTo(List.of(meal2));
     }
 
-    //@Test
+    @Test
     @DisplayName("returnAllMealDtos_when_GetAllMeals")
     public void should_returnAllMealDtos_when_tryToGetAllMeals() {
 
@@ -139,28 +172,9 @@ public class OrderServiceImplTest {
         List<MealDto> mealDtos = new ArrayList<>();
 
         when(orderRepository.findOrderByIdWithEntityGraph(orderId)).thenReturn(order);
-        when(order.getMeals()).thenReturn(meals);
-        when(modelMapper.map(meals, listType)).thenReturn(mealDtos);
+        when(modelMapper.map(order.getMeals(), listType)).thenReturn(mealDtos);
 
         List<MealDto> returnedMealDtos = orderService.getAllMeals(orderId);
         assertThat(returnedMealDtos).isNotNull();
-    }
-
-    private int cookingTimeSum(List<Meal> mealList) {
-
-        int cookingTimeSum = 0;
-        for (Meal meal : mealList) {
-            cookingTimeSum += meal.getTime();
-        }
-        return cookingTimeSum;
-    }
-
-    private BigDecimal orderPriceSum(List<Meal> mealList) {
-
-        BigDecimal price = null;
-        for (Meal meal : mealList) {
-            price = price.add(meal.getPrice());
-        }
-        return price;
     }
 }

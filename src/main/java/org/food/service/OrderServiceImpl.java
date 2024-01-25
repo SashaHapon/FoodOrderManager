@@ -33,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final MealRepository mealRepository;
 
     @Override
-    public void createOrder(Integer accountId, List<MealDto> mealDtoList) {
+    public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
         Order order = new Order();
         order.setAccount(accountRepository.findById(accountId));
@@ -45,7 +45,8 @@ public class OrderServiceImpl implements OrderService {
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
         order.setCookingTimeSum(cookingTimeSum(meals));
-        orderRepository.create(order);
+        Order orderr = orderRepository.create(order);
+        return modelMapper.map(orderr, OrderDto.class);
     }
 
     @Override
