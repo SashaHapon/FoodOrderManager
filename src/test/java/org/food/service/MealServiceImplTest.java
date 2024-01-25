@@ -33,11 +33,6 @@ public class MealServiceImplTest {
     @InjectMocks
     private MealServiceImpl mealService;
 
-    @BeforeEach
-    public void init() {
-        MockitoAnnotations.initMocks(AccountServiceImplTest.class);
-    }
-
     @Test
     @DisplayName("returnAllMeals_when_getAllMeals")
     public void should_returnAllMeals_when_tryToGetAllMeals() {

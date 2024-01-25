@@ -34,11 +34,6 @@ public class AccountServiceImplTest {
     @InjectMocks
     private AccountServiceImpl accountService;
 
-    @BeforeEach
-    public void init() {
-        MockitoAnnotations.initMocks(AccountServiceImplTest.class);
-    }
-
     @Test
     @DisplayName("returnAllAccounts_when_getAllAccounts")
     public void should_returnAllAccounts_when_tryToGetAllAccounts() {

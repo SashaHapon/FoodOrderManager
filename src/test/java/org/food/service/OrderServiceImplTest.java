@@ -40,11 +40,6 @@ public class OrderServiceImplTest {
     @InjectMocks
     private OrderServiceImpl orderService;
 
-    @BeforeEach
-    public void init() {
-        MockitoAnnotations.initMocks(OrderServiceImplTest.class);
-    }
-
     //@Test
     @DisplayName("should_returnOrder_whenTryToCreateOrder")
     public void should_returnOrder_whenTryToCreateOrder() {
