@@ -19,8 +19,11 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceImplTest {
@@ -32,13 +35,13 @@ public class AccountServiceImplTest {
     private AccountServiceImpl accountService;
 
     @BeforeEach
-    public void init(){
+    public void init() {
         MockitoAnnotations.initMocks(AccountServiceImplTest.class);
     }
 
     @Test
-    @DisplayName("return all AccountDto")
-    public void testGetAllAccounts(){
+    @DisplayName("returnAllAccounts_when_getAllAccounts")
+    public void should_returnAllAccounts_when_tryToGetAllAccounts() {
 
         int id = 1;
         int limit = 10;
@@ -47,34 +50,34 @@ public class AccountServiceImplTest {
         List<AccountDto> mockAccountDtos = Arrays.asList(new AccountDto(), new AccountDto(), new AccountDto());
 
         when(accountRepository.findAll(id, limit)).thenReturn(mockAccounts);
-        Type listType = new TypeToken<List<AccountDto>>() {}.getType();
+        Type listType = new TypeToken<List<AccountDto>>() {
+        }.getType();
         when(modelMapper.map(accountRepository.findAll(id, limit), listType)).thenReturn(mockAccountDtos);
 
-        List<AccountDto> accountDtos = accountService.getAllAccounts(id,limit);
+        List<AccountDto> accountDtos = accountService.getAllAccounts(id, limit);
 
         assertThat(accountDtos).isEqualTo(mockAccountDtos);
     }
 
-  //  @Test
-  //  @DisplayName("return all AccountDto")
-    public void testGetAllAccount_throwException(){
+    @Test
+    @DisplayName("throwException_when_getAllAccounts")
+    public void should_throwException_when_tryToGetAllAccounts() {
         int id = 1;
         int limit = 10;
 
         List<Account> mockAccounts = Arrays.asList(new Account(), new Account(), new Account());
 
         when(accountRepository.findAll(id, limit)).thenReturn(mockAccounts);
-        Type listType = new TypeToken<List<AccountDto>>() {}.getType();
-        when(modelMapper.map(accountRepository.findAll(id, limit), listType)).thenThrow();
-        // ???
-        accountService.getAllAccounts(id,limit);
+        Type listType = new TypeToken<List<AccountDto>>() {
+        }.getType();
+        when(modelMapper.map(accountRepository.findAll(id, limit), listType)).thenThrow(IllegalArgumentException.class);
 
-     //   assertThatExceptionOfType().isThrownBy(accountService.getAllAccounts(id,limit));
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> accountService.getAllAccounts(id, limit));
     }
 
     @Test
-    @DisplayName("addAccount() creating account and return Account")
-    public void testAddAccount_ReturnAccount() {
+    @DisplayName("returnAccount_when_addAccount")
+    public void should_returnAccount_when_tryToAddAccount() {
         AccountDto accountDto = new AccountDto();
         Account mappedAccount = new Account();
         Account returnAccount = new Account();
@@ -90,8 +93,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("addAccount() try to create account and throw exception")
-    public void testAddAccount_throwException() {
+    @DisplayName("throwException_when_addAccount")
+    public void should_throwException_when_tryToAddAccount() {
         AccountDto accountDto = new AccountDto();
         Account mappedAccount = new Account();
 
@@ -102,8 +105,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("getAccount() getting account and return account ")
-    public void testGetAccount_returnAccount() {
+    @DisplayName("returnAccount_when_getAccountById")
+    public void should_returnAccount_whenTryToGetAccount() {
         int id = 1;
         AccountDto expectedAccountDtoOutput = new AccountDto();
         Account testAccount = new Account();
@@ -117,8 +120,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("getAccount() try to get account and throw exception")
-    public void testGetAccount_throwException() {
+    @DisplayName("throwException_when_getAccountById")
+    public void should_throwException_when_tryToGetAccount() {
         int id = 1;
 
         when(accountRepository.findById(id)).thenThrow(EntityNotFoundException.class);
@@ -127,7 +130,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void testDeleteAccountById_returnAccount() {
+    @DisplayName("returnAccount_when_deleteAccountById")
+    public void should_returnAccount_when_tryToDeleteAccountById() {
 
         Account testAccount = new Account();
         testAccount.setId(1);
@@ -141,7 +145,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void testDeleteAccountById_andThrowException() {
+    @DisplayName("throwException_when_deleteAccount")
+    public void should_throwException_when_tryToDeleteAccount() {
         Integer id = 1;
 
         when(accountRepository.findById(id)).thenThrow(EntityNotFoundException.class);
@@ -150,7 +155,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void update() {
+    @DisplayName("returnAccount_when_updateAccount")
+    public void should_returnAccount_when_tryToUpdateAccount() {
 
         AccountDto accountDto = new AccountDto();
         accountDto.setId(1);
@@ -169,7 +175,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void update_throwException() {
+    @DisplayName("throwException_when_updateAccount")
+    public void should_throwException_when_tryToUpdateAccount() {
 
         AccountDto accountDto = new AccountDto();
         Account testAccount = new Account();
