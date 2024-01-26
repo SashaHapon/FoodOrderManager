@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
     public void addMeals(Integer orderId, List<MealDto> mealDtos) {
 
         Order order = orderRepository.findById(orderId);
-        Type listType = new TypeToken<List<MealDto>>() {
+        Type listType = new TypeToken<List<Meal>>() {
         }.getType();
         List<Meal> mealList = modelMapper.map(mealDtos, listType);
 

@@ -10,7 +10,7 @@ public class OrderDto {
 
     private Integer id;
 
-    private List<Meal> meals;
+    private List<MealDto> meals;
 
     private String accountId;
 

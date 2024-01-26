@@ -40,7 +40,7 @@ public class OrderServiceImplTest {
     private OrderServiceImpl orderService;
 
     @Test
-    @DisplayName("should_returnOrder_whenTryToCreateOrder")
+    @DisplayName("Return order after create")
     public void should_returnOrder_whenTryToCreateOrder() {
 
         Order order = new Order();
@@ -60,7 +60,7 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_whenTryToCreateOrder")
+    @DisplayName("Throw exception when try to create order")
     public void should_throwException_whenTryToCreateOrder() {
 
         Account account = new Account();
@@ -82,7 +82,7 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnOrder_when_getOrderById")
+    @DisplayName("Return order by id")
     public void should_returnOrder_when_TryToGetOrder() {
         int id = 1;
         OrderDto expectedOrderDtoOutput = new OrderDto();
@@ -97,7 +97,7 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_getOrderById")
+    @DisplayName("Throw exception when try to get order by id")
     public void should_throwException_when_TryToGetOrder() {
         int id = 1;
         Order testOrder = null;
@@ -110,18 +110,21 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("addMealsToOrder_when_AddMeals")
+    @DisplayName("Add mealsToOrder_when_AddMeals")
     public void should_addMealsToOrder_when_tryToAddMeals() {
 
-        int id = 1;
-        OrderDto expectedOrderDtoOutput = new OrderDto();
         Order testOrder = new Order();
-        List<Meal> meals = new ArrayList<>();
-        List<MealDto> mealDtos = new ArrayList<>();
-        Type listType = new TypeToken<List<MealDto>>() {
+        Meal meal = new Meal();
+        meal.setPrice(new BigDecimal(12));
+        meal.setTime(12);
+        MealDto mealDto = new MealDto();
+        List<Meal> meals = new ArrayList<>(List.of(meal));
+        List<MealDto> mealDtos = new ArrayList<>(List.of(mealDto));
+        Type listType = new TypeToken<List<Meal>>() {
         }.getType();
+        testOrder.setMeals(meals);
 
-        when(orderRepository.findById(id)).thenReturn(testOrder);
+        when(orderRepository.findById(1)).thenReturn(testOrder);
         when(modelMapper.map(mealDtos, listType)).thenReturn(meals);
         when(orderRepository.update(testOrder)).thenReturn(testOrder);
 
@@ -149,7 +152,7 @@ public class OrderServiceImplTest {
         Type listType = new TypeToken<List<MealDto>>() {
         }.getType();
         testOrder.setMeals(orderMeals);
-        orderDto.setMeals(List.of(meal2));
+      //  orderDto.setMeals(List.of(meal2));
 
 
         when(orderRepository.findById(id)).thenReturn(testOrder);
