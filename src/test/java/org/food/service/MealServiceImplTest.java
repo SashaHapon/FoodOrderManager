@@ -124,7 +124,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("Check that method calls one time")
+    @DisplayName("Check that delete method calls one time")
     public void should_check_methodsCalls_when_tryToDeleteMealById() {
 
         Meal testMeal = new Meal();
@@ -148,7 +148,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnMeal_when_updateMeal")
+    @DisplayName("Return meal after update")
     public void should_returnMeal_when_tryToUpdateMeal() {
 
         MealDto mealDto = new MealDto();
@@ -167,7 +167,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_updateMeal")
+    @DisplayName("Throw exception when update meal")
     public void should_throwException_when_tryToUpdateMeal() {
 
         MealDto mealDto = new MealDto();
