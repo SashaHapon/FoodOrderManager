@@ -110,7 +110,7 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("Add mealsToOrder_when_AddMeals")
+    @DisplayName("Add meals to order")
     public void should_addMealsToOrder_when_tryToAddMeals() {
 
         Order testOrder = new Order();
@@ -134,13 +134,13 @@ public class OrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("removeMeals_and_returnOrderDtoWithoutThem")
+    @DisplayName("Remove meals and and return order dto without them")
     public void should_removeMeals_and_returnOrderDtoWithoutThem() {
 
         Integer id = 1;
         Order testOrder = new Order();
         OrderDto orderDto = new OrderDto();
-        MealDto mealDto = new MealDto(1, "", new BigDecimal(123), 24);
+        MealDto mealDto = new MealDto(1, "name3", new BigDecimal(555), 5);
 
         Meal meal = new Meal(1, "name1", new BigDecimal(555), 5, "");
         Meal meal1 = new Meal(2, "name2", new BigDecimal(555), 5, "");
@@ -152,7 +152,7 @@ public class OrderServiceImplTest {
         Type listType = new TypeToken<List<MealDto>>() {
         }.getType();
         testOrder.setMeals(orderMeals);
-      //  orderDto.setMeals(List.of(meal2));
+        orderDto.setMeals(List.of(mealDto));
 
 
         when(orderRepository.findById(id)).thenReturn(testOrder);
@@ -161,11 +161,11 @@ public class OrderServiceImplTest {
         when(modelMapper.map(testOrder, OrderDto.class)).thenReturn(orderDto);
 
         OrderDto order = orderService.removeMeals(1, mealDtos);
-        assertThat(order.getMeals()).isEqualTo(List.of(meal2));
+        assertThat(orderDto.getMeals()).isEqualTo(List.of(mealDto));
     }
 
     @Test
-    @DisplayName("returnAllMealDtos_when_GetAllMeals")
+    @DisplayName("Must be return all mealDtos")
     public void should_returnAllMealDtos_when_tryToGetAllMeals() {
 
         Type listType = new TypeToken<List<MealDto>>() {
