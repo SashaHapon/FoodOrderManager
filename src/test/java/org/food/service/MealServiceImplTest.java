@@ -19,8 +19,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class MealServiceImplTest {
@@ -53,7 +54,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_getAllMeals")
+    @DisplayName("Throw exception when try to get all meals")
     public void should_throwException_when_tryToGetAllMeals() {
         int id = 1;
         int limit = 10;
@@ -69,7 +70,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnMeal_when_addMeal")
+    @DisplayName("Return meal after adding meal")
     public void should_returnMeal_when_tryToAddMeal() {
         MealDto mealDto = new MealDto();
         Meal mappedMeal = new Meal();
@@ -86,7 +87,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_addMeal")
+    @DisplayName("Throw exception when add meal")
     public void should_throwException_when_tryToAddAccount() {
         MealDto mealDto = new org.food.dto.MealDto();
         Meal mappedMeal = new Meal();
@@ -98,7 +99,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnMeal_when_getMealById")
+    @DisplayName("Return meal searching by id")
     public void should_returnAccount_whenTryToGetAccount() {
         int id = 1;
         MealDto expectedMealDtoOutput = new MealDto();
@@ -113,7 +114,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_getMealById")
+    @DisplayName("Throw exception when get meal by id")
     public void should_throwException_when_tryToGetMeal() {
         int id = 1;
 
@@ -123,8 +124,8 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnMeal_when_deleteMealById")
-    public void should_returnMeal_when_tryToDeleteMealById() {
+    @DisplayName("Check that method calls one time")
+    public void should_check_methodsCalls_when_tryToDeleteMealById() {
 
         Meal testMeal = new Meal();
         testMeal.setId(1);
@@ -137,7 +138,7 @@ public class MealServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwMeal_when_deleteMeal")
+    @DisplayName("Throw exception when try to delete meal")
     public void should_throwException_when_tryToDeleteMeal() {
         Integer id = 1;
 
