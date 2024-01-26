@@ -59,24 +59,26 @@ public class OrderServiceImplTest {
         assertThat(expectedOrderDtoOutput).isEqualTo(returnedOrderDto);
     }
 
-
+    @Test
     @DisplayName("throwException_whenTryToCreateOrder")
     public void should_throwException_whenTryToCreateOrder() {
 
+        Account account = new Account();
         Order order = new Order();
         Order order1 = null;
-        List<Meal> mealList = new ArrayList<>();
-        List<MealDto> mealDtoList = new ArrayList<>();
-        OrderDto expectedOrderDtoOutput = new OrderDto();
-        Type listType = new TypeToken<List<Meal>>() {}.getType();
 
-        when(accountRepository.findById(1)).thenReturn(new Account());
+        Integer id = 1;
+        List<Meal> mealList = new ArrayList<>(3);
+        List<MealDto> mealDtoList = new ArrayList<>(3);
+        Type listType = new TypeToken<List<Meal>>() {
+        }.getType();
+
+        when(accountRepository.findById(1)).thenReturn(account);
         when(modelMapper.map(mealDtoList, listType)).thenReturn(mealList);
-        when(orderRepository.create(order)).thenReturn(order);
-        when(modelMapper.map(order, OrderDto.class)).thenThrow(IllegalArgumentException.class);
+        when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenThrow(IllegalArgumentException.class);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> orderService.createOrder(1, mealDtoList));
+                .isThrownBy(() -> orderService.createOrder(id, mealDtoList));
     }
 
     @Test

@@ -35,7 +35,7 @@ public class AccountServiceImplTest {
     private AccountServiceImpl accountService;
 
     @Test
-    @DisplayName("returnAllAccounts_when_getAllAccounts")
+    @DisplayName("All accounts must be returned")
     public void should_returnAllAccounts_when_tryToGetAllAccounts() {
 
         int id = 1;
@@ -55,7 +55,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_getAllAccounts")
+    @DisplayName("Throw exception when try to get all accounts")
     public void should_throwException_when_tryToGetAllAccounts() {
         int id = 1;
         int limit = 10;
@@ -71,7 +71,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnAccount_when_addAccount")
+    @DisplayName("Return account after adding account")
     public void should_returnAccount_when_tryToAddAccount() {
         AccountDto accountDto = new AccountDto();
         Account mappedAccount = new Account();
@@ -88,7 +88,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_addAccount")
+    @DisplayName("Throw exception after adding account")
     public void should_throwException_when_tryToAddAccount() {
         AccountDto accountDto = new AccountDto();
         Account mappedAccount = new Account();
@@ -100,7 +100,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnAccount_when_getAccountById")
+    @DisplayName("Return account when try to get account by id")
     public void should_returnAccount_whenTryToGetAccount() {
         int id = 1;
         AccountDto expectedAccountDtoOutput = new AccountDto();
@@ -115,7 +115,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_getAccountById")
+    @DisplayName("Throw exception when try to get account by id")
     public void should_throwException_when_tryToGetAccount() {
         int id = 1;
 
@@ -125,8 +125,8 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnAccount_when_deleteAccountById")
-    public void should_returnAccount_when_tryToDeleteAccountById() {
+    @DisplayName("Check that method deleteAccountById() calls one time")
+    public void should_check_callsMethodOneTime_when_tryToDeleteAccountById() {
 
         Account testAccount = new Account();
         testAccount.setId(1);
@@ -140,7 +140,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_deleteAccount")
+    @DisplayName("Throw exception when try to delete account")
     public void should_throwException_when_tryToDeleteAccount() {
         Integer id = 1;
 
@@ -150,7 +150,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("returnAccount_when_updateAccount")
+    @DisplayName("Return account after update")
     public void should_returnAccount_when_tryToUpdateAccount() {
 
         AccountDto accountDto = new AccountDto();
@@ -170,7 +170,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    @DisplayName("throwException_when_updateAccount")
+    @DisplayName("Throw exception when try to update account")
     public void should_throwException_when_tryToUpdateAccount() {
 
         AccountDto accountDto = new AccountDto();

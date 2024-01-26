@@ -4,13 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.food.api.repository.MealRepository;
 import org.food.dto.MealDto;
 import org.food.model.Meal;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -34,7 +32,7 @@ public class MealServiceImplTest {
     private MealServiceImpl mealService;
 
     @Test
-    @DisplayName("returnAllMeals_when_getAllMeals")
+    @DisplayName("Must be returned all meals")
     public void should_returnAllMeals_when_tryToGetAllMeals() {
 
         int id = 1;
@@ -90,7 +88,7 @@ public class MealServiceImplTest {
     @Test
     @DisplayName("throwException_when_addMeal")
     public void should_throwException_when_tryToAddAccount() {
-        MealDto mealDto = new MealDto();
+        MealDto mealDto = new org.food.dto.MealDto();
         Meal mappedMeal = new Meal();
 
         when(modelMapper.map(mealDto, Meal.class)).thenReturn(mappedMeal);

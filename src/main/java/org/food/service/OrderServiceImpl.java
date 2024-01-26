@@ -45,8 +45,8 @@ public class OrderServiceImpl implements OrderService {
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
         order.setCookingTimeSum(cookingTimeSum(meals));
-        Order orderr = orderRepository.create(order);
-        return modelMapper.map(orderr, OrderDto.class);
+
+        return modelMapper.map(orderRepository.create(order), OrderDto.class);
     }
 
     @Override
