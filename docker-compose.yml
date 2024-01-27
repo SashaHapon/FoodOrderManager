@@ -10,13 +10,7 @@ services:
       MYSQL_DATABASE: mydb
     ports:
       - 3306:3306
-    networks:
-      - common-network
     volumes:
-      - mysql:/home/node/app
+      - mysql:/var/lib/mysql
 volumes:
   mysql:
-
-networks:
-  common-network:
-    driver: bridge

@@ -16,6 +16,4 @@ public class OrderDto {
 
     private AccountDto accountDto;
 
-    private MealDto mealDto;
-
 }
