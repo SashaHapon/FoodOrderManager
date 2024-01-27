@@ -1,7 +1,6 @@
 package org.food.dto;
 
-import org.food.model.Meal;
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
@@ -15,7 +14,5 @@ public class OrderDto {
     private String accountId;
 
     private AccountDto accountDto;
-
-    private MealDto mealDto;
 
 }
