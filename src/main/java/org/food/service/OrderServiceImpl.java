@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -32,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final MealRepository mealRepository;
 
     @Override
-    public void createOrder(Integer accountId, List<MealDto> mealDtoList) {
+    public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
         Order order = new Order();
         order.setAccount(accountRepository.findById(accountId));
@@ -44,7 +45,8 @@ public class OrderServiceImpl implements OrderService {
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
         order.setCookingTimeSum(cookingTimeSum(meals));
-        orderRepository.create(order);
+
+        return modelMapper.map(orderRepository.create(order), OrderDto.class);
     }
 
     @Override
@@ -54,35 +56,39 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addMeals(Integer orderId, Integer[] mealsId) {
+    public void addMeals(Integer orderId, List<MealDto> mealDtos) {
 
         Order order = orderRepository.findById(orderId);
-        List<Meal> meals = orderRepository.findById(orderId).getMeals();
+        Type listType = new TypeToken<List<Meal>>() {
+        }.getType();
+        List<Meal> mealList = modelMapper.map(mealDtos, listType);
 
-        for (int mealId : mealsId) {
-            meals.add(mealRepository.findById(mealId));
-        }
-
-        order.setOrderSum(orderPriceSum(meals));
-        order.setMeals(meals);
-        order.setCookingTimeSum(cookingTimeSum(meals));
+        order.setOrderSum(orderPriceSum(mealList));
+        order.setMeals(mealList);
+        order.setCookingTimeSum(cookingTimeSum(mealList));
         orderRepository.update(order);
     }
 
     @Override
-    public void removeMeals(Integer orderId, Integer[] mealsId) {
+    public OrderDto removeMeals(Integer orderId, List<MealDto> mealDtosToRemove) {
 
         Order order = orderRepository.findById(orderId);
-        List<Meal> meals = orderRepository.findById(orderId).getMeals();
+        List<Meal> orderMeals = order.getMeals();
 
-        for (int mealId : mealsId) {
-            meals.remove(mealRepository.findById(mealId));
-        }
+        Type listType = new TypeToken<List<MealDto>>() {
+        }.getType();
+        List<Meal> mealListToRemove = modelMapper.map(mealDtosToRemove, listType);
 
-        order.setMeals(meals);
-        order.setOrderSum(orderPriceSum(meals));
-        order.setCookingTimeSum(cookingTimeSum(meals));
-        orderRepository.update(order);
+        List<Meal> filteredMeals = orderMeals.stream()
+                .filter(orderMeal -> mealListToRemove.stream()
+                        .noneMatch(mealToRemove -> mealToRemove.getName().equals(orderMeal.getName())))
+                .collect(Collectors.toList());
+
+        order.setMeals(filteredMeals);
+        order.setOrderSum(orderPriceSum(filteredMeals));
+        order.setCookingTimeSum(cookingTimeSum(filteredMeals));
+        OrderDto orderDto = modelMapper.map(orderRepository.update(order), OrderDto.class);
+        return orderDto;
     }
 
     @Override
@@ -104,9 +110,10 @@ public class OrderServiceImpl implements OrderService {
 
     private BigDecimal orderPriceSum(List<Meal> mealList) {
 
-        BigDecimal price = null;
+        BigDecimal price = new BigDecimal(0);
+
         for (Meal meal : mealList) {
-            price = price.add(meal.getPrice());
+            price.add(meal.getPrice());
         }
         return price;
     }

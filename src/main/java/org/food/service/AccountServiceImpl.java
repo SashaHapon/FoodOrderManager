@@ -1,10 +1,12 @@
 package org.food.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.AccountRepository;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
 import org.food.model.Account;
+import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -38,6 +40,7 @@ public class AccountServiceImpl implements AccountService {
         return modelMapper.map(accountRepository.create(account), AccountDto.class);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public AccountDto getAccount(Integer id) {
 
@@ -48,6 +51,9 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccountById(Integer id) {
 
         Account account = accountRepository.findById(id);
+        if(account == null){
+            throw new EntityNotFoundException("Account");
+        }
         accountRepository.delete(account);
     }
 

@@ -1,7 +1,6 @@
 package org.food.dto;
 
-import org.food.model.Meal;
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
@@ -10,12 +9,10 @@ public class OrderDto {
 
     private Integer id;
 
-    private List<Meal> meals;
+    private List<MealDto> meals;
 
     private String accountId;
 
     private AccountDto accountDto;
-
-    private MealDto mealDto;
 
 }

@@ -29,16 +29,16 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public void addMeals(@RequestParam("id") Integer orderId, @RequestBody Integer[] mealsId) {
+    public void addMeals(@RequestParam("id") Integer orderId, @RequestBody  List<MealDto> mealDtos) {
 
-        orderService.addMeals(orderId, mealsId);
+        orderService.addMeals(orderId,  mealDtos);
     }
 
     @DeleteMapping("/{id}")
     public void removeMeals(@RequestParam("id") Integer orderId,
-                            @RequestBody Integer[] mealsId) {
+                            @RequestBody List<MealDto> mealDtosToRemove) {
 
-        orderService.removeMeals(orderId, mealsId);
+        orderService.removeMeals(orderId, mealDtosToRemove);
     }
 
     @GetMapping("/")

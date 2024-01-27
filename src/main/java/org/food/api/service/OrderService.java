@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface OrderService {
 
-    void createOrder(Integer accountId, List<MealDto> mealDtoList);
+    OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList);
 
     OrderDto getOrder(Integer accountId);
 
-    void addMeals(Integer orderId, Integer[] mealsId);
+    void addMeals(Integer orderId,  List<MealDto> mealDtos);
 
-    void removeMeals(Integer orderId, Integer[] mealsId);
+    OrderDto removeMeals(Integer orderId, List<MealDto> mealDtosToRemove);
 
     List<MealDto> getAllMeals(Integer orderId);
 }
