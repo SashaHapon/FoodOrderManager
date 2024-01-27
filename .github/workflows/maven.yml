@@ -1,12 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Java CI with Maven
+name: main
 
 on:
   push:
@@ -16,25 +8,24 @@ on:
 
 jobs:
   build:
-
+    name: Build and Run Tests
     runs-on: ubuntu-latest
-
+    permissions:
+      checks: write
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 17
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '21'
           cache: maven
-      - name: Make wrapper script executable
+      - name: Make maven wrapper script executable
         run: chmod +x ./mvnw
-      - name: Build with Maven
-        run: ./mvnw -B package --file pom.xml
-
-      - name: Run Tests
-        run: ./mvnw test --batch-mode --fail-at-end
-
-      - name: Publish Test Report
+      - name: Build and run tests
+        run: ./mvnw package
+      - name: Publish test reports
         if: success() || failure()
         uses: scacap/action-surefire-report@v1
