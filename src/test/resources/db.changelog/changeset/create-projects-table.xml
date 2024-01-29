@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="Alexandr Hapon" labels="example-label" context="example-context">
+        <comment>example-comment</comment>
+        <createTable tableName="account">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="money" type="decimal(38,2)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="phone_number" type="varchar(255)"/>
+        </createTable>
+        <sqlFile path=""/>
+    </changeSet>
+
+    <changeSet id="2-2" author="Alexandr Hapon" labels="example-label" context="example-context">
+        <comment>example-comment</comment>
+        <createTable tableName="meal">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="price" type="decimal(38,2)"/>
+            <column name="time" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3-5" author="Alexandr Hapon" labels="example-label" context="example-context">
+        <comment>example-comment</comment>
+        <createTable tableName="order">
+            <column name="id" type="int" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="meals_id" type="int">
+                <constraints foreignKeyName="fk_order_meal" referencedTableName="meal" referencedColumnNames="id"/>
+            </column>
+            <column name="account_id" type="int">
+                <constraints foreignKeyName="fk_order_account" referencedTableName="account" referencedColumnNames="id"/>
+            </column>
+            <column name="order_sum" type="decimal(38,2)"/>
+            <column name="cooking_time_sum" type="int"/>
+            <column name="meal_id" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex tableName="order" indexName="idx_order_account_id">
+            <column name="account_id"></column>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="7-6" author="Alexandr Hapon">
+        <createTable tableName="order_meals">
+            <column name="order_id" type="int">
+                <constraints foreignKeyName="fk_order_meal_order" referencedTableName="order" referencedColumnNames="id"/>
+            </column>
+            <column name="meals_id" type="int">
+                <constraints foreignKeyName="fk_order_meal_meal" referencedTableName="meal" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="order_meals" indexName="idx_order_meal_meal_id">
+            <column name="meals_id"></column>
+        </createIndex>
+        <createIndex tableName="order_meals" indexName="idx_order_meal_order_id">
+            <column name="order_id"></column>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

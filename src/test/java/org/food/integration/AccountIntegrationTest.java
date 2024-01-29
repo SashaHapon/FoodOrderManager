@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.food.dto.AccountDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +37,7 @@ public class AccountIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @DisplayName("")
     void getAllAccounts() throws Exception {
         MvcResult result = mockMvc.perform(get("/accounts/")
                         .param("id", "1")
@@ -53,6 +55,7 @@ public class AccountIntegrationTest {
     }
 
     @Test
+    @DisplayName("")
     void addAccount() throws Exception {
 
         AccountDto accountDto = new AccountDto();
