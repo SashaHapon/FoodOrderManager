@@ -13,10 +13,12 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.TestPropertySource;
+
 import java.sql.SQLException;
 
-@TestConfiguration
-@ComponentScan(basePackages = "src/test/java/org/food")
+@Configuration
 public class PersistenceContext {
 
     @MockBean
