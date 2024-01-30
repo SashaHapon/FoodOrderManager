@@ -1,0 +1,29 @@
+# Food Order Manager
+
+Food Order Manager is a project that facilitates the process of managing and placing food orders. It provides a platform for users to browse available dishes, place orders, and manage their order history.
+
+## Features
+
+- Browse a variety of dishes.
+- Place new orders.
+- View order history.
+
+## Technologies Used
+
+- Spring Boot for backend development.
+- MySQL Database for storing orders.
+- H2 Database for testing.
+- Spring Data JPA for simplify the implementation of data access layers.
+- Spring Security for authentication and access control framework for Java applications.
+- Spring Web for building web applications using the Spring framework.
+- Lombok for library to reduce boilerplate code in Java classes.
+- ModelMapper for flexible and easy-to-use Java library for object mapping.
+
+## Getting Started
+
+To get started with the project, follow these steps:
+
+1. Clone the repository.
+2. Set up the backend and frontend components.
+3. Run the application locally.
+
