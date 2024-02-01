@@ -1,0 +1,1 @@
+INSERT INTO account (name, money, phone_number) VALUES ('Test Account 1', 100.0, '1234567890');

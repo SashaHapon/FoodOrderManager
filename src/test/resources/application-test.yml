@@ -1,14 +1,15 @@
 spring:
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL
+    url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS MYDB
     username: root
     password:
-    h2:
-      console:
-        enabled: true
+#    default-schema: mydb
+  h2:
+    console:
+      enabled: true
   jpa:
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: none
     generate-ddl: false
     show-sql: true
 
@@ -16,10 +17,15 @@ spring:
       dialect: org.hibernate.dialect.H2Dialect
   test:
     database:
-      replace: NONE
+      replace: none
   liquibase:
+   # url: jdbc:h2:mem:mydb;;INIT=CREATE SCHEMA IF NOT EXISTS MYDB;
+#    MODE=MYSQL; DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
+    user: root
+    password:
+#    liquibaseSchema: mydb
 
 token:
   tokenLifetime: 144000000

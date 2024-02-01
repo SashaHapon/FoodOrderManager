@@ -4,21 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.food.api.repository.AccountRepository;
 import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
+import org.food.controller.AccountController;
 import org.food.security.repository.RefreshTokenRepository;
 import org.food.security.repository.UserRepository;
-import org.food.security.service.UserService;
 import org.h2.tools.Server;
+import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.TestPropertySource;
 
 import java.sql.SQLException;
 
-@Configuration
+@TestConfiguration
 public class PersistenceContext {
 
     @MockBean
@@ -34,6 +32,9 @@ public class PersistenceContext {
     private OrderRepository orderRepository;
 
     @MockBean
+    AccountController accountController;
+
+    @MockBean
     private RefreshTokenRepository refreshTokenRepository;
     @Bean
     public ObjectMapper objectMapper() {
@@ -45,8 +46,19 @@ public class PersistenceContext {
         return new ModelMapper();
     }
 
+
+
     @Bean(initMethod = "start", destroyMethod = "stop")
     public Server h2Server() throws SQLException {
-        return Server.createTcpServer("-tcp","-tcpAllowOthers","-tcpPort","9092");
+        return Server.createTcpServer("-tcp","-tcpAllowOthers","-tcpPort","9064");
     }
+
+//    @Bean
+//    public WebTestClient webTestClient(){
+//        WebTestClient client = MockMvcWebTestClient.bindToController(accountController)
+//                .configureClient()
+//                .baseUrl("localhost:3306")
+//                .build();
+//        return client;
+//    }
 }

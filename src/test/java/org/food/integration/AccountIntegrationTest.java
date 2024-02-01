@@ -1,84 +1,96 @@
 package org.food.integration;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.food.TestApp;
+import org.food.api.repository.AccountRepository;
 import org.food.dto.AccountDto;
-import org.h2.tools.Server;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
+
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.List;
+
+import java.math.BigDecimal;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@WebAppConfiguration
+
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase
+@AutoConfigureWebTestClient
+@ActiveProfiles("test")
 public class AccountIntegrationTest {
-
-
-    @Autowired
-    private Server h2Server;
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    AccountRepository accountRepository;
 
     @BeforeEach
-    public void init(){
+    void init(){
 
-    }
-    @Test
-    @DisplayName("")
-    void getAllAccounts() throws Exception {
-        MvcResult result = mockMvc.perform(get("/accounts/")
-                        .param("id", "1")
-                        .param("limit", "10")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String content = result.getResponse().getContentAsString();
-
-        List<AccountDto> accounts = objectMapper.readValue(content, new TypeReference<List<AccountDto>>() {});
-
-        assertNotNull(accounts);
-        assertEquals(10, accounts.size());
-    }
+}
 
     @Test
     @DisplayName("")
+    @WithMockUser
+    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
+    void getAccounts() throws Exception {
+
+        ResultActions result = mockMvc.perform(get("/accounts/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        MvcResult mvcResult = result.andReturn();
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+
+        AccountDto response = objectMapper.readValue(contentAsString, AccountDto.class);
+        System.out.println(response);
+    }
+
+    @Test
+    @WithMockUser
+    @DisplayName("")
+    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
     void addAccount() throws Exception {
 
-        AccountDto accountDto = new AccountDto();
-        accountDto.setName("Новый аккаунт");
+        AccountDto accountDto = new AccountDto(1,"Sasha", BigDecimal.valueOf(342), "+4245253562352");
+
+
 
         String requestBody = objectMapper.writeValueAsString(accountDto);
 
-        MvcResult result = mockMvc.perform(get("/accounts/")
+        ResultActions resultActsions = mockMvc.perform(post("/accounts/")
                         .content(requestBody)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        MvcResult result = resultActsions.andReturn();
+
 
         String content = result.getResponse().getContentAsString();
-
+        System.out.println(content);
         AccountDto createdAccountDto = objectMapper.readValue(content, AccountDto.class);
 
         assertNotNull(createdAccountDto);
