@@ -2,11 +2,10 @@ package org.food.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
-import org.junit.jupiter.api.AfterEach;
+import org.food.exception.classes.NotFoundException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+// todo enable filters
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
@@ -44,6 +47,14 @@ public class AccountIntegrationTest {
     @Autowired
     AccountService accountService;
 
+    static String jsonAccount;
+
+    @BeforeAll
+    public static void init() throws IOException {
+        Path path = Paths.get("src/test/resources/db/data/sql/account/integration/test/account-id1.json");
+        jsonAccount = Files.readString(path);
+    }
+
     @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
     @Test
     @DisplayName("Return account from database with id=1")
@@ -52,12 +63,8 @@ public class AccountIntegrationTest {
 
         ResultActions result = mockMvc.perform(get("/accounts/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
-
-        MvcResult mvcResult = result.andReturn();
-        String contentAsString = mvcResult.getResponse().getContentAsString();
-
-        AccountDto response = objectMapper.readValue(contentAsString, AccountDto.class);
+                .andExpect(status().isOk())
+                .andExpect(content().json(jsonAccount));
     }
 
     @Test
@@ -76,20 +83,14 @@ public class AccountIntegrationTest {
     void should_addAccount_toDb() throws Exception {
 
         AccountDto accountDto = new AccountDto(null, "Sasha", BigDecimal.valueOf(342), "+4245253562352");
-
-
         String requestBody = objectMapper.writeValueAsString(accountDto);
 
-        ResultActions resultActsions = mockMvc.perform(post("/accounts/")
+        MvcResult result = mockMvc.perform(post("/accounts/")
                         .content(requestBody)
                         .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        MvcResult result = resultActsions.andReturn();
-
+                .andExpect(status().isOk()).andReturn();
 
         String content = result.getResponse().getContentAsString();
-        System.out.println(content);
         AccountDto createdAccountDto = objectMapper.readValue(content, AccountDto.class);
 
         assertNotNull(createdAccountDto);
@@ -119,11 +120,10 @@ public class AccountIntegrationTest {
         AccountDto firstAccountDto = new AccountDto(1, "Test Account 1", new BigDecimal(100.01).setScale(2, RoundingMode.HALF_UP), "1234567890");
         AccountDto secondAccountDto = new AccountDto(2, "Test Account 2", new BigDecimal(100.01).setScale(2, RoundingMode.HALF_UP), "1234567890");
 
-        ResultActions result = mockMvc.perform(get("/accounts/"))
+        MvcResult mvcResult = mockMvc.perform(get("/accounts/"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn();
 
-        MvcResult mvcResult = result.andReturn();
         String contentAsString = mvcResult.getResponse().getContentAsString();
         List<AccountDto> response = objectMapper.readValue(contentAsString, new TypeReference<List<AccountDto>>() {
         });
@@ -142,7 +142,7 @@ public class AccountIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(() -> accountService.getAccount(3));
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> accountService.getAccount(3));
     }
 
 
@@ -154,7 +154,7 @@ public class AccountIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(() -> accountService.deleteAccountById(404));
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> accountService.deleteAccountById(404));
     }
 
     @Test
