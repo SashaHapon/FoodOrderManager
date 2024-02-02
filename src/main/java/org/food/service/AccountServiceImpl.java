@@ -1,19 +1,17 @@
 package org.food.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.AccountRepository;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
+import org.food.exception.classes.NotFoundException;
 import org.food.model.Account;
-import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
+
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -47,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto getAccount(Integer id) {
         Account account = accountRepository.findById(id);
         if(account == null){
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Account with id=" + id + ", not found");
         }
         return modelMapper.map(account, AccountDto.class);
     }
@@ -57,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountRepository.findById(id);
         if(account == null){
-            throw new EntityNotFoundException();
+            throw new NotFoundException("Account with id=" + id + ", not found");
         }
         accountRepository.delete(account);
     }

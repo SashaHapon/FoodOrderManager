@@ -1,10 +1,10 @@
 package org.food.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.MealRepository;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
+import org.food.exception.classes.NotFoundException;
 import org.food.model.Meal;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -41,7 +41,7 @@ public class MealServiceImpl implements MealService {
         public MealDto getMeal(Integer id){
                 Meal meal = mealRepository.findById(id);
                 if(meal == null){
-                        throw new EntityNotFoundException();
+                        throw new NotFoundException("Meal with id=" + id + ", not found");
                 }
                 return modelMapper.map(meal, MealDto.class);
         }
@@ -51,7 +51,7 @@ public class MealServiceImpl implements MealService {
 
                 Meal meal = mealRepository.findById(id);
                 if(meal == null){
-                        throw new EntityNotFoundException();
+                        throw new NotFoundException("Meal with id=" + id + ", not found");
                 }
                 mealRepository.delete(meal);
         }
