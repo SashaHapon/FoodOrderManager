@@ -13,9 +13,9 @@ import java.util.Date;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
-    @ExceptionHandler(EntityNotFoundException.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ErrorMessage resourceNotFoundException(EntityNotFoundException ex, WebRequest request) {
+    public ErrorMessage resourceNotFoundException(NotFoundException ex, WebRequest request) {
         return new ErrorMessage(
                 HttpStatus.NOT_FOUND.value(),
                 new Date(),
