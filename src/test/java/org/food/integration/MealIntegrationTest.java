@@ -2,10 +2,10 @@ package org.food.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
+import org.food.exception.classes.NotFoundException;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +18,28 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//todo enable filters
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@Sql("classpath:db/data/sql/user/integration/test/users-sql-testdata.sql")
 public class MealIntegrationTest {
 
     @Autowired
@@ -41,15 +49,23 @@ public class MealIntegrationTest {
     @Autowired
     MealService mealService;
 
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
+    static String jsonMeal;
+
+    @BeforeAll
+    public static void init() throws IOException {
+        Path path = Paths.get("src/test/resources/db/data/sql/meal/integration/test/meal-id1.json");
+        jsonMeal = Files.readString(path);
+    }
+
     @Test
     @DisplayName("Return meal from database with id=1")
-    @WithMockUser
+    @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
     void should_return_Account_with_id1() throws Exception {
 
         ResultActions result = mockMvc.perform(get("/meals/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json(jsonMeal));
 
         MvcResult mvcResult = result.andReturn();
         String contentAsString = mvcResult.getResponse().getContentAsString();
@@ -59,7 +75,6 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Throw NotFoundException when try to get meal with id=0)")
-    @WithMockUser
     void should_throw_notFoundException_when_getMeal() throws Exception {
 
         ResultActions result = mockMvc.perform(get("/meals/0"))
@@ -73,7 +88,6 @@ public class MealIntegrationTest {
     void should_addAccount_toDb() throws Exception {
 
         MealDto mealDto = new MealDto(null, "Water", BigDecimal.valueOf(1), 15);
-
 
         String requestBody = objectMapper.writeValueAsString(mealDto);
 
@@ -108,7 +122,6 @@ public class MealIntegrationTest {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("Return all meals from database")
     @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
     public void should_return_allMeals() throws Exception {
@@ -131,7 +144,6 @@ public class MealIntegrationTest {
 
 
     @Test
-    @WithMockUser
     @DisplayName("Delete meal with id=3")
     @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
     public void should_delete_meal_withId_3() throws Exception {
@@ -139,23 +151,21 @@ public class MealIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(() -> mealService.getMeal(3));
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> mealService.getMeal(3));
     }
 
 
     @Test
-    @WithMockUser
     @DisplayName("Throw NotFoundException when try to delete meal with incorrect id")
     public void deleteNonExistingMealById() throws Exception {
         mockMvc.perform(delete("/meals/404"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(() -> mealService.deleteMealById(404));
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> mealService.deleteMealById(404));
     }
 
     @Test
-    @WithMockUser
     @DisplayName("Update meal with id=4")
     @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
     void should_update_meal_with_id_4() throws Exception {
