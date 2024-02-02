@@ -3,9 +3,13 @@ package org.food.controller;
 import lombok.RequiredArgsConstructor;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
+import org.food.exception.classes.BadRequestException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.fasterxml.jackson.core.JsonPointer.empty;
 
 @RestController
 @RequestMapping("/accounts")
@@ -22,8 +26,7 @@ public class AccountController {
     }
 
     @PostMapping("/")
-    public AccountDto addAccount(@RequestBody AccountDto accountDto) {
-
+    public AccountDto addAccount(@RequestBody AccountDto accountDto) throws HttpMessageNotReadableException {
         return accountService.addAccount(accountDto);
     }
 

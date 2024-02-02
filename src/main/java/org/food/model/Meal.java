@@ -10,14 +10,13 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 @Entity
-@Table(name = "meal", schema = "mydb")
+@Table(name = "meal")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Meal {
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;

@@ -10,8 +10,10 @@ import org.hibernate.ObjectNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -43,8 +45,11 @@ public class AccountServiceImpl implements AccountService {
     @Transactional(readOnly = true)
     @Override
     public AccountDto getAccount(Integer id) {
-
-        return modelMapper.map(accountRepository.findById(id), AccountDto.class);
+        Account account = accountRepository.findById(id);
+        if(account == null){
+            throw new EntityNotFoundException();
+        }
+        return modelMapper.map(account, AccountDto.class);
     }
 
     @Override
@@ -52,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountRepository.findById(id);
         if(account == null){
-            throw new EntityNotFoundException("Account");
+            throw new EntityNotFoundException();
         }
         accountRepository.delete(account);
     }

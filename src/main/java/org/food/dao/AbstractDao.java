@@ -42,8 +42,8 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
     @Override
     public List<T> findAll(int id, int limit) {
 
-        return entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName()
-                + " e ORDER BY e." + id + " ASC", entityClass).setMaxResults(limit).getResultList();
+        return entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass)
+                .getResultList();
     }
 
     public T findOrderByIdWithEntityGraph(Integer id) {

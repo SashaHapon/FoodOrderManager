@@ -1,7 +1,5 @@
 INSERT INTO meal (name, price, time, date)
-    VALUES ('Паста карбонара', 15.99, 430, '2024-01-29'),
-    VALUES ('Пицца', 87.879, 54, '2024-01-27'),
-    VALUES ('Салат', 19.99, 50, '2024-01-24'),
-    VALUES ('Чай', 6995.99, 56, '2024-01-23'),
-    VALUES ('Какао', 690.99, 45, '2024-01-23'),
-    VALUES ('Сок', 15.99, 4, '2024-01-11');
+VALUES ('Spaghetti Bolognese', 15.99, 30, '2022-02-15'),
+('Spaghetti Bolognese', 15.99, 30, '2022-02-15'),
+('Spaghetti Bolognese', 15.99, 30, '2022-02-15'),
+('Spaghetti Bolognese', 15.99, 30, '2022-02-15');
