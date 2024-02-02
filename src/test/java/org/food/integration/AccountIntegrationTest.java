@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,6 @@ public class AccountIntegrationTest {
     AccountService accountService;
     @Autowired
     private EntityManager entityManager;
-
-    public void cleanup() {
-        entityManager.flush();
-        entityManager.clear();
-    }
 
     @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
     @Test
