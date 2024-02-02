@@ -1,5 +1,5 @@
 INSERT INTO meal (name, price, time, date)
-VALUES ('Spaghetti Bolognese', 15.99, 30, '2022-02-15'),
-('Spaghetti Bolognese', 15.99, 30, '2022-02-15'),
-('Spaghetti Bolognese', 15.99, 30, '2022-02-15'),
-('Spaghetti Bolognese', 15.99, 30, '2022-02-15');
+VALUES ('Test Meal 1', 15.99, 30, '2022-02-15'),
+('Test Meal 2', 15.99, 30, '2022-02-15'),
+('Test Meal 3', 15.99, 30, '2022-02-15'),
+('Test Meal 4', 15.99, 30, '2022-02-15');

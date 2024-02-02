@@ -1,5 +1,6 @@
 package org.food.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.MealRepository;
 import org.food.api.service.MealService;
@@ -38,14 +39,20 @@ public class MealServiceImpl implements MealService {
 
         @Override
         public MealDto getMeal(Integer id){
-
-                return modelMapper.map(mealRepository.findById(id), MealDto.class);
+                Meal meal = mealRepository.findById(id);
+                if(meal == null){
+                        throw new EntityNotFoundException();
+                }
+                return modelMapper.map(meal, MealDto.class);
         }
 
         @Override
         public void deleteMealById(Integer id) {
 
                 Meal meal = mealRepository.findById(id);
+                if(meal == null){
+                        throw new EntityNotFoundException();
+                }
                 mealRepository.delete(meal);
         }
 

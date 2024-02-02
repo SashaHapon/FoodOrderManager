@@ -3,6 +3,7 @@ package org.food.controller;
 import lombok.RequiredArgsConstructor;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class MealController {
 
     private final MealService mealService;
 
+    @GetMapping("/")
     public List<MealDto> getAll(@RequestParam(defaultValue = "1", required = false) int id,
                                 @RequestParam(defaultValue = "10", required = false) int limit) {
 
@@ -21,7 +23,7 @@ public class MealController {
     }
 
     @PostMapping("/")
-    public MealDto addMeal(MealDto mealDto) {
+    public MealDto addMeal(@RequestBody MealDto mealDto)  throws HttpMessageNotReadableException {
 
         return mealService.addMeal(mealDto);
     }

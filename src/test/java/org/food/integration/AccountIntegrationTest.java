@@ -43,8 +43,6 @@ public class AccountIntegrationTest {
     private ObjectMapper objectMapper;
     @Autowired
     AccountService accountService;
-    @Autowired
-    private EntityManager entityManager;
 
     @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
     @Test
