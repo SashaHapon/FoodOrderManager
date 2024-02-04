@@ -7,9 +7,11 @@ import org.food.api.repository.OrderRepository;
 import org.food.api.service.AccountService;
 import org.food.api.service.MealService;
 import org.food.api.service.OrderService;
+import org.food.dao.OrderRepositoryImpl;
 import org.food.dto.AccountDto;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
+import org.food.model.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,6 +56,8 @@ public class OrderIntegrationTest {
     private ObjectMapper objectMapper;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    OrderRepository orderRepository;
 
     private String getJsonAsString(String name){
         try {
@@ -89,6 +93,7 @@ public class OrderIntegrationTest {
                 .andExpect(content().json(getJsonAsString("getOrder_expectedJson.json")));
     }
 
+    //todo to 3 id order
     @Test
     @WithMockUser
     @DisplayName("Add meals to order with id=1")
@@ -106,6 +111,7 @@ public class OrderIntegrationTest {
         assertNotEquals(mealListAfterAdding, mealListBeforeAdding);
     }
 
+    //todo to 2id
     @Test
     @WithMockUser
     @DisplayName("Add meals to order with id=1")

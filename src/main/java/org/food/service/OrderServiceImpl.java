@@ -8,7 +8,6 @@ import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.exception.classes.NotFoundException;
-import org.food.model.Account;
 import org.food.model.Meal;
 import org.food.model.Order;
 import org.modelmapper.ModelMapper;
@@ -109,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
 
         int cookingTimeSum = 0;
         for (Meal meal : mealList) {
-            cookingTimeSum += meal.getTime();
+            cookingTimeSum += meal.getTimeq();
         }
         return cookingTimeSum;
     }

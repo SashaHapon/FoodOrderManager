@@ -2,7 +2,6 @@ package org.food.model;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +20,5 @@ public class Meal {
     private Integer id;
     private String name;
     private BigDecimal price;
-    private int time;
+    private int timeq;
 }

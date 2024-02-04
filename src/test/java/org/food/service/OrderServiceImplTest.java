@@ -117,7 +117,7 @@ public class OrderServiceImplTest {
         Order testOrder = new Order();
         Meal meal = new Meal();
         meal.setPrice(new BigDecimal(12));
-        meal.setTime(12);
+        meal.setTimeq(12);
         MealDto mealDto = new MealDto();
         List<Meal> meals = new ArrayList<>(List.of(meal));
         List<MealDto> mealDtos = new ArrayList<>(List.of(mealDto));
