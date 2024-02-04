@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "\"order\"")
+@Table(name = "orders")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,10 +22,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Meal.class)
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Meal.class)
     private List<Meal> meals = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     private Account account;
 
     private BigDecimal orderSum;

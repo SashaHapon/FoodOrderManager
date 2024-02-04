@@ -15,34 +15,34 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/{id}")
-    public void createOrder(@RequestParam("id") Integer accountId,
+    @PostMapping("/")
+    public OrderDto createOrder(@RequestParam("id") Integer accountId,
                             @RequestBody List<MealDto> mealDtoList) {
 
-        orderService.createOrder(accountId, mealDtoList);
+        return orderService.createOrder(accountId, mealDtoList);
     }
 
     @GetMapping("/{id}")
-    public OrderDto getOrder(@RequestParam("id") Integer id) {
+    public OrderDto getOrder(@PathVariable("id") Integer id) {
 
         return orderService.getOrder(id);
     }
 
     @PutMapping("/{id}")
-    public void addMeals(@RequestParam("id") Integer orderId, @RequestBody  List<MealDto> mealDtos) {
+    public void addMeals(@PathVariable("id") Integer orderId, @RequestBody  List<MealDto> mealDtos) {
 
         orderService.addMeals(orderId,  mealDtos);
     }
 
     @DeleteMapping("/{id}")
-    public void removeMeals(@RequestParam("id") Integer orderId,
+    public void removeMeals(@PathVariable("id") Integer orderId,
                             @RequestBody List<MealDto> mealDtosToRemove) {
 
         orderService.removeMeals(orderId, mealDtosToRemove);
     }
 
-    @GetMapping("/")
-    public List<MealDto> getAllMeals(@RequestParam("id") Integer id) {
+    @GetMapping("/meals/{id}")
+    public List<MealDto> getAllMeals(@PathVariable("id") Integer id) {
 
         return orderService.getAllMeals(id);
     }

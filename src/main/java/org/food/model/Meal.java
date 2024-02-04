@@ -22,5 +22,4 @@ public class Meal {
     private String name;
     private BigDecimal price;
     private int time;
-    private String date;
 }

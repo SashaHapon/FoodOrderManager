@@ -6,6 +6,7 @@ import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
 import org.food.exception.classes.NotFoundException;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +48,15 @@ public class AccountIntegrationTest {
     @Autowired
     AccountService accountService;
 
-    static String jsonAccount;
+    public String jsonAccount;
 
-    @BeforeAll
-    public static void init() throws IOException {
+    @BeforeEach
+    public void init() throws IOException {
         Path path = Paths.get("src/test/resources/db/data/sql/account/integration/test/account-id1.json");
         jsonAccount = Files.readString(path);
     }
 
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
     @Test
     @DisplayName("Return account from database with id=1")
     @WithMockUser
@@ -114,7 +115,7 @@ public class AccountIntegrationTest {
     @Test
     @WithMockUser
     @DisplayName("Return all accounts from database")
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
     public void should_return_allAccounts() throws Exception {
 
         AccountDto firstAccountDto = new AccountDto(1, "Test Account 1", new BigDecimal(100.01).setScale(2, RoundingMode.HALF_UP), "1234567890");
@@ -136,7 +137,7 @@ public class AccountIntegrationTest {
     @Test
     @WithMockUser
     @DisplayName("Delete account with id=3")
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
     public void should_delete_account_withId_3() throws Exception {
         ResultActions result = mockMvc.perform(delete("/accounts/3"))
                 .andDo(print())
@@ -160,7 +161,7 @@ public class AccountIntegrationTest {
     @Test
     @WithMockUser
     @DisplayName("Update account with id=4")
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
     void should_update_account_with_id_4() throws Exception {
         AccountDto firstAccountDto = new AccountDto(4, "Test Account 4", new BigDecimal(100.01).setScale(2, RoundingMode.HALF_UP), "0000456");
         String requestBody = objectMapper.writeValueAsString(firstAccountDto);

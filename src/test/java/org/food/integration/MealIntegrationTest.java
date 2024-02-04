@@ -39,7 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //todo enable filters
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
-@Sql("classpath:db/data/sql/user/integration/test/users-sql-testdata.sql")
 public class MealIntegrationTest {
 
     @Autowired

@@ -5,6 +5,7 @@ import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
+import org.food.exception.classes.NotFoundException;
 import org.food.model.Account;
 import org.food.model.Meal;
 import org.food.model.Order;
@@ -102,10 +103,10 @@ public class OrderServiceImplTest {
         int id = 1;
         Order testOrder = null;
 
-        when(orderRepository.findById(id)).thenReturn(testOrder);
-        when(modelMapper.map(testOrder, OrderDto.class)).thenThrow(IllegalArgumentException.class);
+        when(orderRepository.findById(id)).thenReturn(testOrder).thenThrow(NotFoundException.class);
+//        when(modelMapper.map(testOrder, OrderDto.class)).thenThrow(IllegalArgumentException.class);
 
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> orderService.getOrder(id));
     }
 
@@ -142,9 +143,9 @@ public class OrderServiceImplTest {
         OrderDto orderDto = new OrderDto();
         MealDto mealDto = new MealDto(1, "name3", new BigDecimal(555), 5);
 
-        Meal meal = new Meal(1, "name1", new BigDecimal(555), 5, "");
-        Meal meal1 = new Meal(2, "name2", new BigDecimal(555), 5, "");
-        Meal meal2 = new Meal(1, "name3", new BigDecimal(555), 5, "");
+        Meal meal = new Meal(1, "name1", new BigDecimal(555), 5);
+        Meal meal1 = new Meal(2, "name2", new BigDecimal(555), 5);
+        Meal meal2 = new Meal(1, "name3", new BigDecimal(555), 5);
 
         List<Meal> mealsToDelete = new ArrayList<>(List.of(meal, meal1));
         List<Meal> orderMeals = new ArrayList<>(List.of(meal, meal1, meal2));
