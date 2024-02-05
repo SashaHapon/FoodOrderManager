@@ -1,45 +1,41 @@
 package org.food.integration;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
 import org.food.exception.classes.NotFoundException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // todo enable filters
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@Transactional
+@Rollback
 public class AccountIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
@@ -48,29 +44,33 @@ public class AccountIntegrationTest {
     @Autowired
     AccountService accountService;
 
-    public String jsonAccount;
-
-    @BeforeEach
-    public void init() throws IOException {
-        Path path = Paths.get("src/test/resources/db/data/sql/account/integration/test/account-id1.json");
-        jsonAccount = Files.readString(path);
+    private String getJsonAsString(String name){
+        try {
+            Path path = Paths.get("src/test/resources/db/data/account/integration/test/" + name);
+            return Files.readString(path);
+        }catch (IOException e){
+            throw new RuntimeException(e.getCause());
+        }
     }
 
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
+
     @Test
-    @DisplayName("Return account from database with id=1")
     @WithMockUser
+    @Sql("classpath:db/data/testdata.sql")
+    @DisplayName("Return account from database with id=1")
     void should_return_Account_with_id1() throws Exception {
 
-        ResultActions result = mockMvc.perform(get("/accounts/1"))
+        mockMvc.perform(get("/accounts/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(jsonAccount));
+                .andExpect(content().json(getJsonAsString("getAccount_expectedAccountDto.json")));
     }
 
     @Test
-    @DisplayName("Throw NotFoundException when try to get account with id=0)")
     @WithMockUser
+    @Sql("classpath:db/data/testdata.sql")
+    @DisplayName("Throw NotFoundException when try to get account with id=0)")
+
     void should_throw_notFoundException_when_getAccount() throws Exception {
 
         ResultActions result = mockMvc.perform(get("/accounts/0"))
@@ -83,19 +83,12 @@ public class AccountIntegrationTest {
     @DisplayName("Add new account to database")
     void should_addAccount_toDb() throws Exception {
 
-        AccountDto accountDto = new AccountDto(null, "Sasha", BigDecimal.valueOf(342), "+4245253562352");
-        String requestBody = objectMapper.writeValueAsString(accountDto);
-
-        MvcResult result = mockMvc.perform(post("/accounts/")
-                        .content(requestBody)
+        mockMvc.perform(post("/accounts/")
+                        .content(getJsonAsString("addAccount_inputAccountDto.json"))
                         .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
-
-        String content = result.getResponse().getContentAsString();
-        AccountDto createdAccountDto = objectMapper.readValue(content, AccountDto.class);
-
-        assertNotNull(createdAccountDto);
-        assertEquals("Sasha", createdAccountDto.getName());
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(getJsonAsString("addAccount_expectedAccountDto.json")));
     }
 
     @Test
@@ -106,7 +99,7 @@ public class AccountIntegrationTest {
 
         String requestBody = objectMapper.writeValueAsString("incorrect message");
 
-        ResultActions result = mockMvc.perform(post("/accounts/")
+        mockMvc.perform(post("/accounts/")
                         .content(requestBody)
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -115,31 +108,22 @@ public class AccountIntegrationTest {
     @Test
     @WithMockUser
     @DisplayName("Return all accounts from database")
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
+    @Sql("classpath:db/data/testdata.sql")
     public void should_return_allAccounts() throws Exception {
 
-        AccountDto firstAccountDto = new AccountDto(1, "Test Account 1", new BigDecimal(100.01).setScale(2, RoundingMode.HALF_UP), "1234567890");
-        AccountDto secondAccountDto = new AccountDto(2, "Test Account 2", new BigDecimal(100.01).setScale(2, RoundingMode.HALF_UP), "1234567890");
-
-        MvcResult mvcResult = mockMvc.perform(get("/accounts/"))
+        mockMvc.perform(get("/accounts/"))
                 .andDo(print())
-                .andExpect(status().isOk()).andReturn();
-
-        String contentAsString = mvcResult.getResponse().getContentAsString();
-        List<AccountDto> response = objectMapper.readValue(contentAsString, new TypeReference<List<AccountDto>>() {
-        });
-
-        assertTrue(response.contains(firstAccountDto));
-        assertTrue(response.contains(secondAccountDto));
+                .andExpect(status().isOk())
+                .andExpect(content().json(getJsonAsString("getAll_expectedListAccountDto.json")));
     }
 
 
     @Test
     @WithMockUser
     @DisplayName("Delete account with id=3")
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
+    @Sql("classpath:db/data/testdata.sql")
     public void should_delete_account_withId_3() throws Exception {
-        ResultActions result = mockMvc.perform(delete("/accounts/3"))
+        mockMvc.perform(delete("/accounts/3"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -161,17 +145,17 @@ public class AccountIntegrationTest {
     @Test
     @WithMockUser
     @DisplayName("Update account with id=4")
-    @Sql("classpath:db/data/sql/account/integration/test/accounts-sql-test2data.sql")
+    @Sql("classpath:db/data/testdata.sql")
     void should_update_account_with_id_4() throws Exception {
-        AccountDto firstAccountDto = new AccountDto(4, "Test Account 4", new BigDecimal(100.01).setScale(2, RoundingMode.HALF_UP), "0000456");
-        String requestBody = objectMapper.writeValueAsString(firstAccountDto);
-        ResultActions result = mockMvc.perform(put("/accounts/4")
-                        .content(requestBody)
+
+        mockMvc.perform(put("/accounts/4")
+                        .content(getJsonAsString("updateAccount_inputAccountDto.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
+        AccountDto inputAccountDto = objectMapper.readValue(getJsonAsString("updateAccount_inputAccountDto.json"), AccountDto.class);
         AccountDto accountDto = accountService.getAccount(4);
-        assertEquals(accountDto, firstAccountDto);
+        assertEquals(accountDto, inputAccountDto);
     }
 }

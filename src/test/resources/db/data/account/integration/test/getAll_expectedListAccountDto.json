@@ -1,0 +1,7 @@
+[
+  {"id":1,"name":"Test Account 1","money":100.01,"phoneNumber":"1234567890"},
+  {"id":2,"name":"Test Account 2","money":100.01,"phoneNumber":"1234567890"},
+  {"id":3,"name":"Test Account 3","money":100.01,"phoneNumber":"1234567890"},
+  {"id":4,"name":"Test Account 4","money":100.01,"phoneNumber":"1234567890"},
+  {"id":5,"name":"Sasha","money":342.00,"phoneNumber":"+4245253562352"}
+]

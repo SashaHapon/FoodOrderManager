@@ -29,7 +29,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -58,7 +57,7 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Return meal from database with id=1")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
     void should_return_Account_with_id1() throws Exception {
 
         ResultActions result = mockMvc.perform(get("/meals/1"))
@@ -122,7 +121,7 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Return all meals from database")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
     public void should_return_allMeals() throws Exception {
 
         MealDto firstMealDto = new MealDto(1,"Test Meal 1",  new BigDecimal(15.99).setScale(2, RoundingMode.HALF_UP), 30);
@@ -144,7 +143,7 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Delete meal with id=3")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
     public void should_delete_meal_withId_3() throws Exception {
         ResultActions result = mockMvc.perform(delete("/meals/3"))
                 .andDo(print())
@@ -166,7 +165,7 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Update meal with id=4")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-sql-testdata.sql")
+    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
     void should_update_meal_with_id_4() throws Exception {
         MealDto firstMealDto = new MealDto(4,"Test Meal 4",  new BigDecimal(17.99).setScale(2, RoundingMode.HALF_UP), 50);
         String requestBody = objectMapper.writeValueAsString(firstMealDto);
