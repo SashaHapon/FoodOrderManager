@@ -2,22 +2,19 @@ package org.food.security.service;
 
 import lombok.RequiredArgsConstructor;
 import org.food.exception.classes.TokenRefreshException;
-import org.food.security.dto.UserDto;
 import org.food.security.model.RefreshToken;
 import org.food.security.model.Role;
 import org.food.security.model.User;
-
 import org.food.security.payload.request.RefreshTokenRequest;
+import org.food.security.payload.request.SignInRequest;
+import org.food.security.payload.request.SignUpRequest;
 import org.food.security.payload.responce.JwtAuthenticationResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.food.security.payload.request.SignInRequest;
-import org.food.security.payload.request.SignUpRequest;
 
 import java.util.Optional;
 

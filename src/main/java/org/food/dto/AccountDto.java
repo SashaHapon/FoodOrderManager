@@ -1,7 +1,8 @@
 package org.food.dto;
 
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Data;
 import java.math.BigDecimal;
 
 @Data

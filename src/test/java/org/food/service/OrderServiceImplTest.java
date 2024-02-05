@@ -1,6 +1,5 @@
 package org.food.service;
 
-import org.assertj.core.api.Assertions;
 import org.food.api.repository.AccountRepository;
 import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;

@@ -1,15 +1,19 @@
 package org.food.dao;
 
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContextType;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.EntityGraph;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.GenericDao;
 import org.springframework.stereotype.Component;
 
-import jakarta.persistence.*;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
 
