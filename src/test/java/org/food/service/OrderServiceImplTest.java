@@ -1,5 +1,6 @@
 package org.food.service;
 
+import org.assertj.core.api.Assertions;
 import org.food.api.repository.AccountRepository;
 import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
@@ -21,10 +22,12 @@ import org.modelmapper.TypeToken;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -117,7 +120,7 @@ public class OrderServiceImplTest {
         Order testOrder = new Order();
         Meal meal = new Meal();
         meal.setPrice(new BigDecimal(12));
-        meal.setTimeq(12);
+        meal.setTime(12);
         MealDto mealDto = new MealDto();
         List<Meal> meals = new ArrayList<>(List.of(meal));
         List<MealDto> mealDtos = new ArrayList<>(List.of(mealDto));
@@ -150,7 +153,7 @@ public class OrderServiceImplTest {
         List<Meal> mealsToDelete = new ArrayList<>(List.of(meal, meal1));
         List<Meal> orderMeals = new ArrayList<>(List.of(meal, meal1, meal2));
         List<MealDto> mealDtos = new ArrayList<>(List.of());
-        Type listType = new TypeToken<List<MealDto>>() {
+        Type listType = new TypeToken<List<Meal>>() {
         }.getType();
         testOrder.setMeals(orderMeals);
         orderDto.setMeals(List.of(mealDto));
@@ -174,13 +177,14 @@ public class OrderServiceImplTest {
 
         Integer orderId = 1;
         Order order = new Order();
-        List<Meal> meals = new ArrayList<>();
-        List<MealDto> mealDtos = new ArrayList<>();
+        List<Meal> mockMeals = Arrays.asList(new Meal(), new Meal(), new Meal());
+        order.setMeals(mockMeals);
 
-        when(orderRepository.findOrderByIdWithEntityGraph(orderId)).thenReturn(order);
-        when(modelMapper.map(order.getMeals(), listType)).thenReturn(mealDtos);
+        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(modelMapper.map(order.getMeals(), listType)).thenReturn(mockMeals);
 
         List<MealDto> returnedMealDtos = orderService.getAllMeals(orderId);
         assertThat(returnedMealDtos).isNotNull();
+        assertEquals(returnedMealDtos, mockMeals);
     }
 }

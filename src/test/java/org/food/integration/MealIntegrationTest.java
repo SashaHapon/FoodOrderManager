@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -38,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //todo enable filters
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
+@Transactional
+@Rollback
 public class MealIntegrationTest {
 
     @Autowired
@@ -47,28 +51,24 @@ public class MealIntegrationTest {
     @Autowired
     MealService mealService;
 
-    static String jsonMeal;
-
-    @BeforeAll
-    public static void init() throws IOException {
-        Path path = Paths.get("src/test/resources/db/data/sql/meal/integration/test/meal-id1.json");
-        jsonMeal = Files.readString(path);
+    private String getJsonAsString(String name){
+        try {
+            Path path = Paths.get("src/test/resources/db/data/meal/integration/test/" + name);
+            return Files.readString(path);
+        }catch (IOException e){
+            throw new RuntimeException(e.getCause());
+        }
     }
 
     @Test
     @DisplayName("Return meal from database with id=1")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
-    void should_return_Account_with_id1() throws Exception {
+    @Sql("classpath:db/data/testdata.sql")
+    void should_return_Meal_with_id1() throws Exception {
 
         ResultActions result = mockMvc.perform(get("/meals/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(jsonMeal));
-
-        MvcResult mvcResult = result.andReturn();
-        String contentAsString = mvcResult.getResponse().getContentAsString();
-
-        MealDto response = objectMapper.readValue(contentAsString, MealDto.class);
+                .andExpect(content().json(getJsonAsString("getMeal_expectedMealDto.json")));
     }
 
     @Test
@@ -121,29 +121,20 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Return all meals from database")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
+    @Sql("classpath:db/data/testdata.sql")
     public void should_return_allMeals() throws Exception {
-
-        MealDto firstMealDto = new MealDto(1,"Test Meal 1",  new BigDecimal(15.99).setScale(2, RoundingMode.HALF_UP), 30);
-        MealDto secondMealDto = new MealDto(2,"Test Meal 2",  new BigDecimal(15.99).setScale(2, RoundingMode.HALF_UP), 30);
 
         ResultActions result = mockMvc.perform(get("/meals/"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json(getJsonAsString("getAllMeals_expectedMealDtoList.json")));
 
-        MvcResult mvcResult = result.andReturn();
-        String contentAsString = mvcResult.getResponse().getContentAsString();
-        List<MealDto> response = objectMapper.readValue(contentAsString, new TypeReference<List<MealDto>>() {
-        });
-        assertNotNull(response);
-        assertTrue(response.contains(firstMealDto));
-        assertTrue(response.contains(secondMealDto));
     }
 
 
     @Test
     @DisplayName("Delete meal with id=3")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
+    @Sql("classpath:db/data/testdata.sql")
     public void should_delete_meal_withId_3() throws Exception {
         ResultActions result = mockMvc.perform(delete("/meals/3"))
                 .andDo(print())
@@ -165,18 +156,18 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Update meal with id=4")
-    @Sql("classpath:db/data/sql/meal/integration/test/meals-testdata.sql")
+    @Sql("classpath:db/data/testdata.sql")
     void should_update_meal_with_id_4() throws Exception {
-        MealDto firstMealDto = new MealDto(4,"Test Meal 4",  new BigDecimal(17.99).setScale(2, RoundingMode.HALF_UP), 50);
-        String requestBody = objectMapper.writeValueAsString(firstMealDto);
-        ResultActions result = mockMvc.perform(put("/meals/4")
-                        .content(requestBody)
+
+        mockMvc.perform(put("/meals/4")
+                        .content(getJsonAsString("updateMeal_inputMealDto.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         MealDto mealDto = mealService.getMeal(4);
-        assertEquals(mealDto, firstMealDto);
+        MealDto inputDto = objectMapper.readValue(getJsonAsString("updateMeal_inputMealDto.json"), MealDto.class);
+        assertEquals(mealDto, inputDto);
     }
 }
 

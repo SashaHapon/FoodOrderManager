@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
 
         int cookingTimeSum = 0;
         for (Meal meal : mealList) {
-            cookingTimeSum += meal.getTimeq();
+            cookingTimeSum += meal.getTime();
         }
         return cookingTimeSum;
     }

@@ -20,5 +20,5 @@ public class Meal {
     private Integer id;
     private String name;
     private BigDecimal price;
-    private int timeq;
+    private int time;
 }

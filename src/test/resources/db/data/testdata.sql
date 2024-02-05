@@ -1,4 +1,4 @@
-INSERT ignore INTO meal (id, name, price, timeq) VALUES
+INSERT ignore INTO meal (id, name, price, time) VALUES
 (1, 'Spaghetti Bolognese', 12.99, 30),
 (2, 'Chicken Caesar Salad', 9.99, 20),
 (3, 'Grilled Salmon', 15.99, 25),
