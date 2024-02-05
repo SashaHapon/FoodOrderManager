@@ -1,6 +1,5 @@
 package org.food.dao;
 
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContextType;
 import jakarta.persistence.TypedQuery;
@@ -9,13 +8,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.EntityGraph;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.GenericDao;
 import org.springframework.stereotype.Component;
-
-import jakarta.persistence.PersistenceContext;
 import java.util.List;
-
 
 @Component
 @RequiredArgsConstructor
@@ -61,14 +58,10 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
 
         TypedQuery<T> typedQuery = entityManager.createQuery(selectQuery);
 
-        // Set pagination
         int firstResult = (id - 1) * limit;
         typedQuery.setFirstResult(firstResult);
         typedQuery.setMaxResults(limit);
-
         return typedQuery.getResultList();
-//        return entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass)
-//                .getResultList();
 
     }
 

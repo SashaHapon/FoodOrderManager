@@ -1,7 +1,10 @@
 package org.food.exception;
 
-import jakarta.persistence.EntityNotFoundException;
-import org.food.exception.classes.*;
+import org.food.exception.classes.BadRequestException;
+import org.food.exception.classes.ErrorMessage;
+import org.food.exception.classes.NotFoundException;
+import org.food.exception.classes.RottenTokenException;
+import org.food.exception.classes.TokenRefreshException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
