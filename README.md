@@ -39,38 +39,41 @@ Food Order Manager is a web application designed to manage the food ordering pro
 ## Actions to Launch the Project
 
 1. **Cloning the Repository:**
-   
-   git clone https://github.com/SashaHapon/FoodOrderManager.git
 
-2. **Go to the Project Directory:**
+   ```bash
+    git clone https://github.com/SashaHapon/FoodOrderManager.git
 
-3. **Build and Run the application using Maven:**
+2. **Prerequisites:**
+   - JDK (Java Development Kit) version 21 or higher
+   - Pre-installed MySQL database or Docker container with MySQL.
 
+3. **Go to the Project Directory.**
+
+4. **Build and Run the application using Maven:**
+
+    ```bash
    ./mvnw spring-boot:run
 
-4. **Access to the Application:**
+5. **Access to the Application:**
    After successful launch, the application will be available at: http://localhost:8080
 
-5. **Functionality Check:**
+6. **Functionality Check:**
    Open your web browser and go to the provided address.
    Log in (if necessary) and start using Food Order Manager.
 
- These steps assume that Maven is already installed on your machine. Make sure you also have
- a MySQL database configured, and all project dependencies are satisfied.
-
 ## Configuration Settings
 
-Before running the Food Order Manager project, you may need to customize certain configuration settings to match your local environment. Below are the key settings that you may need to override in the `application.properties` file:
+Before running the Food Order Manager project, you may need to customize certain configuration settings to match your local environment. Below are the key settings that you may need to override in the `application.yml` file:
 
 **Database Configuration:**
    - `spring.datasource.url`: JDBC URL for the MySQL database.
    - `spring.datasource.username`: Username for connecting to the MySQL database.
    - `spring.datasource.password`: Password for connecting to the MySQL database.
 
-   Example:
-      ```application.yml
-      spring:
-         datasource:
-            url: jdbc:mysql://localhost:3306/your_database
-            username: your_username
-            password: your_password
+Example:
+  ```application.yml
+  spring:
+     datasource:
+        url: jdbc:mysql://localhost:3306/your_database
+        username: your_username
+        password: your_password
