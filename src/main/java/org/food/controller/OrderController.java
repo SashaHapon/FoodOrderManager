@@ -49,8 +49,8 @@ public class OrderController {
         orderService.removeMeals(orderId, mealDtosToRemove);
     }
 
-    @GetMapping("/meals/{id}")
-    public List<MealDto> getAllMeals(@PathVariable("id") Integer id) {
+    @GetMapping("/{orderId}/meals")
+    public List<MealDto> getAllMeals(@PathVariable("orderId") Integer id) {
 
         return orderService.getAllMeals(id);
     }

@@ -118,11 +118,10 @@ public class OrderControllerIntegrationTests extends TestUtils {
     public void should_getAllMeals_fromOrder() throws Exception {
 
         List<MealDto> listM = orderService.getOrder(1).getMeals();
-        MvcResult mvcResult = mockMvc.perform(get("/orders/meals/1"))
+        MvcResult mvcResult = mockMvc.perform(get("/orders/1/meals").param("orderId", "1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
-
 
         String contentAsString = mvcResult.getResponse().getContentAsString();
         List<MealDto> mealDtos = objectMapper.readValue(contentAsString, new TypeReference<List<MealDto>>() {
