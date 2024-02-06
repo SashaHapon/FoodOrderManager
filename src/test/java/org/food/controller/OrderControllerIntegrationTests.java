@@ -1,8 +1,8 @@
-package org.food.integration;
+package org.food.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.food.api.repository.OrderRepository;
+import org.food.TestUtils;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
@@ -20,19 +20,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Transactional
 @Rollback
-public class OrderIntegrationTest {
+public class OrderControllerIntegrationTests extends TestUtils {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -51,51 +48,43 @@ public class OrderIntegrationTest {
     @Autowired
     private OrderService orderService;
     @Autowired
-    OrderRepository orderRepository;
-
-    private String getJsonAsString(String name){
-        try {
-            Path path = Paths.get("src/test/resources/db/data/order/integration/test/" + name);
-            return Files.readString(path);
-        }catch (IOException e){
-            throw new RuntimeException(e.getCause());
-        }
-    }
+    OrderController orderController;
 
     @Test
     @WithMockUser
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_addMeals_toOrder/testdata.sql")
     public void should_createOrder() throws Exception, IOException {
 
         mockMvc.perform(post("/orders/").param("id", "1")
                         .contentType(APPLICATION_JSON)
-                        .content(getJsonAsString("createOrder_inputMealsDtoList.json")))
+                        .content(getJsonAsString("/should_createOrder/createOrder_inputMealsDtoList.json", orderController)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("createOrder_expectedJson.json")));
+                .andExpect(content().json(getJsonAsString("/should_createOrder/createOrder_expectedJson.json", orderController)));
     }
 
     @Test
     @WithMockUser
     @DisplayName("Return order from database with id=1")
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_return_Order_with_id1/testdata.sql")
     void should_return_Order_with_id1() throws Exception {
 
         mockMvc.perform(get("/orders/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("getOrder_expectedJson.json")));
+                .andExpect(content().json(getJsonAsString("/should_return_Order_with_id1/getOrder_expectedJson.json",
+                        orderController)));
     }
 
     @Test
     @WithMockUser
     @DisplayName("Add meals to order with id=3")
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_addMeals_toOrder/testdata.sql")
     public void should_addMeals_toOrder() throws Exception {
 
         List<MealDto> mealListBeforeAdding = orderService.getOrder(3).getMeals();
         mockMvc.perform(put("/orders/3").param("id", "3")
-                        .content(getJsonAsString("addMeals_inputMeal.json"))
+                        .content(getJsonAsString("/should_addMeals_toOrder/addMeals_inputMeal.json", orderController))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -108,12 +97,12 @@ public class OrderIntegrationTest {
     @Test
     @WithMockUser
     @DisplayName("Remove meals from order with id=2")
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_removeMeals_fromOrder/testdata.sql")
     public void should_removeMeals_fromOrder() throws Exception {
 
         OrderDto orderBeforeDeleting = orderService.getOrder(2);
         mockMvc.perform(delete("/orders/2").param("orderId", "2")
-                        .content(getJsonAsString("removeMeals_inputMeal.json"))
+                        .content(getJsonAsString("/should_removeMeals_fromOrder/removeMeals_inputMeal.json",orderController))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -124,8 +113,8 @@ public class OrderIntegrationTest {
 
     @Test
     @WithMockUser
-    @DisplayName("Get all meals from order with id=1")
-    @Sql("classpath:db/data/testdata.sql")
+    @DisplayName("Get all meals from order")
+    @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_getAllMeals_fromOrder/testdata.sql")
     public void should_getAllMeals_fromOrder() throws Exception {
 
         List<MealDto> listM = orderService.getOrder(1).getMeals();

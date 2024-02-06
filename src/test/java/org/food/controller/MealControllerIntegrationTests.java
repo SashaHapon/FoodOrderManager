@@ -1,6 +1,7 @@
-package org.food.integration;
+package org.food.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.food.TestUtils;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
 import org.food.exception.classes.NotFoundException;
@@ -18,20 +19,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @Transactional
 @Rollback
-public class MealIntegrationTest {
+public class MealControllerIntegrationTests extends TestUtils {
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,32 +47,24 @@ public class MealIntegrationTest {
     private ObjectMapper objectMapper;
     @Autowired
     MealService mealService;
-
-    private String getJsonAsString(String name){
-        try {
-            Path path = Paths.get("src/test/resources/db/data/meal/integration/test/" + name);
-            return Files.readString(path);
-        }catch (IOException e){
-            throw new RuntimeException(e.getCause());
-        }
-    }
+    MealController mealController;
 
     @Test
     @DisplayName("Return meal from database with id=1")
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/MealControllerIntegrationTest/should_return_Meal_with_id1/insert_meal_with_id_1.sql")
     void should_return_Meal_with_id1() throws Exception {
 
-        ResultActions result = mockMvc.perform(get("/meals/1"))
+        mockMvc.perform(get("/meals/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("getMeal_expectedMealDto.json")));
+                .andExpect(content().json(getJsonAsString("/should_return_Meal_with_id1/getMeal_expectedMealDto.json", mealController)));
     }
 
     @Test
     @DisplayName("Throw NotFoundException when try to get meal with id=0)")
     void should_throw_notFoundException_when_getMeal() throws Exception {
 
-        ResultActions result = mockMvc.perform(get("/meals/0"))
+        mockMvc.perform(get("/meals/0"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -86,7 +75,6 @@ public class MealIntegrationTest {
     void should_addAccount_toDb() throws Exception {
 
         MealDto mealDto = new MealDto(null, "Water", BigDecimal.valueOf(1), 15);
-
         String requestBody = objectMapper.writeValueAsString(mealDto);
 
         ResultActions resultActsions = mockMvc.perform(post("/meals/")
@@ -95,10 +83,7 @@ public class MealIntegrationTest {
                 .andExpect(status().isOk());
 
         MvcResult result = resultActsions.andReturn();
-
-
         String content = result.getResponse().getContentAsString();
-        System.out.println(content);
         MealDto createdMealDto = objectMapper.readValue(content, MealDto.class);
 
         assertNotNull(createdMealDto);
@@ -121,22 +106,22 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Return all meals from database")
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/MealControllerIntegrationTest/should_return_allMeals/insert_seven_meals.sql")
     public void should_return_allMeals() throws Exception {
 
-        ResultActions result = mockMvc.perform(get("/meals/"))
+        mockMvc.perform(get("/meals/"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("getAllMeals_expectedMealDtoList.json")));
+                .andExpect(content().json(getJsonAsString("/should_return_allMeals/getAllMeals_expectedMealDtoList.json",mealController)));
 
     }
 
 
     @Test
     @DisplayName("Delete meal with id=3")
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/MealControllerIntegrationTest/should_delete_meal_withId_3/insert_meal_with_id_3.sql")
     public void should_delete_meal_withId_3() throws Exception {
-        ResultActions result = mockMvc.perform(delete("/meals/3"))
+        mockMvc.perform(delete("/meals/3"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -156,17 +141,18 @@ public class MealIntegrationTest {
 
     @Test
     @DisplayName("Update meal with id=4")
-    @Sql("classpath:db/data/testdata.sql")
+    @Sql("classpath:data/org/food/controller/MealControllerIntegrationTest/should_update_meal_with_id_4/insert_meal_with_id_4.sql")
     void should_update_meal_with_id_4() throws Exception {
 
         mockMvc.perform(put("/meals/4")
-                        .content(getJsonAsString("updateMeal_inputMealDto.json"))
+                        .content(getJsonAsString("/should_update_meal_with_id_4/updateMeal_inputMealDto.json", mealController))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         MealDto mealDto = mealService.getMeal(4);
-        MealDto inputDto = objectMapper.readValue(getJsonAsString("updateMeal_inputMealDto.json"), MealDto.class);
+        MealDto inputDto = objectMapper.readValue(getJsonAsString("/should_update_meal_with_id_4/updateMeal_inputMealDto.json",
+                mealController), MealDto.class);
         assertEquals(mealDto, inputDto);
     }
 }

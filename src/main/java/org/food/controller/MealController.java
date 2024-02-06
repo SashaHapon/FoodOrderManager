@@ -31,7 +31,7 @@ public class MealController {
     }
 
     @PostMapping("/")
-    public MealDto addMeal(@RequestBody MealDto mealDto)  throws HttpMessageNotReadableException {
+    public MealDto addMeal(@RequestBody MealDto mealDto) {
 
         return mealService.addMeal(mealDto);
     }
