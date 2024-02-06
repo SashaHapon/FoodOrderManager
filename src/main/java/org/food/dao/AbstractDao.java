@@ -1,13 +1,18 @@
 package org.food.dao;
 
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContextType;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.EntityGraph;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.GenericDao;
 import org.springframework.stereotype.Component;
-
-import jakarta.persistence.*;
 import java.util.List;
-
 
 @Component
 @RequiredArgsConstructor
@@ -41,9 +46,23 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
 
     @Override
     public List<T> findAll(int id, int limit) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
 
-        return entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName()
-                + " e ORDER BY e." + id + " ASC", entityClass).setMaxResults(limit).getResultList();
+        Root<T> root = criteriaQuery.from(entityClass);
+
+        Order orderById = criteriaBuilder.asc(root.get("id"));
+        criteriaQuery.orderBy(orderById);
+
+        CriteriaQuery<T> selectQuery = criteriaQuery.select(root);
+
+        TypedQuery<T> typedQuery = entityManager.createQuery(selectQuery);
+
+        int firstResult = (id - 1) * limit;
+        typedQuery.setFirstResult(firstResult);
+        typedQuery.setMaxResults(limit);
+        return typedQuery.getResultList();
+
     }
 
     public T findOrderByIdWithEntityGraph(Integer id) {

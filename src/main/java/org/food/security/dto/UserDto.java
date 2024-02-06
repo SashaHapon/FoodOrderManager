@@ -1,6 +1,9 @@
 package org.food.security.dto;
 
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.food.security.model.Role;
 
 

@@ -7,6 +7,7 @@ import org.food.api.repository.OrderRepository;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
+import org.food.exception.classes.NotFoundException;
 import org.food.model.Meal;
 import org.food.model.Order;
 import org.modelmapper.ModelMapper;
@@ -41,7 +42,6 @@ public class OrderServiceImpl implements OrderService {
         }.getType();
         List<Meal> meals = modelMapper.map(mealDtoList, listType);
 
-        orderPriceSum(meals);
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
         order.setCookingTimeSum(cookingTimeSum(meals));
@@ -49,10 +49,14 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(orderRepository.create(order), OrderDto.class);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public OrderDto getOrder(Integer id) {
-
-        return modelMapper.map(orderRepository.findById(id), OrderDto.class);
+        Order order = orderRepository.findById(id);
+        if(order == null){
+            throw new NotFoundException("Order with id=" + id + ", not found");
+        }
+        return modelMapper.map(order, OrderDto.class);
     }
 
     @Override
@@ -75,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId);
         List<Meal> orderMeals = order.getMeals();
 
-        Type listType = new TypeToken<List<MealDto>>() {
+        Type listType = new TypeToken<List<Meal>>() {
         }.getType();
         List<Meal> mealListToRemove = modelMapper.map(mealDtosToRemove, listType);
 
@@ -83,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
                 .filter(orderMeal -> mealListToRemove.stream()
                         .noneMatch(mealToRemove -> mealToRemove.getName().equals(orderMeal.getName())))
                 .collect(Collectors.toList());
+
 
         order.setMeals(filteredMeals);
         order.setOrderSum(orderPriceSum(filteredMeals));
@@ -93,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<MealDto> getAllMeals(Integer orderId) {
-        Order order = orderRepository.findOrderByIdWithEntityGraph(orderId);
+        Order order = orderRepository.findById(orderId);
         Type listType = new TypeToken<List<MealDto>>() {
         }.getType();
         return modelMapper.map(order.getMeals(), listType);

@@ -5,6 +5,7 @@ import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
+import org.food.exception.classes.NotFoundException;
 import org.food.model.Account;
 import org.food.model.Meal;
 import org.food.model.Order;
@@ -20,10 +21,12 @@ import org.modelmapper.TypeToken;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -102,10 +105,10 @@ public class OrderServiceImplTest {
         int id = 1;
         Order testOrder = null;
 
-        when(orderRepository.findById(id)).thenReturn(testOrder);
-        when(modelMapper.map(testOrder, OrderDto.class)).thenThrow(IllegalArgumentException.class);
+        when(orderRepository.findById(id)).thenReturn(testOrder).thenThrow(NotFoundException.class);
+//        when(modelMapper.map(testOrder, OrderDto.class)).thenThrow(IllegalArgumentException.class);
 
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(NotFoundException.class)
                 .isThrownBy(() -> orderService.getOrder(id));
     }
 
@@ -142,14 +145,14 @@ public class OrderServiceImplTest {
         OrderDto orderDto = new OrderDto();
         MealDto mealDto = new MealDto(1, "name3", new BigDecimal(555), 5);
 
-        Meal meal = new Meal(1, "name1", new BigDecimal(555), 5, "");
-        Meal meal1 = new Meal(2, "name2", new BigDecimal(555), 5, "");
-        Meal meal2 = new Meal(1, "name3", new BigDecimal(555), 5, "");
+        Meal meal = new Meal(1, "name1", new BigDecimal(555), 5);
+        Meal meal1 = new Meal(2, "name2", new BigDecimal(555), 5);
+        Meal meal2 = new Meal(1, "name3", new BigDecimal(555), 5);
 
         List<Meal> mealsToDelete = new ArrayList<>(List.of(meal, meal1));
         List<Meal> orderMeals = new ArrayList<>(List.of(meal, meal1, meal2));
         List<MealDto> mealDtos = new ArrayList<>(List.of());
-        Type listType = new TypeToken<List<MealDto>>() {
+        Type listType = new TypeToken<List<Meal>>() {
         }.getType();
         testOrder.setMeals(orderMeals);
         orderDto.setMeals(List.of(mealDto));
@@ -173,13 +176,14 @@ public class OrderServiceImplTest {
 
         Integer orderId = 1;
         Order order = new Order();
-        List<Meal> meals = new ArrayList<>();
-        List<MealDto> mealDtos = new ArrayList<>();
+        List<Meal> mockMeals = Arrays.asList(new Meal(), new Meal(), new Meal());
+        order.setMeals(mockMeals);
 
-        when(orderRepository.findOrderByIdWithEntityGraph(orderId)).thenReturn(order);
-        when(modelMapper.map(order.getMeals(), listType)).thenReturn(mealDtos);
+        when(orderRepository.findById(orderId)).thenReturn(order);
+        when(modelMapper.map(order.getMeals(), listType)).thenReturn(mockMeals);
 
         List<MealDto> returnedMealDtos = orderService.getAllMeals(orderId);
         assertThat(returnedMealDtos).isNotNull();
+        assertEquals(returnedMealDtos, mockMeals);
     }
 }

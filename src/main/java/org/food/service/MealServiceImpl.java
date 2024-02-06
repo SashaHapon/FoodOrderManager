@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.food.api.repository.MealRepository;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
+import org.food.exception.classes.NotFoundException;
 import org.food.model.Meal;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -38,14 +39,20 @@ public class MealServiceImpl implements MealService {
 
         @Override
         public MealDto getMeal(Integer id){
-
-                return modelMapper.map(mealRepository.findById(id), MealDto.class);
+                Meal meal = mealRepository.findById(id);
+                if(meal == null){
+                        throw new NotFoundException("Meal with id=" + id + ", not found");
+                }
+                return modelMapper.map(meal, MealDto.class);
         }
 
         @Override
         public void deleteMealById(Integer id) {
 
                 Meal meal = mealRepository.findById(id);
+                if(meal == null){
+                        throw new NotFoundException("Meal with id=" + id + ", not found");
+                }
                 mealRepository.delete(meal);
         }
 
