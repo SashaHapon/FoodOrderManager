@@ -23,6 +23,7 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="date" type="varchar(255)"/>
             <column name="name" type="varchar(255)"/>
             <column name="price" type="decimal(38,2)"/>
             <column name="time" type="int"/>
@@ -32,7 +33,7 @@
     <changeSet id="3-5" author="Alexandr Hapon" labels="example-label" context="example-context">
         <comment>example-comment</comment>
         <createTable tableName="order">
-            <column name="id" type="int">
+            <column name="id" type="int" >
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="meals_id" type="int">

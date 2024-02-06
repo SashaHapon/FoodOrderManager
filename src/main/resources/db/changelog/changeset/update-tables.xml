@@ -23,8 +23,16 @@
                           tableName="orders"/>
     </changeSet>
 
-    <changeSet id="1245" author="Aleksandr Hapon">
+    <changeSet id="124" author="Aleksandr Hapon">
         <renameTable oldTableName="order_meals" newTableName="orders_meals"/>
+    </changeSet>
+    <changeSet author="liquibase-docs" id="dropColumn-example">
+        <dropColumn catalogName="cat"
+                    columnName="date"
+                    schemaName="public"
+                    tableName="meal">
+            <column name="date"/>
+        </dropColumn>
     </changeSet>
 
 </databaseChangeLog>

@@ -41,6 +41,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Rollback
 public class OrderControllerIntegrationTests extends TestUtils {
+
+    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/OrderControllerIntegrationTest";
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -57,10 +59,10 @@ public class OrderControllerIntegrationTests extends TestUtils {
 
         mockMvc.perform(post("/orders/").param("id", "1")
                         .contentType(APPLICATION_JSON)
-                        .content(getJsonAsString("/should_createOrder/createOrder_inputMealsDtoList.json", orderController)))
+                        .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_inputMealsDtoList.json")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("/should_createOrder/createOrder_expectedJson.json", orderController)));
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_expectedJson.json")));
     }
 
     @Test
@@ -72,8 +74,7 @@ public class OrderControllerIntegrationTests extends TestUtils {
         mockMvc.perform(get("/orders/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("/should_return_Order_with_id1/getOrder_expectedJson.json",
-                        orderController)));
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_return_Order_with_id1/getOrder_expectedJson.json")));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class OrderControllerIntegrationTests extends TestUtils {
 
         List<MealDto> mealListBeforeAdding = orderService.getOrder(3).getMeals();
         mockMvc.perform(put("/orders/3").param("id", "3")
-                        .content(getJsonAsString("/should_addMeals_toOrder/addMeals_inputMeal.json", orderController))
+                        .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_addMeals_toOrder/addMeals_inputMeal.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -102,7 +103,7 @@ public class OrderControllerIntegrationTests extends TestUtils {
 
         OrderDto orderBeforeDeleting = orderService.getOrder(2);
         mockMvc.perform(delete("/orders/2").param("orderId", "2")
-                        .content(getJsonAsString("/should_removeMeals_fromOrder/removeMeals_inputMeal.json",orderController))
+                        .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_removeMeals_fromOrder/removeMeals_inputMeal.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());

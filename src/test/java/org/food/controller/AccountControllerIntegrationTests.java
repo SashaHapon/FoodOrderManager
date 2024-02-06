@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Rollback
 public class AccountControllerIntegrationTests extends TestUtils {
+    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/AccountControllerIntegrationTest";
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -42,6 +43,7 @@ public class AccountControllerIntegrationTests extends TestUtils {
     @Autowired
     AccountService accountService;
     AccountController accountController;
+
 
     @Test
     @WithMockUser
@@ -52,8 +54,8 @@ public class AccountControllerIntegrationTests extends TestUtils {
         mockMvc.perform(get("/accounts/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("/should_return_Account_with_id1/getAccount_expectedAccountDto.json",
-                        accountController)));
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                        "/should_return_Account_with_id1/getAccount_expectedAccountDto.json")));
     }
 
     @Test
@@ -72,13 +74,12 @@ public class AccountControllerIntegrationTests extends TestUtils {
     void should_addAccount_toDb() throws Exception {
 
         mockMvc.perform(post("/accounts/")
-                        .content(getJsonAsString("/should_addAccount_toDb/addAccount_inputAccountDto.json",
-                                accountController))
+                        .content(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                                        "/should_addAccount_toDb/addAccount_inputAccountDto.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("/should_addAccount_toDb/addAccount_expectedAccountDto.json",
-                        accountController)));
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_addAccount_toDb/addAccount_expectedAccountDto.json")));
     }
 
     @Test
@@ -103,8 +104,8 @@ public class AccountControllerIntegrationTests extends TestUtils {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content()
-                        .json(getJsonAsString("/should_return_allAccounts/getAll_expectedListAccountDto.json",
-                                accountController)));
+                        .json(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                                "/should_return_allAccounts/getAll_expectedListAccountDto.json")));
     }
 
 
@@ -141,15 +142,14 @@ public class AccountControllerIntegrationTests extends TestUtils {
     void should_update_account_with_id_4() throws Exception {
 
         mockMvc.perform(put("/accounts/4")
-                        .content(getJsonAsString("/should_update_account_with_id_4/updateAccount_inputAccountDto.json",
-                                accountController))
+                        .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_update_account_with_id_4/updateAccount_inputAccountDto.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         AccountDto inputAccountDto = objectMapper
-                .readValue(getJsonAsString("/should_update_account_with_id_4/updateAccount_inputAccountDto.json",
-                        accountController), AccountDto.class);
+                .readValue(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                        "/should_update_account_with_id_4/updateAccount_inputAccountDto.json"), AccountDto.class);
         AccountDto accountDto = accountService.getAccount(4);
         assertEquals(accountDto, inputAccountDto);
     }

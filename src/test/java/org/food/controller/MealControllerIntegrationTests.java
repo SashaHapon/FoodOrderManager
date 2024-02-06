@@ -41,6 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Rollback
 public class MealControllerIntegrationTests extends TestUtils {
 
+    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/MealControllerIntegrationTest";
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -57,7 +58,8 @@ public class MealControllerIntegrationTests extends TestUtils {
         mockMvc.perform(get("/meals/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("/should_return_Meal_with_id1/getMeal_expectedMealDto.json", mealController)));
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                        "/should_return_Meal_with_id1/getMeal_expectedMealDto.json")));
     }
 
     @Test
@@ -112,7 +114,8 @@ public class MealControllerIntegrationTests extends TestUtils {
         mockMvc.perform(get("/meals/"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString("/should_return_allMeals/getAllMeals_expectedMealDtoList.json",mealController)));
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                        "/should_return_allMeals/getAllMeals_expectedMealDtoList.json")));
 
     }
 
@@ -145,14 +148,15 @@ public class MealControllerIntegrationTests extends TestUtils {
     void should_update_meal_with_id_4() throws Exception {
 
         mockMvc.perform(put("/meals/4")
-                        .content(getJsonAsString("/should_update_meal_with_id_4/updateMeal_inputMealDto.json", mealController))
+                        .content(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                                "/should_update_meal_with_id_4/updateMeal_inputMealDto.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         MealDto mealDto = mealService.getMeal(4);
-        MealDto inputDto = objectMapper.readValue(getJsonAsString("/should_update_meal_with_id_4/updateMeal_inputMealDto.json",
-                mealController), MealDto.class);
+        MealDto inputDto = objectMapper.readValue(getJsonAsString(TEST_DATA_FILE_PREFIX +
+                "/should_update_meal_with_id_4/updateMeal_inputMealDto.json"), MealDto.class);
         assertEquals(mealDto, inputDto);
     }
 }
