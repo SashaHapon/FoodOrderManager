@@ -1,5 +1,6 @@
 package org.food.security.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Hidden
 public class AuthController {
 
     private final AuthenticationService authenticationService;

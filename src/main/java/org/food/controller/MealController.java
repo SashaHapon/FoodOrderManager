@@ -1,5 +1,7 @@
 package org.food.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
@@ -19,10 +21,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/meals")
 @RequiredArgsConstructor
+@Tag(name="MealController", description=" Позволяет контролировать блюда в бд")
 public class MealController {
 
     private final MealService mealService;
 
+    @Operation(
+            summary = "Получение всех блюд",
+            description = "Позволяет получить все блюда из базы данных"
+    )
     @GetMapping("/")
     public List<MealDto> getAll(@RequestParam(defaultValue = "1", required = false) int id,
                                 @RequestParam(defaultValue = "10", required = false) int limit) {
@@ -30,24 +37,40 @@ public class MealController {
         return mealService.getAllMeals(id, limit);
     }
 
+    @Operation(
+            summary = "Добавление блюда",
+            description = "Позволяет добавить блюдо в базу данных"
+    )
     @PostMapping("/")
     public MealDto addMeal(@RequestBody MealDto mealDto) {
 
         return mealService.addMeal(mealDto);
     }
 
+    @Operation(
+            summary = "Получение блюда",
+            description = "Позволяет получить блюдо по id из базы данных"
+    )
     @GetMapping("/{id}")
     public MealDto getMeal(@PathVariable("id") Integer id){
 
         return mealService.getMeal(id);
     }
 
+    @Operation(
+            summary = "Удаление блюда",
+            description = "Позволяет удалить блюдо по id из базы данных"
+    )
     @DeleteMapping("/{id}")
     public void deleteMealById(@PathVariable("id") Integer id){
 
         mealService.deleteMealById(id);
     }
 
+    @Operation(
+            summary = "Обновление блюда",
+            description = "Позволяет обновить данные о блюде в базе данных"
+    )
     @PutMapping("/{id}")
     void update(@RequestBody MealDto mealDto){
 
