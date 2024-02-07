@@ -1,0 +1,418 @@
+{
+	"info": {
+		"_postman_id": "b9be81d4-2d67-4494-8c17-9f540da48d90",
+		"name": "FoodOrderManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30440925"
+	},
+	"item": [
+		{
+			"name": "RequestsToAccountController",
+			"item": [
+				{
+					"name": "getAllAccount",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjEsImVtYWlsIjoic2FzaGFAZ21haWwuY29tIiwic3ViIjoiU2FzaGEiLCJpYXQiOjE3MDcyMTk0NjgsImV4cCI6MTcwNzM2MzQ2OH0.ILsidU9nlpU1_C6oayS1k307m7B4qDwJ_escq00b3Yw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080\\accounts\\",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAccountById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjEsImVtYWlsIjoic2FzaGFAZ21haWwuY29tIiwic3ViIjoiU2FzaGEiLCJpYXQiOjE3MDcyMTk0NjgsImV4cCI6MTcwNzM2MzQ2OH0.ILsidU9nlpU1_C6oayS1k307m7B4qDwJ_escq00b3Yw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080\\accounts\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addAccount",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiUk9MRV9VU0VSIiwiaWQiOjEsImVtYWlsIjoic2FzaGFAZ21haWwuY29tIiwic3ViIjoiU2FzaGEiLCJpYXQiOjE3MDcyOTA2NTcsImV4cCI6MTcwNzQzNDY1N30.nlrmoWGoz201fem7Mu8Vw0x4vmWdB3NqPEM3EFm4Lwg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\":\"Dima\",\r\n  \"money\":1220.01,\r\n  \"phoneNumber\":\"+3752039382138\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080\\accounts\\",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAccountById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\accounts\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAccount",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\accounts\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RequestsToSecurityController",
+			"item": [
+				{
+					"name": "Sign-up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"username\":\"Sasha\",\r\n    \"email\":\"sasha@gmail.com\",\r\n    \"password\":\"sdplagrmngwwlemm23\"\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080\\auth\\sign-up",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RequestsToMealController",
+			"item": [
+				{
+					"name": "getAllMeals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\meals\\",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"meals",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMeal",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\meals\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"meals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteMealById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\meals\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"meals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateMeal",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\meals\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"meals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addMeal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\meals\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"meals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RequestsToOrderController",
+			"item": [
+				{
+					"name": "createOrder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\orders\\",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOrder",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\orders\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addMeals",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\orders\\",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeMeals",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\orders\\1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"orders",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllMeals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080\\orders\\1\\meals",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"orders",
+								"1",
+								"meals"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
