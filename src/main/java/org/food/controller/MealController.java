@@ -1,6 +1,8 @@
 package org.food.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.food.api.service.MealService;
@@ -30,9 +32,12 @@ public class MealController {
             summary = "Получение всех блюд",
             description = "Позволяет получить все блюда из базы данных"
     )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/")
-    public List<MealDto> getAll(@RequestParam(defaultValue = "1", required = false) int id,
-                                @RequestParam(defaultValue = "10", required = false) int limit) {
+    public List<MealDto> getAll(@RequestParam(defaultValue = "1", required = false)
+                                    @Parameter(description = "Строка отсчета") int id,
+                                @RequestParam(defaultValue = "10", required = false)
+                                    @Parameter(description = "Количество строк") int limit) {
 
         return mealService.getAllMeals(id, limit);
     }
@@ -41,8 +46,10 @@ public class MealController {
             summary = "Добавление блюда",
             description = "Позволяет добавить блюдо в базу данных"
     )
+    @SecurityRequirement(name = "JWT")
     @PostMapping("/")
-    public MealDto addMeal(@RequestBody MealDto mealDto) {
+    public MealDto addMeal(@RequestBody
+                               @Parameter(description = "Данные нового блюда") MealDto mealDto) {
 
         return mealService.addMeal(mealDto);
     }
@@ -51,8 +58,10 @@ public class MealController {
             summary = "Получение блюда",
             description = "Позволяет получить блюдо по id из базы данных"
     )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/{id}")
-    public MealDto getMeal(@PathVariable("id") Integer id){
+    public MealDto getMeal(@PathVariable("id")
+                               @Parameter(description = "Идентификатор блюда") Integer id){
 
         return mealService.getMeal(id);
     }
@@ -61,8 +70,10 @@ public class MealController {
             summary = "Удаление блюда",
             description = "Позволяет удалить блюдо по id из базы данных"
     )
+    @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
-    public void deleteMealById(@PathVariable("id") Integer id){
+    public void deleteMealById(@PathVariable("id")
+                                   @Parameter(description = "Идентификатор блюда") Integer id){
 
         mealService.deleteMealById(id);
     }
@@ -71,8 +82,10 @@ public class MealController {
             summary = "Обновление блюда",
             description = "Позволяет обновить данные о блюде в базе данных"
     )
+    @SecurityRequirement(name = "JWT")
     @PutMapping("/{id}")
-    void update(@RequestBody MealDto mealDto){
+    void update(@RequestBody
+                @Parameter(description = "Данные обновления блюда") MealDto mealDto){
 
         mealService.update(mealDto);
     }

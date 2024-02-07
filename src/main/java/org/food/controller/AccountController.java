@@ -1,6 +1,8 @@
 package org.food.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.food.api.service.AccountService;
@@ -29,9 +31,12 @@ public class AccountController {
             summary = "Получение всех аккаунтов",
             description = "Позволяет получить аккаунты"
     )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/")
-    public List<AccountDto> getAllAccounts(@RequestParam(defaultValue = "1", required = false) int id,
-                                           @RequestParam(defaultValue = "10",required = false) int limit) {
+    public List<AccountDto> getAllAccounts(@RequestParam(defaultValue = "1", required = false)
+                                               @Parameter(description = "Строка отсчета") int id,
+                                           @RequestParam(defaultValue = "10",required = false)
+                                           @Parameter(description = "Количесво строк")int limit) {
 
         return accountService.getAllAccounts(id, limit);
     }
@@ -40,8 +45,10 @@ public class AccountController {
             summary = "Добавление аккаунта",
             description = "Позволяет добавить аккаунт в базу данных"
     )
+    @SecurityRequirement(name = "JWT")
     @PostMapping("/")
-    public AccountDto addAccount(@RequestBody AccountDto accountDto) {
+    public AccountDto addAccount(@RequestBody
+                                     @Parameter(description = "Данные нового пользователя")AccountDto accountDto) {
         return accountService.addAccount(accountDto);
     }
 
@@ -49,8 +56,10 @@ public class AccountController {
             summary = "Получение аккаунта",
             description = "Позволяет получить аккаунт по id из базы данных"
     )
+    @SecurityRequirement(name = "JWT")
     @GetMapping("/{id}")
-    public AccountDto getAccount(@PathVariable("id") Integer id) {
+    public AccountDto getAccount(@PathVariable("id")
+                                     @Parameter(description = "Идентификатор аккаунта")Integer id) {
 
         return accountService.getAccount(id);
     }
@@ -59,8 +68,10 @@ public class AccountController {
             summary = "Удаление аккаунта",
             description = "Позволяет удалить аккаунт по id из базы данных"
     )
+    @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
-    void deleteAccountById(@PathVariable("id") Integer id) {
+    void deleteAccountById(@PathVariable("id")
+                           @Parameter(description = "Идентификатор аккаунта") Integer id) {
 
         accountService.deleteAccountById(id);
     }
@@ -69,8 +80,10 @@ public class AccountController {
             summary = "Обновление аккаунта",
             description = "Позволяет обновить данные аккаунта"
     )
+    @SecurityRequirement(name = "JWT")
     @PutMapping("/{id}")
-    void update(@RequestBody AccountDto accountDto) {
+    void update(@RequestBody
+                @Parameter(description = "Новые данные аккаунта") AccountDto accountDto) {
 
         accountService.update(accountDto);
     }
