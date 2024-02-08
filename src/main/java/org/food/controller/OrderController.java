@@ -23,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT")
 @Tag(name = "OrderController", description = " Позволяет контролировать заказы в бд")
 public class OrderController {
 
@@ -32,7 +33,6 @@ public class OrderController {
             summary = "Создание заказа",
             description = "Позволяет создать заказ в базе данных"
     )
-    @SecurityRequirement(name = "JWT")
     @PostMapping("/")
     public OrderDto createOrder(@RequestParam("id")
                                 @Parameter(description = "Индентификатор аккаунта") Integer accountId,
@@ -47,7 +47,6 @@ public class OrderController {
             summary = "Получение заказа",
             description = "Позволяет получить заказ из базы данных"
     )
-    @SecurityRequirement(name = "JWT")
     @GetMapping("/{id}")
     public OrderDto getOrder(@PathVariable("id")
                              @Parameter(description = "Идентификатор заказа") Integer id) {
@@ -59,7 +58,6 @@ public class OrderController {
             summary = "Добавление блюда в заказ",
             description = "Позволяет создать заказ в базе данных"
     )
-    @SecurityRequirement(name = "JWT")
     @PutMapping("/{id}")
     public void addMeals(@PathVariable("id")
                          @Parameter(description = "Идентификатор заказа") Integer orderId,
@@ -73,7 +71,6 @@ public class OrderController {
             summary = "Удаление блюд из заказа",
             description = "Позволяет удалить блюда из заказа в базе данных"
     )
-    @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
     public void removeMeals(@PathVariable("id")
                             @Parameter(description = "Идентификатор заказа") Integer orderId,
@@ -87,7 +84,6 @@ public class OrderController {
             summary = "Получение всех блюд заказа",
             description = "Позволяет получить все блюда из заказа в базе данных"
     )
-    @SecurityRequirement(name = "JWT")
     @GetMapping("/{orderId}/meals")
     public List<MealDto> getAllMeals(@PathVariable("orderId")
                                      @Parameter(description = "Идентификатор заказа") Integer id) {

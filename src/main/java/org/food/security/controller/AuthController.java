@@ -1,6 +1,8 @@
 package org.food.security.controller;
 
-import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@Hidden
+@Tag(name = "AccountController", description = " Позволяет контролировать аккаунты в бд")
 public class AuthController {
 
     private final AuthenticationService authenticationService;
-    private  final UserService userService;
+    private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity <UserDto> signUp(@RequestBody @Valid SignUpRequest request) {
+    @Operation(
+            summary = "Создание нового пользователя",
+            description = "Позволяет создать нового пользователя в базе данных"
+    )
+    public ResponseEntity<UserDto> signUp(@RequestBody
+                                          @Valid
+                                          @Parameter(description = "Запрос на регистрацию") SignUpRequest request) {
 
         JwtAuthenticationResponse response = authenticationService.signUp(request);
         UserDto userDto = userService.getUserDtoByUsername(response.getUserName());
@@ -36,15 +44,28 @@ public class AuthController {
                 .body(userDto);
     }
 
+
     @PostMapping("/sign-in")
-    public ResponseEntity <UserDto> signIn(@RequestBody @Valid SignInRequest request) {
+    @Operation(
+            summary = "Вход пользователя",
+            description = "Позволяет войти пользователю в приложение"
+    )
+    public ResponseEntity<UserDto> signIn(@RequestBody
+                                          @Valid
+                                          @Parameter(description = "Запрос на аутентификацию") SignInRequest request) {
         JwtAuthenticationResponse response = authenticationService.signIn(request);
         return ResponseEntity.ok().header("accessToken", response.getAccessToken()).build();
     }
 
     @Transactional
     @PostMapping("/refresh")
-    public ResponseEntity <UserDto> refreshToken(@RequestBody @Valid RefreshTokenRequest refreshToken) {
+    @Operation(
+            summary = "Обновление",
+            description = "Позволяет создать заказ в базе данных"
+    )
+    public ResponseEntity<UserDto> refreshToken(@RequestBody
+                                                @Valid
+                                                @Parameter(description = "Запрос на обновление токена") RefreshTokenRequest refreshToken) {
         JwtAuthenticationResponse response = authenticationService.refreshToken(refreshToken);
         return ResponseEntity.ok().header("RefreshToken", response.getRefreshToken()).build();
     }

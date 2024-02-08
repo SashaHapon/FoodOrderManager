@@ -1,12 +1,13 @@
 package org.food.security.payload.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-//@Schema(description = "Запрос на регистрацию")
+@Schema(description = "Запрос на регистрацию")
 public class SignUpRequest {
 
 //    @Schema(description = "Имя пользователя", example = "Jon")

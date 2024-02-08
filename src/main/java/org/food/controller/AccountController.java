@@ -22,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT")
 @Tag(name="AccountController", description=" Позволяет контролировать аккаунты в бд")
 public class AccountController {
 
@@ -31,7 +32,6 @@ public class AccountController {
             summary = "Получение всех аккаунтов",
             description = "Позволяет получить аккаунты"
     )
-    @SecurityRequirement(name = "JWT")
     @GetMapping("/")
     public List<AccountDto> getAllAccounts(@RequestParam(defaultValue = "1", required = false)
                                                @Parameter(description = "Строка отсчета") int id,
@@ -45,7 +45,6 @@ public class AccountController {
             summary = "Добавление аккаунта",
             description = "Позволяет добавить аккаунт в базу данных"
     )
-    @SecurityRequirement(name = "JWT")
     @PostMapping("/")
     public AccountDto addAccount(@RequestBody
                                      @Parameter(description = "Данные нового пользователя")AccountDto accountDto) {
@@ -56,7 +55,6 @@ public class AccountController {
             summary = "Получение аккаунта",
             description = "Позволяет получить аккаунт по id из базы данных"
     )
-    @SecurityRequirement(name = "JWT")
     @GetMapping("/{id}")
     public AccountDto getAccount(@PathVariable("id")
                                      @Parameter(description = "Идентификатор аккаунта")Integer id) {
@@ -68,7 +66,6 @@ public class AccountController {
             summary = "Удаление аккаунта",
             description = "Позволяет удалить аккаунт по id из базы данных"
     )
-    @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
     void deleteAccountById(@PathVariable("id")
                            @Parameter(description = "Идентификатор аккаунта") Integer id) {
@@ -80,7 +77,6 @@ public class AccountController {
             summary = "Обновление аккаунта",
             description = "Позволяет обновить данные аккаунта"
     )
-    @SecurityRequirement(name = "JWT")
     @PutMapping("/{id}")
     void update(@RequestBody
                 @Parameter(description = "Новые данные аккаунта") AccountDto accountDto) {

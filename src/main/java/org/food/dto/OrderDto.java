@@ -13,9 +13,6 @@ public class OrderDto {
     private Integer id;
     @Schema(description = "Список блюд")
     private List<MealDto> meals;
-    //todo needed??
-//    private String accountId;
-//
     @Schema(description = "Сущность пользователя")
     private AccountDto account;
     @Schema(description = "Сумма заказа")

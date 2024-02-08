@@ -23,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/meals")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT")
 @Tag(name="MealController", description=" Позволяет контролировать блюда в бд")
 public class MealController {
 
@@ -32,7 +33,6 @@ public class MealController {
             summary = "Получение всех блюд",
             description = "Позволяет получить все блюда из базы данных"
     )
-    @SecurityRequirement(name = "JWT")
     @GetMapping("/")
     public List<MealDto> getAll(@RequestParam(defaultValue = "1", required = false)
                                     @Parameter(description = "Строка отсчета") int id,
@@ -46,7 +46,6 @@ public class MealController {
             summary = "Добавление блюда",
             description = "Позволяет добавить блюдо в базу данных"
     )
-    @SecurityRequirement(name = "JWT")
     @PostMapping("/")
     public MealDto addMeal(@RequestBody
                                @Parameter(description = "Данные нового блюда") MealDto mealDto) {
@@ -58,7 +57,6 @@ public class MealController {
             summary = "Получение блюда",
             description = "Позволяет получить блюдо по id из базы данных"
     )
-    @SecurityRequirement(name = "JWT")
     @GetMapping("/{id}")
     public MealDto getMeal(@PathVariable("id")
                                @Parameter(description = "Идентификатор блюда") Integer id){
@@ -70,7 +68,6 @@ public class MealController {
             summary = "Удаление блюда",
             description = "Позволяет удалить блюдо по id из базы данных"
     )
-    @SecurityRequirement(name = "JWT")
     @DeleteMapping("/{id}")
     public void deleteMealById(@PathVariable("id")
                                    @Parameter(description = "Идентификатор блюда") Integer id){
@@ -82,7 +79,6 @@ public class MealController {
             summary = "Обновление блюда",
             description = "Позволяет обновить данные о блюде в базе данных"
     )
-    @SecurityRequirement(name = "JWT")
     @PutMapping("/{id}")
     void update(@RequestBody
                 @Parameter(description = "Данные обновления блюда") MealDto mealDto){
