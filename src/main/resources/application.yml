@@ -15,9 +15,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
-        exclude: "env,beans"
-
+        include: "health,info,metrics,auditevents"
+        exclude: "env,beans,shutdown,mappings"
+  server:
+    port: 8092
 token:
   tokenLifetime: 144000000
   refreshExpirationMs: 86400000
