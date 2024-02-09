@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@Tag(name = "AuthController", description = " Позволяет получить полозователя из бд")
+@Tag(name = "UserController", description = " Позволяет получить полозователя из бд")
 public class UserController {
     private final UserService userService;
 
