@@ -5,6 +5,8 @@ import org.food.TestUtils;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
 import org.food.exception.classes.NotFoundException;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.MySQLContainer;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,8 +45,20 @@ public class AccountControllerIntegrationTests extends TestUtils {
     private ObjectMapper objectMapper;
     @Autowired
     AccountService accountService;
-    AccountController accountController;
 
+    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>(
+            "mysql:latest"
+    );
+
+    @BeforeAll
+    static void beforeAll() {
+        mySQLContainer.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        mySQLContainer.stop();
+    }
 
     @Test
     @WithMockUser

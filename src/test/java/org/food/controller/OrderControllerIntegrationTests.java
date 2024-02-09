@@ -6,6 +6,8 @@ import org.food.TestUtils;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.MySQLContainer;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,8 +52,20 @@ public class OrderControllerIntegrationTests extends TestUtils {
     private ObjectMapper objectMapper;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    OrderController orderController;
+
+    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>(
+            "mysql:latest"
+    );
+
+    @BeforeAll
+    static void beforeAll() {
+        mySQLContainer.start();
+    }
+
+    @AfterAll
+    static void afterAll() {
+        mySQLContainer.stop();
+    }
 
     @Test
     @WithMockUser
