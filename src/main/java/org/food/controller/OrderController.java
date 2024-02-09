@@ -1,5 +1,9 @@
 package org.food.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
@@ -19,38 +23,70 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT")
+@Tag(name = "OrderController", description = " Позволяет контролировать заказы в бд")
 public class OrderController {
 
     private final OrderService orderService;
 
+    @Operation(
+            summary = "Создание заказа",
+            description = "Позволяет создать заказ в базе данных"
+    )
     @PostMapping("/")
-    public OrderDto createOrder(@RequestParam("id") Integer accountId,
-                            @RequestBody List<MealDto> mealDtoList) {
+    public OrderDto createOrder(@RequestParam("id")
+                                @Parameter(description = "Индентификатор аккаунта") Integer accountId,
+                                @RequestBody
+                                @Parameter(description = "Список блюд")
+                                List<MealDto> mealDtoList) {
 
         return orderService.createOrder(accountId, mealDtoList);
     }
 
+    @Operation(
+            summary = "Получение заказа",
+            description = "Позволяет получить заказ из базы данных"
+    )
     @GetMapping("/{id}")
-    public OrderDto getOrder(@PathVariable("id") Integer id) {
+    public OrderDto getOrder(@PathVariable("id")
+                             @Parameter(description = "Идентификатор заказа") Integer id) {
 
         return orderService.getOrder(id);
     }
 
+    @Operation(
+            summary = "Добавление блюда в заказ",
+            description = "Позволяет создать заказ в базе данных"
+    )
     @PutMapping("/{id}")
-    public void addMeals(@PathVariable("id") Integer orderId, @RequestBody  List<MealDto> mealDtos) {
+    public void addMeals(@PathVariable("id")
+                         @Parameter(description = "Идентификатор заказа") Integer orderId,
+                         @RequestBody
+                         @Parameter(description = "Список блюд") List<MealDto> mealDtos) {
 
-        orderService.addMeals(orderId,  mealDtos);
+        orderService.addMeals(orderId, mealDtos);
     }
 
+    @Operation(
+            summary = "Удаление блюд из заказа",
+            description = "Позволяет удалить блюда из заказа в базе данных"
+    )
     @DeleteMapping("/{id}")
-    public void removeMeals(@PathVariable("id") Integer orderId,
-                            @RequestBody List<MealDto> mealDtosToRemove) {
+    public void removeMeals(@PathVariable("id")
+                            @Parameter(description = "Идентификатор заказа") Integer orderId,
+                            @RequestBody
+                            @Parameter(description = "Список блюд") List<MealDto> mealDtosToRemove) {
 
         orderService.removeMeals(orderId, mealDtosToRemove);
     }
 
+    @Operation(
+            summary = "Получение всех блюд заказа",
+            description = "Позволяет получить все блюда из заказа в базе данных"
+    )
     @GetMapping("/{orderId}/meals")
-    public List<MealDto> getAllMeals(@PathVariable("orderId") Integer id) {
+    public List<MealDto> getAllMeals(@PathVariable("orderId")
+                                     @Parameter(description = "Идентификатор заказа") Integer id) {
 
         return orderService.getAllMeals(id);
     }
