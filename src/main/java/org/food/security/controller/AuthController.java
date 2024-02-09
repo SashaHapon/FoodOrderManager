@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@Tag(name = "AccountController", description = " Позволяет контролировать аккаунты в бд")
+@Tag(name = "AuthController", description = "Позволяет контролировать доступ к приложению")
 public class AuthController {
 
     private final AuthenticationService authenticationService;
@@ -60,8 +60,8 @@ public class AuthController {
     @Transactional
     @PostMapping("/refresh")
     @Operation(
-            summary = "Обновление",
-            description = "Позволяет создать заказ в базе данных"
+            summary = "Обновление токена",
+            description = "Позволяет обновить токены access и refresh"
     )
     public ResponseEntity<UserDto> refreshToken(@RequestBody
                                                 @Valid
