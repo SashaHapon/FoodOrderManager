@@ -41,7 +41,7 @@ public abstract class AbstractDao<T> implements GenericDao<T> {
 
     @Override
     public void delete(T entity) {
-        entityManager.remove(entity);
+        entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
     }
 
     @Override

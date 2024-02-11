@@ -29,4 +29,10 @@ public class Account {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    public Account(String name, BigDecimal money, String phoneNumber){
+        this.name = name;
+        this.money = money;
+        this.phoneNumber = phoneNumber;
+    }
 }
