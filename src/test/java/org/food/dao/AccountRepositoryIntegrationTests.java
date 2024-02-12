@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,6 +40,7 @@ public class AccountRepositoryIntegrationTests {
     private Account account5;
     private Account newAccount4;
     private Account newAccount;
+    private List<Account> accountList;
     static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:latest");
 
     @BeforeAll
@@ -57,9 +59,10 @@ public class AccountRepositoryIntegrationTests {
         account2 = new Account(2, "Test Account 2", new BigDecimal("100.01"), "1234567890");
         account3 = new Account(3, "Test Account 3", new BigDecimal("100.01"), "1234567890");
         account4 = new Account(4, "Test Account 4", new BigDecimal("100.01"), "1234567890");
-        account5 = new Account(5, "Test Account 5", new BigDecimal("100.01"), "1234567890");
+        account5 = new Account(5, "Test Account 5", new BigDecimal("342.00"), "+4245253562352");
         newAccount4 = new Account(4, "Sasha", new BigDecimal("100.01"), "1234567890");
         newAccount = new Account("Sasha", new BigDecimal("102.01"), "+375448954612");
+        accountList = new ArrayList<>(List.of(account1, account2, account3, account4, account5));
     }
 
     @Test
@@ -75,8 +78,7 @@ public class AccountRepositoryIntegrationTests {
     @Sql(TEST_DATA_FILE_PREFIX + "/should_findAccountById/insert_account_with_Id_1.sql")
     public void should_findAccountById() {
         Account account = accountRepository.findById(id);
-        assertThat(account.getId()).isEqualTo(account1.getId());
-        assertThat(account.getName()).isEqualTo(account1.getName());
+        assertThat(account).isEqualTo(account1);
     }
 
     @Test
@@ -85,8 +87,7 @@ public class AccountRepositoryIntegrationTests {
     public void should_updateAccount() {
         accountRepository.update(newAccount4);
         Account account = accountRepository.findById(4);
-        assertThat(account.getId()).isEqualTo(newAccount4.getId());
-        assertThat(account.getName()).isEqualTo(newAccount4.getName());
+        assertThat(account).isEqualTo(newAccount4);
     }
 
     @Test
@@ -103,21 +104,7 @@ public class AccountRepositoryIntegrationTests {
     @Sql(TEST_DATA_FILE_PREFIX + "/should_findAllAccounts/insert_five_accounts.sql")
     public void should_findAllAccounts() {
         List<Account> accounts = accountRepository.findAll(id, limit);
-
-        assertThat(accounts.get(0).getId()).isEqualTo(account1.getId());
-        assertThat(accounts.get(0).getName()).isEqualTo(account1.getName());
-
-        assertThat(accounts.get(1).getId()).isEqualTo(account2.getId());
-        assertThat(accounts.get(1).getName()).isEqualTo(account2.getName());
-
-        assertThat(accounts.get(2).getId()).isEqualTo(account3.getId());
-        assertThat(accounts.get(2).getName()).isEqualTo(account3.getName());
-
-        assertThat(accounts.get(3).getId()).isEqualTo(account4.getId());
-        assertThat(accounts.get(3).getName()).isEqualTo(account4.getName());
-
-        assertThat(accounts.get(4).getId()).isEqualTo(account5.getId());
-        assertThat(accounts.get(4).getName()).isEqualTo(account5.getName());
+        assertThat(accounts).isEqualTo(accountList);
     }
 
 }

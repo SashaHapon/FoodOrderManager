@@ -2,20 +2,20 @@ package org.food.model;
 
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import lombok.Setter;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 @Entity
 @Table(name = "meal")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Meal {
@@ -25,4 +25,10 @@ public class Meal {
     private String name;
     private BigDecimal price;
     private int time;
+
+    public Meal(String name, BigDecimal price, int time) {
+        this.name = name;
+        this.price = price;
+        this.time = time;
+    }
 }
