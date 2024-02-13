@@ -72,7 +72,7 @@ public class MealRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Account with id=1 must be returned")
+    @DisplayName("All meals must be returned")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_returnAllMeals/insert_seven_meals.sql")
     public void should_returnAllMeals() {
         List<Meal> meals = mealRepository.findAll(id, limit);
@@ -80,27 +80,23 @@ public class MealRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("New account must be created")
+    @DisplayName("New meal must be created")
     public void should_addNewMeal() {
         Meal createdMeal = mealRepository.create(newMeal);
         Meal meal = mealRepository.findById(2);
         assertThat(meal).isEqualTo(createdMeal);
     }
 
-    ;
-
     @Test
-    @DisplayName("Account with id=1 must be returned")
+    @DisplayName("Meal with id=1 must be returned")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_returnMealById/insert_meal_withId_1.sql")
     public void should_returnMealById() {
         Meal meal = mealRepository.findById(1);
         assertThat(meal).isEqualTo(meal0);
     }
 
-    ;
-
     @Test
-    @DisplayName("")
+    @DisplayName("Meal with id=3 must be deleted")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_deleteMeal/insert_meal_with_id_3.sql")
     public void should_deleteMeal() {
         Meal mealBefore = mealRepository.findById(3);
@@ -110,16 +106,12 @@ public class MealRepositoryIntegrationTest {
         assertThat(meal).isNull();
     }
 
-    ;
-
     @Test
-    @DisplayName("")
+    @DisplayName("Meal with id=4 must be updated")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_updateMeal/insert_meal_with_id_4.sql")
     public void should_updateMeal() {
         mealRepository.update(mealToUpdate);
         Meal meal = mealRepository.findById(4);
         assertThat(meal).isEqualTo(mealToUpdate);
     }
-
-    ;
 }
