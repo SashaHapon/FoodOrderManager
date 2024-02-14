@@ -1,6 +1,21 @@
 version: '3'
 
 services:
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - 5432:5432
+    networks:
+      - common-network
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
   mysql:
     image: mysql:latest
     hostname: mysql
@@ -16,9 +31,12 @@ services:
       - mysql:/var/lib/mysql
 volumes:
   mysql:
+  postgres:
 
 networks:
   common-network:
     driver: bridge
+
+
 
 
