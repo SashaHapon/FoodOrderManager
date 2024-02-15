@@ -8,7 +8,7 @@
     <changeSet id="1" author="Alexandr Hapon" labels="example-label" context="example-context">
         <comment>example-comment</comment>
         <createTable tableName="account">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="int" autoIncrement="true" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="money" type="decimal(38,2)"/>

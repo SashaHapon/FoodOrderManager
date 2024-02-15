@@ -1,4 +1,4 @@
-INSERT ignore INTO meal (id, name, price, time) VALUES
+INSERT INTO meal (id, name, price, time) VALUES
 (1, 'Spaghetti Bolognese', 12.99, 30),
 (2, 'Chicken Caesar Salad', 9.99, 20),
 (3, 'Grilled Salmon', 15.99, 25),
@@ -12,5 +12,5 @@ INSERT INTO account (id, name, money, phone_number) VALUES
 (2,'Test Account 2', 100.01, '1234567890'),
 (3,'Test Account 3', 100.01, '1234567890'),
 (4,'Test Account 4', 100.01, '1234567890'),
- (5,'Sasha', 342.0, '+4245253562352')
+(5,'Sasha', 342.0, '+4245253562352')
 ;

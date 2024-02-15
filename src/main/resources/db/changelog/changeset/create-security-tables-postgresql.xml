@@ -5,8 +5,10 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="1-5" author="Alexandr Hapon" labels="example-label" context="example-context" dbms="mysql">
+
+    <changeSet id="4-1" author="Alexandr Hapon" labels="example-label" context="example-context" dbms="postgresql">
         <comment>example-comment</comment>
+        <sql>CREATE TYPE role AS ENUM ('ROLE_USER', 'ROLE_ADMIN')</sql>
         <createTable tableName="users">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -15,7 +17,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="password" type="varchar(255)"/>
-            <column name="role" type="enum('ROLE_USER', 'ROLE_ADMIN')">
+            <column name="role" type="role">
                 <constraints nullable="false"/>
             </column>
             <column name="username" type="varchar(255)">
@@ -24,8 +26,7 @@
         </createTable>
     </changeSet>
 
-
-    <changeSet id="5-1" author="Alexandr Hapon" dbms="mysql">
+    <changeSet id="6-1" author="Alexandr Hapon" dbms="postgresql">
         <createIndex tableName="users" indexName="idx_users_username" unique="true">
             <column name="username"/>
         </createIndex>
@@ -34,7 +35,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="2-1" author="Alexandr Hapon" labels="example-label" context="example-context" dbms="mysql">
+    <changeSet id="2-1" author="Alexandr Hapon" labels="example-label" context="example-context" dbms="postgresql">
         <comment>example-comment</comment>
         <createTable tableName="accesstoken">
             <column name="id" type="bigint" autoIncrement="true">
@@ -57,7 +58,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="3-7" author="Alexandr Hapon" labels="example-label" context="example-context" dbms="mysql">
+    <changeSet id="3-7" author="Alexandr Hapon" labels="example-label" context="example-context" dbms="postgresql">
         <comment>example-comment</comment>
         <createTable tableName="refreshtoken">
             <column name="id" type="bigint" autoIncrement="true">

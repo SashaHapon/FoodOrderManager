@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,16 +32,16 @@ public class OrderRepositoryIntegrationTest {
     private OrderRepository orderRepository;
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/OrderServiceIntegrationTests";
 
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:latest");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
     @BeforeAll
     static void beforeAll() {
-        mySQLContainer.start();
+        postgres.start();
     }
 
     @AfterAll
     static void afterAll() {
-        mySQLContainer.stop();
+        postgres.start();
     }
 
     @Test
@@ -53,7 +54,7 @@ public class OrderRepositoryIntegrationTest {
         List<Meal> mealList = new ArrayList<>(List.of(meal1, meal2, meal3));
         Account account1 = new Account(1,"Test Account 1", new BigDecimal("100.01"), "1234567890");
 
-        Order createdOrder = orderRepository.create(new Order(null, mealList, account1, new BigDecimal("1222"), 13));
+        Order createdOrder = orderRepository.create(new Order(mealList, account1, new BigDecimal("1222"), 13));
         Order order = orderRepository.findById(createdOrder.getId());
         assertThat(order).isNotNull();
         assertThat(order.getMeals().get(0)).isEqualTo(meal1);

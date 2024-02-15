@@ -12,7 +12,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,16 +29,16 @@ public class MealRepositoryIntegrationTest {
     private MealRepository mealRepository;
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/MealRepositoryIntegrationTests";
 
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:latest");
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
 
     @BeforeAll
     static void beforeAll() {
-        mySQLContainer.start();
+        postgres.start();
     }
 
     @AfterAll
     static void afterAll() {
-        mySQLContainer.stop();
+        postgres.start();
     }
 
     @Test
