@@ -52,20 +52,6 @@ public class MealControllerIntegrationTests extends TestUtils {
     @Autowired
     MealService mealService;
 
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>(
-            "mysql:latest"
-    );
-
-    @BeforeAll
-    static void beforeAll() {
-        mySQLContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        mySQLContainer.stop();
-    }
-
     @Test
     @DisplayName("Return meal from database with id=1")
     @Sql("classpath:data/org/food/controller/MealControllerIntegrationTest/should_return_Meal_with_id1/insert_meal_with_id_1.sql")
