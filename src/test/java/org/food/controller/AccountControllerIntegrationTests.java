@@ -42,8 +42,6 @@ public class AccountControllerIntegrationTests extends TestUtils {
     private ObjectMapper objectMapper;
     @Autowired
     AccountService accountService;
-    AccountController accountController;
-
 
     @Test
     @WithMockUser
