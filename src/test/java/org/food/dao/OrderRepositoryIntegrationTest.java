@@ -45,7 +45,7 @@ public class OrderRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("New meal must be created")
+    @DisplayName("New order must be created")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_create_new_Order/insert_data_for_order.sql")
     public void should_create_new_Order() {
         Meal meal1 = new Meal(1, "Spaghetti Bolognese", new BigDecimal("12.99"), 30);
@@ -64,7 +64,7 @@ public class OrderRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Meal with id=1 must be returned")
+    @DisplayName("Order with id=1 must be returned")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_return_order_by_id/insert_order_with_id_1.sql")
     public void should_return_order_by_id() {
         Meal meal1 = new Meal(1, "Spaghetti Bolognese", new BigDecimal("12.99"), 30);
@@ -78,7 +78,7 @@ public class OrderRepositoryIntegrationTest {
     }
 
     @Test
-    @DisplayName("Meal with id=1 must be returned")
+    @DisplayName("Order with id=2 must be updated")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_update_order_by_id/insert_order_with_id_2.sql")
     public void should_update_order_by_id() {
         Meal meal1 = new Meal(1, "Spaghetti Bolognese", new BigDecimal("12.99"), 30);
