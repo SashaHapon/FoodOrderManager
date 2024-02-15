@@ -13,7 +13,7 @@
     </changeSet>
 
 
-    <changeSet author="Alexandr Hapon" id="5">
+    <changeSet author="Alexandr Hapon" id="5" dbms="mysql">
         <dropForeignKeyConstraint
                                    baseTableName="order_meals"
                                    constraintName="fk_order_meal_order"/>
@@ -23,6 +23,10 @@
                                  constraintName="fk_order_meal_order"
                                  referencedTableName="orders"
                                  referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Alexandr Hapon" id="6" dbms="postgresql">
+        <addAutoIncrement tableName="orders" columnName="id"/>
     </changeSet>
 
     <changeSet id="124" author="Aleksandr Hapon">
