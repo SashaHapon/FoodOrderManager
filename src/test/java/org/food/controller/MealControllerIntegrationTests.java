@@ -48,7 +48,6 @@ public class MealControllerIntegrationTests extends TestUtils {
     private ObjectMapper objectMapper;
     @Autowired
     MealService mealService;
-    MealController mealController;
 
     @Test
     @DisplayName("Return meal from database with id=1")
