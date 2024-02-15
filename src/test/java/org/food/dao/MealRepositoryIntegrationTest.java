@@ -67,7 +67,7 @@ public class MealRepositoryIntegrationTest {
         Meal newMeal = new Meal(null, "Draniki", new BigDecimal("15.99"), 2);
 
         Meal createdMeal = mealRepository.create(newMeal);
-        Meal meal = mealRepository.findById(2);
+        Meal meal = mealRepository.findById(createdMeal.getId());
 
         assertThat(meal).isEqualTo(createdMeal);
     }

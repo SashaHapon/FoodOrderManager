@@ -54,8 +54,8 @@ public class OrderRepositoryIntegrationTest {
         List<Meal> mealList = new ArrayList<>(List.of(meal1, meal2, meal3));
         Account account1 = new Account(1,"Test Account 1", new BigDecimal("100.01"), "1234567890");
 
-        orderRepository.create(new Order(null, mealList, account1, new BigDecimal("1222"), 13));
-        Order order = orderRepository.findById(3);
+        Order createdOrder = orderRepository.create(new Order(null, mealList, account1, new BigDecimal("1222"), 13));
+        Order order = orderRepository.findById(createdOrder.getId());
         assertThat(order).isNotNull();
         assertThat(order.getMeals().get(0)).isEqualTo(meal1);
         assertThat(order.getMeals().get(1)).isEqualTo(meal2);
