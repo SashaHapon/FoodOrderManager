@@ -61,6 +61,24 @@ Food Order Manager is a web application designed to manage the food ordering pro
    Open your web browser and go to the provided address.
    Log in (if necessary) and start using Food Order Manager.
 
+## Running Tests with Test Containers
+In this project, you can run tests for different databases using Spring test profiles.
+To achieve this, follow these steps:
+
+**For MySQL:**
+
+```bash
+./mvnw test -Dspring.profiles.active=mysqltest
+```
+**For PostgreSQL:**
+
+```bash
+./mvnw test -Dspring.profiles.active=postgrestets
+```
+This will run your tests using the specified database profile, allowing you to test your application against different database systems.
+
+
+
 ## Configuration Settings
 
 Before running the Food Order Manager project, you may need to customize certain configuration settings to match your local environment. Below are the key settings that you may need to override in the `application.yml` file:
