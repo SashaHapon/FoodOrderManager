@@ -9,7 +9,6 @@ import org.springframework.core.env.Environment;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class ContainerConfiguration {
