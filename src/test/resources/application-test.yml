@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:mydb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=true;MODE=MYSQL;INIT=CREATE SCHEMA IF NOT EXISTS MYDB
+    username: root
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    user: root
+    password:
+
+token:
+  tokenLifetime: 144000000
+  refreshExpirationMs: 86400000
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
