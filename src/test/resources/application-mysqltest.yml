@@ -1,15 +1,10 @@
 spring:
   datasource:
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:mysql://localhost/mydb
     username: root
     password:
-  h2:
-    console:
-      enabled: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     user: root
