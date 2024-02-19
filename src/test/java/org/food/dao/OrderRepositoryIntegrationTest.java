@@ -14,8 +14,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,23 +28,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Transactional
 @Rollback
+@Testcontainers
 public class OrderRepositoryIntegrationTest {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private JdbcDatabaseContainer<?> databaseContainer;
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/OrderServiceIntegrationTests";
-
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.start();
-    }
 
     @Test
     @DisplayName("New order must be created")

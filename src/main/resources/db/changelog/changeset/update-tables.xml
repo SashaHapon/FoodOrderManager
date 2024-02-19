@@ -25,7 +25,7 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet author="liquibase-docs" id="addAutoIncrement-example">
+    <changeSet author="liquibase-docs" id="addAutoIncrement-example" dbms="postgresql">
         <addAutoIncrement catalogName="mydb"
                           columnDataType="int"
                           columnName="id"

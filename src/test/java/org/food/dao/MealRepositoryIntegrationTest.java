@@ -1,5 +1,6 @@
 package org.food.dao;
 
+import org.food.TestUtils;
 import org.food.api.repository.MealRepository;
 import org.food.model.Meal;
 import org.junit.jupiter.api.AfterAll;
@@ -8,11 +9,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,25 +25,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test")
 @Transactional
 @Rollback
-public class MealRepositoryIntegrationTest {
+@Testcontainers
+public class MealRepositoryIntegrationTest extends TestUtils {
     @Autowired
     private MealRepository mealRepository;
+
+    @Autowired
+    private JdbcDatabaseContainer<?> databaseContainer;
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/MealRepositoryIntegrationTests";
-
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:latest");
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.start();
-    }
 
     @Test
     @DisplayName("All meals must be returned")
