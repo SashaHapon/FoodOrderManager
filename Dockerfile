@@ -5,8 +5,6 @@ COPY .mvn .mvn
 COPY mvnw .
 COPY pom.xml .
 COPY src src
-RUN mvn dependency:go-offline
-RUN mvn -o verify
 RUN mvn -f /app/pom.xml -B package -DskipTests
 
 # Используйте образ JRE для запуска приложения
