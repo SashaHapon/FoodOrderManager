@@ -18,11 +18,10 @@ public class ContainerConfiguration {
 
     @Bean
     @ServiceConnection
-    public JdbcDatabaseContainer<?> jdbcDatabaseContainer(){
-        if (env.matchesProfiles("postgrestest")){
-            return new PostgreSQLContainer<>("postgres:latest").withUsername("root");
-        } else {
+    public JdbcDatabaseContainer<?> jdbcDatabaseContainer() {
+        if (env.matchesProfiles("mysqltest")) {
             return new MySQLContainer<>("mysql:latest").withUsername("root").withDatabaseName("mydb");
         }
+            return new PostgreSQLContainer<>("postgres:latest").withUsername("root");
     }
 }
