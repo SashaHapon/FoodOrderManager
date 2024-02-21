@@ -1,4 +1,7 @@
-/target
 /.idea
 
-log4j.log
+/order-manager/target
+/order-manager/log4j.log
+
+/receipt/target
+/log4j.log
