@@ -1,9 +1,9 @@
 # Используйте образ JDK для сборки
 FROM maven:3.9.6-eclipse-temurin-17 as builder
 WORKDIR /app
-COPY .mvn .mvn
-COPY mvnw .
-COPY pom.xml .
+COPY ../.mvn .mvn
+COPY ../mvnw .
+COPY ../pom.xml .
 COPY src src
 RUN mvn -f /app/pom.xml -B package -DskipTests
 

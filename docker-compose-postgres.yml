@@ -6,7 +6,7 @@ services:
       - "POSTGRES_HOST=postgres"
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: food-manager/Dockerfile
     depends_on:
       - postgres
     networks:
