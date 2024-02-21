@@ -37,6 +37,18 @@
                           tableName="orders"/>
     </changeSet>
 
+    <changeSet author="liquibase-docs" id="addAutoIncrement-example" dbms="h2">
+        <addAutoIncrement catalogName="mydb"
+                          columnDataType="int"
+                          columnName="id"
+                          defaultOnNull="false"
+                          generationType="ALWAYS"
+                          incrementBy="1"
+                          schemaName="public"
+                          startWith="1"
+                          tableName="orders"/>
+    </changeSet>
+
     <changeSet id="124" author="Aleksandr Hapon">
         <renameTable oldTableName="order_meals" newTableName="orders_meals"/>
     </changeSet>
