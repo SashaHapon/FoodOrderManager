@@ -1,6 +1,5 @@
 package org.food.dao;
 
-import org.food.TestUtils;
 import org.food.api.repository.MealRepository;
 import org.food.model.Meal;
 import org.junit.jupiter.api.DisplayName;
@@ -19,17 +18,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @Rollback
 @Testcontainers
-public class MealRepositoryIntegrationTest extends TestUtils {
-    @Autowired
-    private MealRepository mealRepository;
+public class MealRepositoryIntegrationTests {
+    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/MealRepositoryIntegrationTests";
 
     @Autowired
+    private MealRepository mealRepository;
+    @Autowired
     private JdbcDatabaseContainer<?> databaseContainer;
-    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/MealRepositoryIntegrationTests";
 
     @Test
     @DisplayName("All meals must be returned")

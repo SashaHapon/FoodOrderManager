@@ -1,7 +1,7 @@
 package org.food.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.food.TestUtils;
+import org.food.BaseTests;
 import org.food.api.service.MealService;
 import org.food.dto.MealDto;
 import org.food.exception.classes.NotFoundException;
@@ -36,18 +36,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //todo enable filters
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test")
+@ActiveProfiles("h2")
 @Transactional
 @Rollback
-public class MealControllerIntegrationTests extends TestUtils {
-
+public class MealControllerIntegrationTests extends BaseTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/MealControllerIntegrationTest";
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    MealService mealService;
+    private MealService mealService;
 
     @Test
     @DisplayName("Return meal from database with id=1")

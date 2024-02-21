@@ -2,7 +2,7 @@ package org.food.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.food.TestUtils;
+import org.food.BaseTests;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
@@ -36,12 +36,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //todo enable filters
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test")
+@ActiveProfiles("h2")
 @Transactional
 @Rollback
-public class OrderControllerIntegrationTests extends TestUtils {
-
+public class OrderControllerIntegrationTests extends BaseTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/OrderControllerIntegrationTest";
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired

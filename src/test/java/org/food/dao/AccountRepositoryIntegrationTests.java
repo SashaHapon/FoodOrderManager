@@ -2,7 +2,6 @@ package org.food.dao;
 
 import org.food.api.repository.AccountRepository;
 import org.food.model.Account;
-import org.food.testconfig.ContainerConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +18,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @Rollback
 @Testcontainers
-public class AccountRepositoryIntegrationTests extends ContainerConfiguration {
+public class AccountRepositoryIntegrationTests {
+    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/AccountRepositoryIntegrationTests";
+
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private JdbcDatabaseContainer<?> databaseContainer;
-
-    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/AccountRepositoryIntegrationTests";
 
     @Test
     @DisplayName("New account must be created")

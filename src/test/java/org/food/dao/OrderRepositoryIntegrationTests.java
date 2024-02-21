@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -20,13 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-@SpringBootTest
-@ActiveProfiles("test")
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 @Rollback
 @Testcontainers
-public class OrderRepositoryIntegrationTest {
-
+public class OrderRepositoryIntegrationTests {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
@@ -41,7 +39,7 @@ public class OrderRepositoryIntegrationTest {
         Meal meal2 = new Meal(2, "Chicken Caesar Salad", new BigDecimal("9.99"), 20);
         Meal meal3 = new Meal(3, "Grilled Salmon", new BigDecimal("15.99"), 25);
         List<Meal> mealList = new ArrayList<>(List.of(meal1, meal2, meal3));
-        Account account1 = new Account(1,"Test Account 1", new BigDecimal("100.01"), "1234567890");
+        Account account1 = new Account(1, "Test Account 1", new BigDecimal("100.01"), "1234567890");
 
         Order createdOrder = orderRepository.create(new Order(mealList, account1, new BigDecimal("1222"), 13));
         Order order = orderRepository.findById(createdOrder.getId());
@@ -57,7 +55,7 @@ public class OrderRepositoryIntegrationTest {
     @Sql(TEST_DATA_FILE_PREFIX + "/should_return_order_by_id/insert_order_with_id_1.sql")
     public void should_return_order_by_id() {
         Meal meal1 = new Meal(1, "Spaghetti Bolognese", new BigDecimal("12.99"), 30);
-        Account account1 = new Account(1,"Test Account 1", new BigDecimal("100.01"), "1234567890");
+        Account account1 = new Account(1, "Test Account 1", new BigDecimal("100.01"), "1234567890");
 
         Order order = orderRepository.findById(1);
 

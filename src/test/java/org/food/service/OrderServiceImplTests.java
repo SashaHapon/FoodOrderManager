@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceImplTest {
+public class OrderServiceImplTests {
     @Mock
     private ModelMapper modelMapper;
     @Mock
@@ -68,7 +68,6 @@ public class OrderServiceImplTest {
 
         Account account = new Account();
         Order order = new Order();
-        Order order1 = null;
 
         Integer id = 1;
         List<Meal> mealList = new ArrayList<>(3);
@@ -140,7 +139,7 @@ public class OrderServiceImplTest {
     @DisplayName("Remove meals and and return order dto without them")
     public void should_removeMeals_and_returnOrderDtoWithoutThem() {
 
-        Integer id = 1;
+        int id = 1;
         Order testOrder = new Order();
         OrderDto orderDto = new OrderDto();
         MealDto mealDto = new MealDto(1, "name3", new BigDecimal(555), 5);
@@ -174,7 +173,7 @@ public class OrderServiceImplTest {
         Type listType = new TypeToken<List<MealDto>>() {
         }.getType();
 
-        Integer orderId = 1;
+        int orderId = 1;
         Order order = new Order();
         List<Meal> mockMeals = Arrays.asList(new Meal(), new Meal(), new Meal());
         order.setMeals(mockMeals);

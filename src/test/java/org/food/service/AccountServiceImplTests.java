@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AccountServiceImplTest {
+public class AccountServiceImplTests {
     @Mock
     private ModelMapper modelMapper;
     @Mock
@@ -140,7 +140,7 @@ public class AccountServiceImplTest {
     @Test
     @DisplayName("Throw exception when try to delete account")
     public void should_throwException_when_tryToDeleteAccount() {
-        Integer id = 1;
+        int id = 1;
 
         when(accountRepository.findById(id)).thenThrow(EntityNotFoundException.class);
 

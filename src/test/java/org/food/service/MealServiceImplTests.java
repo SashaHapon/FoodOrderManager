@@ -19,12 +19,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class MealServiceImplTest {
+public class MealServiceImplTests {
     @Mock
     private ModelMapper modelMapper;
     @Mock
@@ -140,7 +140,7 @@ public class MealServiceImplTest {
     @Test
     @DisplayName("Throw exception when try to delete meal")
     public void should_throwException_when_tryToDeleteMeal() {
-        Integer id = 1;
+        int id = 1;
 
         when(mealRepository.findById(id)).thenThrow(EntityNotFoundException.class);
 
@@ -173,7 +173,7 @@ public class MealServiceImplTest {
         MealDto mealDto = new MealDto();
         Meal testMeal = new Meal();
 
-        when(modelMapper.map(mealDto,Meal.class)).thenReturn(testMeal);
+        when(modelMapper.map(mealDto, Meal.class)).thenReturn(testMeal);
         when(mealRepository.update(testMeal)).thenThrow(NullPointerException.class);
 
         assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> mealService.update(mealDto));

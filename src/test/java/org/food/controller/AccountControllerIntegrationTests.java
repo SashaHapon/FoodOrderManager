@@ -1,7 +1,7 @@
 package org.food.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.food.TestUtils;
+import org.food.BaseTests;
 import org.food.api.service.AccountService;
 import org.food.dto.AccountDto;
 import org.food.exception.classes.NotFoundException;
@@ -28,20 +28,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// todo enable filters
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//todo enable filters
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test")
+@ActiveProfiles("h2")
 @Transactional
 @Rollback
-public class AccountControllerIntegrationTests extends TestUtils {
+public class AccountControllerIntegrationTests extends BaseTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/AccountControllerIntegrationTest";
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     @Test
     @WithMockUser

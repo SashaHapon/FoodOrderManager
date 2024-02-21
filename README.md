@@ -41,42 +41,42 @@ Food Order Manager is a web application designed to manage the food ordering pro
 ## Actions to Launch the Project
 
 ### Prerequisites:
-- JDK 21 or higher
+- JDK 17 or higher
 - Docker
 
 ### Steps
 
-1. Cloning the Repository:
+1. Clone the repository
 
-```bash
-git clone https://github.com/SashaHapon/FoodOrderManager.git
-````
+   ```bash
+   git clone https://github.com/SashaHapon/FoodOrderManager.git
+   ````
 
-2. Go to the Project Directory.
+2. Navigate to the Project Directory
 
-```bash
-cd FoodOrderManager
-```
+   ```bash
+   cd FoodOrderManager
+   ```
 
-3. Selecting a database for the application. This application supports using different databases using Spring profiles. Below are instructions on how to run the application with each of the supported databases.
-4. Running the application
+3. Running the application
 
    - with MySQL:
 
-        ```bash
-        docker compose --file docker-compose-mysql.yml up --detach
-        ```
+     ```bash
+     docker compose --file docker-compose-mysql.yml up --detach
+     ```
 
    - with PostgreSQL:
 
-      ```bash
-      docker compose --file docker-compose-postgres.yml up --detach
-      ```
-5. Access to the Application:
+     ```bash
+     docker compose --file docker-compose-postgres.yml up --detach
+     ```
+
+4. Access to the Application:
    
    After successful launch, the application will be available at: http://localhost:8080
 
-6. Functionality Check:
+5. Functionality Check:
    
    Open your web browser and go to the provided address.
 
@@ -86,27 +86,31 @@ cd FoodOrderManager
 In this project, you can run tests for different databases using Spring test profiles.
 To achieve this, follow these steps:
 
-**For MySQL:**
-```bash
-./mvnw test -D spring.profiles.active=testcontainers,mysqltest
-```
-**For PostgreSQL:**
+- For MySQL:
 
-```bash
-./mvnw test -D spring.profiles.active=testcontainers,postgrestest
-```
+  ```bash
+  ./mvnw test -P mysql
+  ```
+
+- For PostgreSQL:
+
+  ```bash
+  ./mvnw test -P postgres
+  ```
+
 This will run your tests using the specified database profile, allowing you to test your application against different database systems.
-
-
 
 ## Configuration Settings
 
-Before running the Food Order Manager project, you may need to customize certain configuration settings to match your local environment. Below are the key settings that you may need to override in the `application.yml` file:
+Before running the Food Order Manager project, you may need to customize certain configuration settings to match your local environment.
+
+Below are the key settings that you may need to override in the `application.yml` file:
 
 **Database Configuration:**
-   - `spring.datasource.url`: JDBC URL for the MySQL database.
-   - `spring.datasource.username`: Username for connecting to the MySQL database.
-   - `spring.datasource.password`: Password for connecting to the MySQL database.
+
+   - `spring.datasource.url`: JDBC URL for the database.
+   - `spring.datasource.username`: Username for connecting to the database.
+   - `spring.datasource.password`: Password for connecting to the database.
 
 Example:
 ```yaml
