@@ -1,16 +1,15 @@
 spring:
-  datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/mydb
-    username: root
-    password: 12345
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: "postgres"
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: true
+
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
+
 management:
   endpoints:
     web:
@@ -19,9 +18,9 @@ management:
         exclude: "env,beans,shutdown,mappings"
   server:
     port: 8092
+
 token:
   tokenLifetime: 144000000
   refreshExpirationMs: 86400000
   signing:
     key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855
-

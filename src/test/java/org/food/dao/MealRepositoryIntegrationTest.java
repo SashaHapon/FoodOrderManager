@@ -1,18 +1,17 @@
 package org.food.dao;
 
+import org.food.TestUtils;
 import org.food.api.repository.MealRepository;
 import org.food.model.Meal;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,25 +20,16 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test")
 @Transactional
 @Rollback
-public class MealRepositoryIntegrationTest {
+@Testcontainers
+public class MealRepositoryIntegrationTest extends TestUtils {
     @Autowired
     private MealRepository mealRepository;
+
+    @Autowired
+    private JdbcDatabaseContainer<?> databaseContainer;
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/MealRepositoryIntegrationTests";
-
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:latest");
-
-    @BeforeAll
-    static void beforeAll() {
-        mySQLContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        mySQLContainer.stop();
-    }
 
     @Test
     @DisplayName("All meals must be returned")

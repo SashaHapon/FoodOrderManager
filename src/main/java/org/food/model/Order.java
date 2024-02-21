@@ -23,6 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -36,4 +37,11 @@ public class Order {
     private BigDecimal orderSum;
 
     private int cookingTimeSum;
+
+    public Order(List<Meal> meals, Account account, BigDecimal orderSum, int cookingTimeSum) {
+        this.meals = meals;
+        this.account = account;
+        this.orderSum = orderSum;
+        this.cookingTimeSum = cookingTimeSum;
+    }
 }

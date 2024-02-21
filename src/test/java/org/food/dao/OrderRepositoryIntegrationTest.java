@@ -4,8 +4,6 @@ import org.food.api.repository.OrderRepository;
 import org.food.model.Account;
 import org.food.model.Meal;
 import org.food.model.Order;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,23 +24,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Transactional
 @Rollback
+@Testcontainers
 public class OrderRepositoryIntegrationTest {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private JdbcDatabaseContainer<?> databaseContainer;
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/OrderServiceIntegrationTests";
-
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:latest");
-
-    @BeforeAll
-    static void beforeAll() {
-        mySQLContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        mySQLContainer.stop();
-    }
 
     @Test
     @DisplayName("New order must be created")
@@ -53,7 +43,7 @@ public class OrderRepositoryIntegrationTest {
         List<Meal> mealList = new ArrayList<>(List.of(meal1, meal2, meal3));
         Account account1 = new Account(1,"Test Account 1", new BigDecimal("100.01"), "1234567890");
 
-        Order createdOrder = orderRepository.create(new Order(null, mealList, account1, new BigDecimal("1222"), 13));
+        Order createdOrder = orderRepository.create(new Order(mealList, account1, new BigDecimal("1222"), 13));
         Order order = orderRepository.findById(createdOrder.getId());
         assertThat(order).isNotNull();
         assertThat(order.getMeals().get(0)).isEqualTo(meal1);

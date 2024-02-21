@@ -1,6 +1,19 @@
 version: '3'
 
 services:
+  foodmanager:
+    environment:
+      - "SPRING_PROFILES_ACTIVE=mysql"
+      - "MYSQL_HOST=mysql"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    networks:
+      - common-network
+    ports:
+      - 8080:8080
   mysql:
     image: mysql:latest
     hostname: mysql
@@ -20,5 +33,3 @@ volumes:
 networks:
   common-network:
     driver: bridge
-
-

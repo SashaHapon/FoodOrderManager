@@ -6,8 +6,6 @@ import org.food.TestUtils;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MySQLContainer;
 
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,24 +49,10 @@ public class OrderControllerIntegrationTests extends TestUtils {
     @Autowired
     private OrderService orderService;
 
-    static MySQLContainer<?> mySQLContainer = new MySQLContainer<>(
-            "mysql:latest"
-    );
-
-    @BeforeAll
-    static void beforeAll() {
-        mySQLContainer.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        mySQLContainer.stop();
-    }
-
     @Test
     @WithMockUser
-    @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_addMeals_toOrder/testdata.sql")
-    public void should_createOrder() throws Exception, IOException {
+    @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_createOrder/testdata.sql")
+    public void should_createOrder() throws Exception {
 
         mockMvc.perform(post("/orders/").param("id", "1")
                         .contentType(APPLICATION_JSON)
