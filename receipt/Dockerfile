@@ -8,6 +8,6 @@ RUN mvn -f /app/pom.xml -B package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 EXPOSE 8080
-COPY /app/order-manager/target/order-manager-1.0-SNAPSHOT.jar order-manager.jar
-#COPY --from=builder /app/order-manager/target/order-manager-1.0-SNAPSHOT.jar order-manager.jar
-ENTRYPOINT ["java", "-jar", "/app/order-manager.jar"]
+#COPY target/food-order-manager-1.0-SNAPSHOT.jar food-order-manager.jar
+COPY --from=builder /app/target/receipt-1.0-SNAPSHOT.jar receipt.jar
+ENTRYPOINT ["java", "-jar", "/app/receipt.jar"]

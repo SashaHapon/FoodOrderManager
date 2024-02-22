@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
+import org.food.dto.ReceiptDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,6 +53,14 @@ public class OrderController {
                              @Parameter(description = "Идентификатор заказа") Integer id) {
 
         return orderService.getOrder(id);
+    }
+
+    //todo
+    @GetMapping("/{id}/receipt")
+    public ReceiptDto printReceipt(@PathVariable("id")
+                                @Parameter(description = "Идентификатор заказа") Integer id) {
+
+        return orderService.printReceipt(id);
     }
 
     @Operation(

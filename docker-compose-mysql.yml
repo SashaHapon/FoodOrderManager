@@ -14,6 +14,16 @@ services:
       - common-network
     ports:
       - 8080:8080
+  receipt:
+    build:
+      context: .
+      dockerfile: receipt/Dockerfile
+    depends_on:
+      - foodmanager
+    networks:
+      - common-network
+    ports:
+      - 8090:8090
   mysql:
     image: mysql:latest
     hostname: mysql
