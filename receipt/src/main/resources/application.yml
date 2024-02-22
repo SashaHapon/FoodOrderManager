@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: "receipt"
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000 # Таймаут подключения (в миллисекундах)
+        readTimeout: 5000 # Таймаут чтения (в миллисекундах)
+        loggerLevel: FULL # Уровень логирования (BASIC, HEADERS, FULL)
+server:
+  port: 8090

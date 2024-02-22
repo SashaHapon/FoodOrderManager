@@ -19,6 +19,14 @@ management:
   server:
     port: 8092
 
+feign:
+  client:
+    config:
+      receipt:
+        url: http://localhost:8090 # URL сервера
+        connectTimeout: 5000 # Таймаут подключения (в миллисекундах)
+        readTimeout: 5000 # Таймаут чтения (в миллисекундах)
+        loggerLevel: FULL # Уровень логирования (BASIC, HEADERS, FULL)
 token:
   tokenLifetime: 144000000
   refreshExpirationMs: 86400000

@@ -72,7 +72,7 @@ Food Order Manager is a web application designed to manage the food ordering pro
      docker compose --file docker-compose-postgres.yml up --detach
      ```
 
-4. Access to the Application:
+4. Access to the org.receipt.Application:
    
    After successful launch, the application will be available at: http://localhost:8080
 

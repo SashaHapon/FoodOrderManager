@@ -1,10 +1,11 @@
-package service;
+package org.receipt.service;
 
-import api.ReceiptService;
-import org.food.clients.feign.dto.ReceiptResponse;
-import org.food.
+import org.receipt.api.ReceiptService;
+import org.receipt.dto.ReceiptRequest;
+import org.receipt.dto.ReceiptResponse;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public ReceiptResponse print(ReceiptRequest request) {

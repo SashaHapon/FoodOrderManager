@@ -1,6 +1,7 @@
 package org.food.model;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Meal.class)
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Meal.class, cascade = CascadeType.ALL)
     private List<Meal> meals = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)

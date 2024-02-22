@@ -1,7 +1,7 @@
-package api;
+package org.receipt.api;
 
-import org.food.clients.feign.dto.ReceiptRequest;
-import org.food.clients.feign.dto.ReceiptResponse;
+import org.receipt.dto.ReceiptRequest;
+import org.receipt.dto.ReceiptResponse;
 import org.springframework.stereotype.Service;
 
 @Service
