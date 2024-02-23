@@ -18,15 +18,17 @@ management:
         exclude: "env,beans,shutdown,mappings"
   server:
     port: 8092
-
 feign:
   client:
     config:
       receipt:
-        url: http://localhost:8090 # URL сервера
-        connectTimeout: 5000 # Таймаут подключения (в миллисекундах)
-        readTimeout: 5000 # Таймаут чтения (в миллисекундах)
-        loggerLevel: FULL # Уровень логирования (BASIC, HEADERS, FULL)
+        readTimeout: 10000
+        connectTimeout: 5000
+        loggerLevel: FULL
+        url: http://${receipt:localhost}:8090/
+receipt:
+  ribbon:
+    listOfServers: http://localhost:8090
 token:
   tokenLifetime: 144000000
   refreshExpirationMs: 86400000

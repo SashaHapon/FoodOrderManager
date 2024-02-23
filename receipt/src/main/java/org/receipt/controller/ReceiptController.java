@@ -5,6 +5,7 @@ import org.receipt.dto.ReceiptRequest;
 import org.receipt.dto.ReceiptResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,7 +14,7 @@ public class ReceiptController {
     ReceiptService receiptService;
 
     @GetMapping("/order/receipt/")
-    ReceiptResponse print(ReceiptRequest request) {
+    ReceiptResponse print(@RequestBody ReceiptRequest request) {
         return receiptService.print(request);
     }
 
