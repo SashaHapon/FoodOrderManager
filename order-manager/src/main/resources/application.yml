@@ -9,7 +9,15 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
-
+  cloud:
+    openfeign:
+      client:
+        config:
+          receipt:
+            url: http://${RECEIPT_SERVICE_HOST:localhost}:8080/
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: full
 management:
   endpoints:
     web:
@@ -18,17 +26,6 @@ management:
         exclude: "env,beans,shutdown,mappings"
   server:
     port: 8092
-feign:
-  client:
-    config:
-      receipt:
-        readTimeout: 10000
-        connectTimeout: 5000
-        loggerLevel: FULL
-        url: http://${receipt:localhost}:8090/
-receipt:
-  ribbon:
-    listOfServers: http://localhost:8090
 token:
   tokenLifetime: 144000000
   refreshExpirationMs: 86400000

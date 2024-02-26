@@ -1,17 +1,15 @@
 package org.food.clients.feign.dto;
 
 import lombok.Data;
-import org.food.dto.AccountDto;
-import org.food.dto.MealDto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.food.clients.feign.dto.ReceiptRequest.Item;
 
 @Data
 public class ReceiptResponse {
-    private Integer id;
-    private List<MealDto> meals;
-    private AccountDto account;
-    private BigDecimal orderSum;
-    private int cookingTimeSum;
+    private Integer orderId;
+    private List<Item> items;
+    private BigDecimal orderTotalCost;
 }
+

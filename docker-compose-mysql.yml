@@ -5,9 +5,10 @@ services:
     environment:
       - "SPRING_PROFILES_ACTIVE=mysql"
       - "MYSQL_HOST=mysql"
+      - "RECEIPT_SERVICE_HOST=receipt"
     build:
-      context: .
-      dockerfile: order-manager/Dockerfile
+      context: /order-manager
+      dockerfile: Dockerfile
     depends_on:
       - mysql
     networks:
@@ -16,8 +17,8 @@ services:
       - 8080:8080
   receipt:
     build:
-      context: .
-      dockerfile: receipt/Dockerfile
+      context: /receipt
+      dockerfile: Dockerfile
     depends_on:
       - food-manager
     networks:

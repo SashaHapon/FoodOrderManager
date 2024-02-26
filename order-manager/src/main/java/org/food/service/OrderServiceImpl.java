@@ -6,6 +6,8 @@ import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
 import org.food.api.service.OrderService;
 import org.food.clients.feign.ReceiptClient;
+import org.food.clients.feign.dto.ItemMappingProperties;
+import org.food.clients.feign.dto.OrderMappingProperties;
 import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.clients.feign.dto.ReceiptResponse;
 import org.food.dto.MealDto;
@@ -15,6 +17,7 @@ import org.food.exception.classes.NotFoundException;
 import org.food.model.Meal;
 import org.food.model.Order;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +71,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReceiptDto printReceipt(Integer id) {
         Order order = orderRepository.findById(id);
+
+        modelMapper.createTypeMap(Meal.class, ReceiptRequest.Item.class)
+                .addMapping(Meal::getName, ReceiptRequest.Item::setName)
+                .addMapping(Meal::getPrice, ReceiptRequest.Item::setCost)
+                .addMapping(Meal::getTime, ReceiptRequest.Item::setCount);
+        modelMapper.createTypeMap(Order.class, ReceiptRequest.class)
+                .addMapping(Order::getId, ReceiptRequest::setOrderId)
+                .addMapping(Order::getOrderSum, ReceiptRequest::setOrderTotalCost)
+                .addMapping(Order::getMeals, ReceiptRequest::setItems);
+
         ReceiptRequest receiptRequest = modelMapper.map(order, ReceiptRequest.class);
         ReceiptResponse receiptResponse = receiptClient.print(receiptRequest);
         return modelMapper.map(receiptResponse, ReceiptDto.class);

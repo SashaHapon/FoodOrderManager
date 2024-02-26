@@ -1,23 +1,30 @@
 package org.receipt.service;
 
 import org.receipt.api.ReceiptService;
-import org.receipt.dto.ReceiptRequest;
-import org.receipt.dto.ReceiptResponse;
+import org.receipt.dto.OrderDto;
+import org.receipt.dto.ReceiptRequest.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReceiptServiceImpl implements ReceiptService {
+
+    private static final Logger logger
+            = LoggerFactory.getLogger(ReceiptServiceImpl.class);
+
     @Override
-    public ReceiptResponse print(ReceiptRequest request) {
-        System.out.println("Order ID:" + request.getId() + "\n" +
-                "Account ID:" + request.getAccount().getId() + "\n" +
-                "Account Name:" + request.getAccount().getName() + "\n" +
-                "Account Phone:" + request.getAccount().getPhoneNumber() + "\n" +
-                "Meals:" + request.getMeals() + "\n" +
-                "Cooking Time:" + request.getCookingTimeSum() + "\n" +
-                "Price:" + request.getOrderSum() + "\n");
-        ReceiptResponse receiptResponse = new ReceiptResponse();
-        receiptResponse.setId(request.getId());
-        return receiptResponse;
+    public OrderDto print(OrderDto orderDto) {
+
+
+        //todo date
+        logger.info("Date: " + orderDto.getLocalDateTime());
+        logger.info("Printing check for Order ID: " + orderDto.getOrderId());
+        logger.info("Items:");
+        for (Item item : orderDto.getItems()) {
+            logger.info("- " + item.getName() + ": $" + item.getCost());
+        }
+        logger.info("Total Cost: $" + orderDto.getOrderTotalCost());
+        return orderDto;
     }
 }
