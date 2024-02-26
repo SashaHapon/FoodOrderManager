@@ -1,11 +1,9 @@
 package org.receipt.api;
 
-import org.receipt.dto.OrderDto;
-import org.receipt.dto.ReceiptRequest;
-import org.receipt.dto.ReceiptResponse;
+import org.receipt.dto.ReceiptDto;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface ReceiptService {
-    OrderDto print(OrderDto orderDto);
+    ReceiptDto print(ReceiptDto receiptDto);
 }

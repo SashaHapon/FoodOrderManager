@@ -1,7 +1,7 @@
 package org.receipt.service;
 
 import org.receipt.api.ReceiptService;
-import org.receipt.dto.OrderDto;
+import org.receipt.dto.ReceiptDto;
 import org.receipt.dto.ReceiptRequest.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,17 +14,18 @@ public class ReceiptServiceImpl implements ReceiptService {
             = LoggerFactory.getLogger(ReceiptServiceImpl.class);
 
     @Override
-    public OrderDto print(OrderDto orderDto) {
+    public ReceiptDto print(ReceiptDto receiptDto) {
 
-
-        //todo date
-        logger.info("Date: " + orderDto.getLocalDateTime());
-        logger.info("Printing check for Order ID: " + orderDto.getOrderId());
+        logger.info("============PAYMENT CHECK==============");
+        logger.info("Date: " + receiptDto.getLocalDateTimes());
+        logger.info("Printing check for Order ID: " + receiptDto.getOrderId());
         logger.info("Items:");
-        for (Item item : orderDto.getItems()) {
+        for (Item item : receiptDto.getItems()) {
             logger.info("- " + item.getName() + ": $" + item.getCost());
         }
-        logger.info("Total Cost: $" + orderDto.getOrderTotalCost());
-        return orderDto;
+        logger.info("Total Cost: $" + receiptDto.getOrderTotalCost());
+        logger.info("----------------------------------------");
+        logger.info("");
+        return receiptDto;
     }
 }

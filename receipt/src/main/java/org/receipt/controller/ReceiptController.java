@@ -2,7 +2,7 @@ package org.receipt.controller;
 
 import org.modelmapper.ModelMapper;
 import org.receipt.api.ReceiptService;
-import org.receipt.dto.OrderDto;
+import org.receipt.dto.ReceiptDto;
 import org.receipt.dto.ReceiptRequest;
 import org.receipt.dto.ReceiptResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,9 @@ public class ReceiptController {
 
     @PostMapping("/receipt")
     ReceiptResponse print(@RequestBody ReceiptRequest request) {
-        OrderDto orderDto = mapper.map(request, OrderDto.class);
-        OrderDto rerutnedOrderDto = receiptService.print(orderDto);
-        return mapper.map(rerutnedOrderDto, ReceiptResponse.class);
+        ReceiptDto receiptDto = mapper.map(request, ReceiptDto.class);
+        ReceiptDto rerutnedReceiptDto = receiptService.print(receiptDto);
+        return mapper.map(rerutnedReceiptDto, ReceiptResponse.class);
     }
 
 }
