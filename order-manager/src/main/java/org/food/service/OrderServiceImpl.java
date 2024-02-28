@@ -6,7 +6,7 @@ import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
 import org.food.api.service.OrderService;
 import org.food.clients.feign.ReceiptClient;
-import org.food.clients.feign.dto.OrderToReceiptRequestMapper;
+import org.food.clients.feign.service.OrderToReceiptRequestMapper;
 import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.clients.feign.dto.ReceiptResponse;
 import org.food.dto.MealDto;
@@ -40,6 +40,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final ReceiptClient receiptClient;
 
+    private final OrderToReceiptRequestMapper customMapper;
+
     @Override
     public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
@@ -70,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
     public ReceiptDto printReceipt(Integer id) {
         Order order = orderRepository.findById(id);
         order.setOrderSum(orderPriceSum(order.getMeals()));
-        ReceiptRequest receiptRequest = OrderToReceiptRequestMapper.map(order);
+        ReceiptRequest receiptRequest = customMapper.map(order);
         ReceiptResponse receiptResponse = receiptClient.print(receiptRequest);
         return modelMapper.map(receiptResponse, ReceiptDto.class);
     }

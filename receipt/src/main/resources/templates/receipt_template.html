@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt Template</title>
+</head>
+<body>
+<p>============PAYMENT CHECK==============</p>
+<p>Date: [[${localDateTimes}]]</p>
+<p>Printing check for Order ID: [[${orderId}]]</p>
+<p>Items:</p>
+<ul>
+    <li th:each="item : ${items}">
+        <span th:text="${item.name}"></span>: $<span th:text="${item.cost}"></span>
+    </li>
+</ul>
+<p>Total Cost: $[[${orderTotalCost}]]</p>
+<p>---------------------------------------</p>
+<p>&nbsp;</p>
+</body>
+</html>

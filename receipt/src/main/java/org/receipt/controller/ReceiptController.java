@@ -19,10 +19,9 @@ public class ReceiptController {
     ModelMapper mapper;
 
     @PostMapping("/receipt")
-    ReceiptResponse print(@RequestBody ReceiptRequest request) {
+    String print(@RequestBody ReceiptRequest request) {
         ReceiptDto receiptDto = mapper.map(request, ReceiptDto.class);
-        ReceiptDto rerutnedReceiptDto = receiptService.print(receiptDto);
-        return mapper.map(rerutnedReceiptDto, ReceiptResponse.class);
+        return receiptService.print(receiptDto);
     }
 
 }

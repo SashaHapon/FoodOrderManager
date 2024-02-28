@@ -1,4 +1,19 @@
 package org.food.dto;
 
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.List;
+
 public class ReceiptDto {
+    private Integer orderId;
+    private List<Item> items;
+    private BigDecimal orderTotalCost;
+
+    @Data
+    public static class Item {
+        private String name;
+        private Integer count;
+        private BigDecimal cost;
+    }
 }

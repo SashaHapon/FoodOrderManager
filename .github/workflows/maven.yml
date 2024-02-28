@@ -22,10 +22,18 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: maven
-      - name: Make maven wrapper script executable
-        run: chmod +x ./mvnw
-      - name: Build and run tests
-        run: ./mvnw package
+      - name: Make maven wrapper script executable for Order Manager
+        run: chmod +x ./order-manager/mvnw
+      - name: Build and run tests for Order Manager
+        run: ./order-manager/mvnw package
+      - name: Publish Order Manager test reports
+        if: success() || failure()
+        uses: scacap/action-surefire-report@v1
+
+      - name: Make maven wrapper script executable for Receipt
+        run: chmod +x ./receipt/mvnw
+      - name: Build receipt project
+        run: ./receipt/mvnw package
       - name: Publish test reports
         if: success() || failure()
         uses: scacap/action-surefire-report@v1

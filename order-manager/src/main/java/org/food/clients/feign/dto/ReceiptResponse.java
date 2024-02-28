@@ -4,12 +4,18 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
-import org.food.clients.feign.dto.ReceiptRequest.Item;
 
 @Data
 public class ReceiptResponse {
     private Integer orderId;
-    private List<Item> items;
+    private List<MealItemResponse> items;
     private BigDecimal orderTotalCost;
+
+    @Data
+    public static class MealItemResponse {
+        private String name;
+        private Integer count;
+        private BigDecimal cost;
+    }
 }
 

@@ -1,14 +1,19 @@
-package org.food.clients.feign.dto;
+package org.food.clients.feign.service;
 
+import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.model.Meal;
 import org.food.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.food.clients.feign.dto.ReceiptRequest.MealItemRequest;
+import org.springframework.stereotype.Service;
+
+@Service
 public class OrderToReceiptRequestMapper {
 
-    public static ReceiptRequest map(Order order) {
+    public ReceiptRequest map(Order order) {
         ReceiptRequest receiptRequest = new ReceiptRequest();
 
         receiptRequest.setOrderId(order.getId());
@@ -17,11 +22,11 @@ public class OrderToReceiptRequestMapper {
         return receiptRequest;
     }
 
-    private static List<ReceiptRequest.Item> mapItems(List<Meal> meals) {
-        List<ReceiptRequest.Item> items = new ArrayList<>();
+    private List<MealItemRequest> mapItems(List<Meal> meals) {
+        List<MealItemRequest> items = new ArrayList<>();
 
         for (Meal meal : meals) {
-            ReceiptRequest.Item item = new ReceiptRequest.Item();
+            MealItemRequest item = new MealItemRequest();
             item.setName(meal.getName());
             item.setCount(meal.getTime());
             item.setCost(meal.getPrice());

@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ReceiptService {
-    ReceiptDto print(ReceiptDto receiptDto);
+    String print(ReceiptDto receiptDto);
 }

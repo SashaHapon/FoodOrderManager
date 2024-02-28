@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class ReceiptDto {
     private Integer orderId;
-    private List<ReceiptRequest.Item> items;
+    private List<ReceiptRequest.MealItemRequest> items;
     private BigDecimal orderTotalCost;
     private final String localDateTimes;
 
