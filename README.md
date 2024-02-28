@@ -6,8 +6,8 @@ Food Order Manager is a web application designed to manage the food ordering pro
 
 ## Services
 The project consists of the following services:
-- [Order manager](./oeder-manager/README.md): Designed to manage the food ordering process.
-- [Reciept](./receipt/README.md): Designed to manage the receipt printing process.
+- [Order manager](order-manager/README.md): Designed to manage the food ordering process.
+- [Reciept](receipt/README.md): Designed to manage the receipt printing process.
 
 ## Project Requirements
 
