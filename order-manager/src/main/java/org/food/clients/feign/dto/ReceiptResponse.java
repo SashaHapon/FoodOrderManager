@@ -8,11 +8,11 @@ import java.util.List;
 @Data
 public class ReceiptResponse {
     private Integer orderId;
-    private List<MealItemResponse> items;
+    private List<Item> items;
     private BigDecimal orderTotalCost;
 
     @Data
-    public static class MealItemResponse {
+    public static class Item {
         private String name;
         private Integer count;
         private BigDecimal cost;

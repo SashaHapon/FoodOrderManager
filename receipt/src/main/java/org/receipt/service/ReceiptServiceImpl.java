@@ -1,8 +1,7 @@
 package org.receipt.service;
 
 import org.receipt.api.ReceiptService;
-import org.receipt.dto.ReceiptDto;
-import org.receipt.dto.ReceiptRequest.MealItemRequest;
+import org.receipt.model.Receipt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class ReceiptServiceImpl implements ReceiptService {
             = LoggerFactory.getLogger(ReceiptServiceImpl.class);
 
     @Override
-    public String print(ReceiptDto receiptDto) {
+    public String print(Receipt receipt) {
 
 //        logger.info("============PAYMENT CHECK==============");
 //        logger.info("Date: " + receiptDto.getLocalDateTimes());
@@ -38,10 +37,10 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         // Создайте контекст с данными для шаблона
         Context context = new Context();
-        context.setVariable("localDateTimes", receiptDto.getLocalDateTimes());
-        context.setVariable("orderId", receiptDto.getOrderId());
-        context.setVariable("items", receiptDto.getItems());
-        context.setVariable("orderTotalCost", receiptDto.getOrderTotalCost());
+        context.setVariable("localDateTimes", receipt.getLocalDateTimes());
+        context.setVariable("orderId", receipt.getOrderId());
+        context.setVariable("items", receipt.getItems());
+        context.setVariable("orderTotalCost", receipt.getOrderTotalCost());
 
         // Обработайте шаблон с помощью Thymeleaf
         String formattedText = templateEngine.process("receipt_template", context);

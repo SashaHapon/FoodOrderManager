@@ -1,4 +1,4 @@
-package org.receipt.dto;
+package org.receipt.payload;
 
 import lombok.Data;
 
@@ -8,11 +8,11 @@ import java.util.List;
 @Data
 public class ReceiptRequest {
     private Integer orderId;
-    private List<MealItemRequest> items;
+    private List<Item> items;
     private BigDecimal orderTotalCost;
 
     @Data
-    public static class MealItemRequest {
+    public static class Item {
         private String name;
         private Integer count;
         private BigDecimal cost;

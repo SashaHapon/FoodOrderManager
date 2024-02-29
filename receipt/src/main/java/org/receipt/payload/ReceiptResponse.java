@@ -1,4 +1,4 @@
-package org.receipt.dto;
+package org.receipt.payload;
 
 import lombok.Data;
 

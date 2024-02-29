@@ -1,4 +1,4 @@
-package org.receipt.dto;
+package org.receipt.model;
 
 import lombok.Data;
 
@@ -8,13 +8,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
-public class ReceiptDto {
+public class Receipt {
     private Integer orderId;
-    private List<ReceiptRequest.MealItemRequest> items;
+    private List<Item> items;
     private BigDecimal orderTotalCost;
     private final String localDateTimes;
 
-    public ReceiptDto(){
+    public Receipt(){
         LocalDateTime localDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         localDateTimes = localDateTime.format(formatter);
