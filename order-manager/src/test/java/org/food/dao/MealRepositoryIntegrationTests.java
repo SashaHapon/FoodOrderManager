@@ -2,10 +2,12 @@ package org.food.dao;
 
 import org.food.api.repository.MealRepository;
 import org.food.model.Meal;
+import org.food.testconfig.ContainerConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @Rollback
 @Testcontainers
+@Import(ContainerConfiguration.class)
 public class MealRepositoryIntegrationTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/MealRepositoryIntegrationTests";
 

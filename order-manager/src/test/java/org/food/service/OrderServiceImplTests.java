@@ -50,11 +50,7 @@ public class OrderServiceImplTests {
         List<Meal> mealList = new ArrayList<>();
         List<MealDto> mealDtoList = new ArrayList<>();
         OrderDto expectedOrderDtoOutput = new OrderDto();
-        Type listType = new TypeToken<List<Meal>>() {
-        }.getType();
-
         when(accountRepository.findById(1)).thenReturn(new Account());
-        when(modelMapper.map(mealDtoList, listType)).thenReturn(mealList);
         when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenReturn(expectedOrderDtoOutput);
 
         OrderDto returnedOrderDto = orderService.createOrder(1, mealDtoList);
@@ -72,11 +68,8 @@ public class OrderServiceImplTests {
         Integer id = 1;
         List<Meal> mealList = new ArrayList<>(3);
         List<MealDto> mealDtoList = new ArrayList<>(3);
-        Type listType = new TypeToken<List<Meal>>() {
-        }.getType();
 
         when(accountRepository.findById(1)).thenReturn(account);
-        when(modelMapper.map(mealDtoList, listType)).thenReturn(mealList);
         when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenThrow(IllegalArgumentException.class);
 
         assertThatExceptionOfType(IllegalArgumentException.class)

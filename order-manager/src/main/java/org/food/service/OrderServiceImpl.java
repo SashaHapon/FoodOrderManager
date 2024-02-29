@@ -47,9 +47,9 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
         order.setAccount(accountRepository.findById(accountId));
-        Type listType = new TypeToken<List<Meal>>() {
-        }.getType();
-        List<Meal> meals = modelMapper.map(mealDtoList, listType);
+        List<Meal> meals = mealDtoList.stream()
+                .map(mealDto -> mealRepository.findById(mealDto.getId()))
+                .collect(Collectors.toList());
 
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
