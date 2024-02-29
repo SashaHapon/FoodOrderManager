@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id);
         order.setOrderSum(orderPriceSum(order.getMeals()));
         ReceiptRequest receiptRequest = customMapper.map(order);
-        ReceiptResponse receiptResponse = receiptClient.print(receiptRequest);
+        ReceiptResponse receiptResponse = new ReceiptResponse(receiptClient.print(receiptRequest));
         return modelMapper.map(receiptResponse, ReceiptDto.class);
     }
 

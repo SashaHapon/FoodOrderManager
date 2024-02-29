@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient("receipt")
 public interface ReceiptClient {
     @PostMapping("/receipt")
-    ReceiptResponse print(ReceiptRequest request);
+    String print(ReceiptRequest request);
 }

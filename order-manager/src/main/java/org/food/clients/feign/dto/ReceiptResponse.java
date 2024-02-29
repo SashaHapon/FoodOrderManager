@@ -1,21 +1,17 @@
 package org.food.clients.feign.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReceiptResponse {
-    private Integer orderId;
-    private List<Item> items;
-    private BigDecimal orderTotalCost;
 
-    @Data
-    public static class Item {
-        private String name;
-        private Integer count;
-        private BigDecimal cost;
-    }
+    private String receipt;
 }
 
