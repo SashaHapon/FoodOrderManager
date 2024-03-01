@@ -13,6 +13,7 @@ public class Receipt {
     private List<Item> items;
     private BigDecimal orderTotalCost;
     private final String localDateTimes;
+    private String text;
 
     public Receipt(){
         LocalDateTime localDateTime = LocalDateTime.now();

@@ -7,7 +7,7 @@ Food Order Manager is a web application designed to manage the food ordering pro
 ## Services
 The project consists of the following services:
 - [Order manager](order-manager/README.md): Designed to manage the food ordering process.
-- [Reciept](receipt-service/README.md): Designed to manage the receipt printing process.
+- [Receipt](receipt-service/README.md): Designed to manage the receipt printing process.
 
 ## Project Requirements
 
@@ -55,7 +55,7 @@ The project consists of the following services:
      docker compose --file docker-compose-postgres.yml up --detach
      ```
 
-4. Access to the org.order-manager.Application:
+4. Access to the [Order Manager Application](order-manager):
    
    After successful launch, the application will be available at: http://localhost:8080
 

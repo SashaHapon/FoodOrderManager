@@ -2,12 +2,10 @@ package org.receipt.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.receipt.api.ReceiptService;
+import org.receipt.controller.dto.ReceiptRequest;
+import org.receipt.controller.dto.ReceiptResponse;
 import org.receipt.model.Receipt;
-import org.receipt.payload.ReceiptRequest;
-import org.receipt.payload.ReceiptResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.receipt.service.ReceiptService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +21,9 @@ public class ReceiptController {
     @PostMapping("/receipt")
     ReceiptResponse print(@RequestBody ReceiptRequest request) {
         Receipt receipt = mapper.map(request, Receipt.class);
-        return receiptService.print(receipt);
+        Receipt printerdReceipt = receiptService.print(receipt);
+        ReceiptResponse receiptResponse = new ReceiptResponse();
+        receiptResponse.setReceipt(printerdReceipt.getText());
+        return receiptResponse;
     }
-
 }
