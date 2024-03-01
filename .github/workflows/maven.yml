@@ -33,7 +33,7 @@ jobs:
       - name: Make maven wrapper script executable for Receipt
         run: chmod +x ./receipt-service/mvnw
       - name: Build receipt project
-        run: ./receipt-service/mvnw -f receipt/pom.xml package
+        run: ./receipt-service/mvnw -f receipt-service/pom.xml package
       - name: Publish test reports
         if: success() || failure()
         uses: scacap/action-surefire-report@v1
