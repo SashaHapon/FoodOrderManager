@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "JWT")
-@Tag(name="AccountController", description=" Позволяет контролировать аккаунты в бд")
+@Tag(name = "AccountController", description = " Позволяет контролировать аккаунты в бд")
 public class AccountController {
 
     private final AccountService accountService;
@@ -34,9 +34,9 @@ public class AccountController {
     )
     @GetMapping("/")
     public List<AccountDto> getAllAccounts(@RequestParam(defaultValue = "1", required = false)
-                                               @Parameter(description = "Строка отсчета") int id,
-                                           @RequestParam(defaultValue = "10",required = false)
-                                           @Parameter(description = "Количесво строк")int limit) {
+                                           @Parameter(description = "Строка отсчета") int id,
+                                           @RequestParam(defaultValue = "10", required = false)
+                                           @Parameter(description = "Количесво строк") int limit) {
 
         return accountService.getAllAccounts(id, limit);
     }
@@ -47,7 +47,7 @@ public class AccountController {
     )
     @PostMapping("/")
     public AccountDto addAccount(@RequestBody
-                                     @Parameter(description = "Данные нового пользователя")AccountDto accountDto) {
+                                 @Parameter(description = "Данные нового пользователя") AccountDto accountDto) {
         return accountService.addAccount(accountDto);
     }
 
@@ -57,7 +57,7 @@ public class AccountController {
     )
     @GetMapping("/{id}")
     public AccountDto getAccount(@PathVariable("id")
-                                     @Parameter(description = "Идентификатор аккаунта")Integer id) {
+                                 @Parameter(description = "Идентификатор аккаунта") Integer id) {
 
         return accountService.getAccount(id);
     }

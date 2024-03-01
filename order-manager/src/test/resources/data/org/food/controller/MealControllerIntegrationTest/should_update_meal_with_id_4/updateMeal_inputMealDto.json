@@ -1,1 +1,6 @@
-{"id":4,"name":"Test Meal 4","price":17.99,"time":50}
+{
+  "id": 4,
+  "name": "Test Meal 4",
+  "price": 17.99,
+  "time": 50
+}

@@ -1,27 +1,27 @@
 package org.food.dao;
 
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceContextType;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Order;
 import jakarta.persistence.criteria.Root;
-import jakarta.persistence.EntityGraph;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.food.api.repository.GenericDao;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public abstract class AbstractDao<T> implements GenericDao<T> {
 
+    private final Class<T> entityClass;
     @PersistenceContext(type = PersistenceContextType.TRANSACTION)
     private EntityManager entityManager;
-
-    private final Class<T> entityClass;
 
     @Override
     public T create(T entity) {

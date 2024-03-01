@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repository;
-    private  final ModelMapper mapper;
+    private final ModelMapper mapper;
+
     /**
      * Сохранение пользователя
      *
@@ -53,15 +54,16 @@ public class UserService {
         User user = repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
         UserDto userDto = mapper.map(user, UserDto.class);
-        return  userDto;
+        return userDto;
     }
 
     public User getByUsername(String username) {
 
         User user = repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-        return  user;
+        return user;
     }
+
     /**
      * Получение пользователя по имени пользователя
      * <p>

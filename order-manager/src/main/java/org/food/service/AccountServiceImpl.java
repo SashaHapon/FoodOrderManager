@@ -8,10 +8,8 @@ import org.food.exception.classes.NotFoundException;
 import org.food.model.Account;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -29,7 +27,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<AccountDto> getAllAccounts(int id, int limit) {
 
-        Type listType = new TypeToken<List<AccountDto>>() {}.getType();
+        Type listType = new TypeToken<List<AccountDto>>() {
+        }.getType();
         return modelMapper.map(accountRepository.findAll(id, limit), listType);
     }
 
@@ -44,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto getAccount(Integer id) {
         Account account = accountRepository.findById(id);
-        if(account == null){
+        if (account == null) {
             throw new NotFoundException("Account with id=" + id + ", not found");
         }
         return modelMapper.map(account, AccountDto.class);
@@ -54,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
     public void deleteAccountById(Integer id) {
 
         Account account = accountRepository.findById(id);
-        if(account == null){
+        if (account == null) {
             throw new NotFoundException("Account with id=" + id + ", not found");
         }
         accountRepository.delete(account);

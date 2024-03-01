@@ -1,8 +1,44 @@
-[{"id":1,"name":"Spaghetti Bolognese","price":12.99,"time":30},
-  {"id":2,"name":"Chicken Caesar Salad","price":9.99,"time":20},
-  {"id":3,"name":"Grilled Salmon","price":15.99,"time":25},
-  {"id":4,"name":"Test Meal 1","price":15.99,"time":30},
-  {"id":5,"name":"Test Meal 2","price":15.99,"time":30},
-  {"id":6,"name":"Test Meal 3","price":15.99,"time":30},
-  {"id":7,"name":"Test Meal 4","price":15.99,"time":30}
+[
+  {
+    "id": 1,
+    "name": "Spaghetti Bolognese",
+    "price": 12.99,
+    "time": 30
+  },
+  {
+    "id": 2,
+    "name": "Chicken Caesar Salad",
+    "price": 9.99,
+    "time": 20
+  },
+  {
+    "id": 3,
+    "name": "Grilled Salmon",
+    "price": 15.99,
+    "time": 25
+  },
+  {
+    "id": 4,
+    "name": "Test Meal 1",
+    "price": 15.99,
+    "time": 30
+  },
+  {
+    "id": 5,
+    "name": "Test Meal 2",
+    "price": 15.99,
+    "time": 30
+  },
+  {
+    "id": 6,
+    "name": "Test Meal 3",
+    "price": 15.99,
+    "time": 30
+  },
+  {
+    "id": 7,
+    "name": "Test Meal 4",
+    "price": 15.99,
+    "time": 30
+  }
 ]

@@ -38,7 +38,7 @@ public class AccountRepositoryIntegrationTests {
     public void should_createNewAccount() {
         Account account = accountRepository.create(new Account(null, "Sasha", new BigDecimal("102.01"), "+375448954612"));
         Account returnedAccount = accountRepository.findById(account.getId());
-        
+
         assertThat(account).isEqualTo(returnedAccount);
     }
 
