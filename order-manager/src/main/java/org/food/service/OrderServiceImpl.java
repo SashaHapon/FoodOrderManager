@@ -71,9 +71,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReceiptDto printReceipt(Integer id) {
         Order order = orderRepository.findById(id);
+        if(order == null){
+            throw new NotFoundException("Order with id=" + id + ", not found");
+        }
         order.setOrderSum(orderPriceSum(order.getMeals()));
         ReceiptRequest receiptRequest = customMapper.map(order);
-        ReceiptResponse receiptResponse = new ReceiptResponse(receiptClient.print(receiptRequest));
+        ReceiptResponse receiptResponse = receiptClient.print(receiptRequest);
         return modelMapper.map(receiptResponse, ReceiptDto.class);
     }
 

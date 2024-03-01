@@ -29,7 +29,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Meal.class, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Meal.class)
     private List<Meal> meals = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Account.class)

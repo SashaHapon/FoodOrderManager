@@ -17,7 +17,7 @@ services:
       - 8080:8080
   receipt:
     build:
-      context: /receipt
+      context: /receipt-service
       dockerfile: Dockerfile
     depends_on:
       - food-manager

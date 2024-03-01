@@ -8,5 +8,5 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 EXPOSE 8090
-COPY --from=builder /app/target/receipt-0.0.1-SNAPSHOT.jar receipt.jar
+COPY --from=builder /app/target/receipt-service-0.0.1-SNAPSHOT.jar receipt.jar
 ENTRYPOINT ["java", "-jar", "/app/receipt.jar"]

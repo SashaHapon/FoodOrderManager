@@ -1,10 +1,10 @@
 package org.receipt.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.receipt.api.ReceiptService;
 import org.receipt.model.Receipt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.receipt.payload.ReceiptResponse;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -12,16 +12,16 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.StringTemplateResolver;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ReceiptServiceImpl implements ReceiptService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReceiptServiceImpl.class);
+    private final TemplateEngine templateEngine;
 
     @Override
-    public String print(Receipt receipt) {
-
-        TemplateEngine templateEngine = new TemplateEngine();
+    public ReceiptResponse print(Receipt receipt) {
         StringTemplateResolver resolver = new StringTemplateResolver();
+        ReceiptResponse response = new ReceiptResponse();
         resolver.setTemplateMode(TemplateMode.HTML);
         templateEngine.setTemplateResolver(resolver);
 
@@ -32,8 +32,8 @@ public class ReceiptServiceImpl implements ReceiptService {
         context.setVariable("orderTotalCost", receipt.getOrderTotalCost());
 
         String formattedText = templateEngine.process("receipt_template", context);
-        logger.info(formattedText);
-
-        return formattedText;
+        log.info(formattedText);
+        response.setReceipt(formattedText);
+        return response;
     }
 }
