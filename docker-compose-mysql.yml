@@ -1,12 +1,13 @@
 version: '3'
 
 services:
-  foodmanager:
+  food-manager:
     environment:
       - "SPRING_PROFILES_ACTIVE=mysql"
       - "MYSQL_HOST=mysql"
+      - "RECEIPT_SERVICE_HOST=receipt"
     build:
-      context: .
+      context: /order-manager
       dockerfile: Dockerfile
     depends_on:
       - mysql
@@ -14,6 +15,16 @@ services:
       - common-network
     ports:
       - 8080:8080
+  receipt:
+    build:
+      context: /receipt-service
+      dockerfile: Dockerfile
+    depends_on:
+      - food-manager
+    networks:
+      - common-network
+    ports:
+      - 8090:8090
   mysql:
     image: mysql:latest
     hostname: mysql

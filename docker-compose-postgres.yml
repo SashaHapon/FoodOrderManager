@@ -1,18 +1,30 @@
 version: '3'
 
 services:
-  foodmanager:
+  food-manager:
     environment:
       - "POSTGRES_HOST=postgres"
+      - "RECEIPT_SERVICE_HOST=receipt"
     build:
-      context: .
+      context: /order-manager
       dockerfile: Dockerfile
+
     depends_on:
       - postgres
     networks:
       - common-network
     ports:
       - 8080:8080
+  receipt:
+    build:
+      context: /receipt-service
+      dockerfile: Dockerfile
+    depends_on:
+      - food-manager
+    networks:
+      - common-network
+    ports:
+      - 8090:8090
   postgres:
     image: postgres:latest
     restart: always

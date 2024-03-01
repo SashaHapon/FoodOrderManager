@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: "postgres"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          receipt:
+            url: http://${RECEIPT_SERVICE_HOST:localhost}:8090/
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: full
+            retryer: feign.Retryer.Default
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,auditevents"
+        exclude: "env,beans,shutdown,mappings"
+  server:
+    port: 8092
+token:
+  tokenLifetime: 144000000
+  refreshExpirationMs: 86400000
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A75327855

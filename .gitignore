@@ -1,4 +1,3 @@
-/target
-/.idea
-
+.idea
 log4j.log
+target
