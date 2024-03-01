@@ -1,1 +1,31 @@
-{"id":1,"meals":[{"id":1,"name":"Spaghetti Bolognese","price":12.99,"time":30},{"id":2,"name":"Chicken Caesar Salad","price":9.99,"time":20},{"id":3,"name":"Grilled Salmon","price":15.99,"time":25}],"account":{"id":1,"name":"Test Account 1","money":100.01,"phoneNumber":"1234567890"},"orderSum":50.99,"cookingTimeSum":30}
+{
+  "id": 1,
+  "meals": [
+    {
+      "id": 1,
+      "name": "Spaghetti Bolognese",
+      "price": 12.99,
+      "time": 30
+    },
+    {
+      "id": 2,
+      "name": "Chicken Caesar Salad",
+      "price": 9.99,
+      "time": 20
+    },
+    {
+      "id": 3,
+      "name": "Grilled Salmon",
+      "price": 15.99,
+      "time": 25
+    }
+  ],
+  "account": {
+    "id": 1,
+    "name": "Test Account 1",
+    "money": 100.01,
+    "phoneNumber": "1234567890"
+  },
+  "orderSum": 50.99,
+  "cookingTimeSum": 30
+}

@@ -1,5 +1,6 @@
 {
-  "id":4,
-  "name":"Test Account 4",
-  "money":100.01,"phoneNumber":"0000456"
+  "id": 4,
+  "name": "Test Account 4",
+  "money": 100.01,
+  "phoneNumber": "0000456"
 }

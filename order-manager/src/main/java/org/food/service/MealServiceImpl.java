@@ -19,47 +19,48 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MealServiceImpl implements MealService {
 
-        private final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-        private final MealRepository mealRepository;
+    private final MealRepository mealRepository;
 
-        @Override
-        public List<MealDto> getAllMeals(int id, int limit){
+    @Override
+    public List<MealDto> getAllMeals(int id, int limit) {
 
-                Type listType = new TypeToken<List<MealDto>>(){}.getType();
-                return modelMapper.map(mealRepository.findAll(id, limit),listType);
+        Type listType = new TypeToken<List<MealDto>>() {
+        }.getType();
+        return modelMapper.map(mealRepository.findAll(id, limit), listType);
+    }
+
+    @Override
+    public MealDto addMeal(MealDto mealDto) {
+
+        Meal meal = modelMapper.map(mealDto, Meal.class);
+        return modelMapper.map(mealRepository.create(meal), MealDto.class);
+    }
+
+    @Override
+    public MealDto getMeal(Integer id) {
+        Meal meal = mealRepository.findById(id);
+        if (meal == null) {
+            throw new NotFoundException("Meal with id=" + id + ", not found");
         }
+        return modelMapper.map(meal, MealDto.class);
+    }
 
-        @Override
-        public MealDto addMeal(MealDto mealDto){
+    @Override
+    public void deleteMealById(Integer id) {
 
-                Meal meal = modelMapper.map(mealDto, Meal.class);
-                return modelMapper.map(mealRepository.create(meal), MealDto.class);
+        Meal meal = mealRepository.findById(id);
+        if (meal == null) {
+            throw new NotFoundException("Meal with id=" + id + ", not found");
         }
-
-        @Override
-        public MealDto getMeal(Integer id){
-                Meal meal = mealRepository.findById(id);
-                if(meal == null){
-                        throw new NotFoundException("Meal with id=" + id + ", not found");
-                }
-                return modelMapper.map(meal, MealDto.class);
-        }
-
-        @Override
-        public void deleteMealById(Integer id) {
-
-                Meal meal = mealRepository.findById(id);
-                if(meal == null){
-                        throw new NotFoundException("Meal with id=" + id + ", not found");
-                }
-                mealRepository.delete(meal);
-        }
+        mealRepository.delete(meal);
+    }
 
 
-        @Override
-        public void update(MealDto mealDto) {
+    @Override
+    public void update(MealDto mealDto) {
 
-                mealRepository.update(modelMapper.map(mealDto, Meal.class));
-        }
+        mealRepository.update(modelMapper.map(mealDto, Meal.class));
+    }
 }

@@ -29,15 +29,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 @Import(ContainerConfiguration.class)
 public class OrderRepositoryIntegrationTests {
+    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/OrderServiceIntegrationTests";
     @Autowired
     private OrderRepository orderRepository;
-
     @Autowired
     private MealRepository mealRepository;
-
     @Autowired
     private JdbcDatabaseContainer<?> databaseContainer;
-    private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/dao/OrderServiceIntegrationTests";
 
     @Test
     @DisplayName("New order must be created")
@@ -46,7 +44,7 @@ public class OrderRepositoryIntegrationTests {
         Meal meal1 = new Meal(1, "Spaghetti Bolognese", new BigDecimal("12.99"), 30);
         Meal meal2 = new Meal(2, "Chicken Caesar Salad", new BigDecimal("9.99"), 20);
         Meal meal3 = new Meal(3, "Grilled Salmon", new BigDecimal("15.99"), 25);
-        List<Meal> mealList = mealRepository.findAll(1,3);
+        List<Meal> mealList = mealRepository.findAll(1, 3);
         Account account1 = new Account(1, "Test Account 1", new BigDecimal("100.01"), "1234567890");
 
         Order createdOrder = orderRepository.create(new Order(mealList, account1, new BigDecimal("1222"), 13));

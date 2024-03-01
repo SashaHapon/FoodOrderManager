@@ -27,7 +27,6 @@ public class ControllerExceptionHandler {
     }
 
 
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorMessage resourceNotFoundException(HttpMessageNotReadableException ex, WebRequest request) {
@@ -60,7 +59,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorMessage handleBadRequestException(BadRequestException badRequestException, WebRequest request){
+    public ErrorMessage handleBadRequestException(BadRequestException badRequestException, WebRequest request) {
         return new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
                 new Date(),
@@ -70,7 +69,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = RottenTokenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorMessage rottenTokenException(RottenTokenException rottenTokenException, WebRequest request){
+    public ErrorMessage rottenTokenException(RottenTokenException rottenTokenException, WebRequest request) {
         return new ErrorMessage(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 new Date(),

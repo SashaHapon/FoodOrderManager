@@ -6,9 +6,9 @@ import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
 import org.food.api.service.OrderService;
 import org.food.clients.feign.ReceiptClient;
-import org.food.clients.feign.service.OrderToReceiptRequestMapper;
 import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.clients.feign.dto.ReceiptResponse;
+import org.food.clients.feign.service.OrderToReceiptRequestMapper;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.dto.ReceiptDto;
@@ -62,7 +62,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getOrder(Integer id) {
         Order order = orderRepository.findById(id);
-        if(order == null){
+        if (order == null) {
             throw new NotFoundException("Order with id=" + id + ", not found");
         }
         return modelMapper.map(order, OrderDto.class);
@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ReceiptDto printReceipt(Integer id) {
         Order order = orderRepository.findById(id);
-        if(order == null){
+        if (order == null) {
             throw new NotFoundException("Order with id=" + id + ", not found");
         }
         order.setOrderSum(orderPriceSum(order.getMeals()));

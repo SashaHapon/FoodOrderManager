@@ -1,5 +1,6 @@
 package org.food.api.service;
-import org.food.dto.AccountDto ;
+
+import org.food.dto.AccountDto;
 
 import java.util.List;
 
@@ -15,4 +16,4 @@ public interface AccountService {
     void deleteAccountById(Integer id);
 
     void update(AccountDto accountDTO);
- }
+}

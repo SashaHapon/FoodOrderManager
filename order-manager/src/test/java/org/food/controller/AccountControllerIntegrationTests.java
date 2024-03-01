@@ -74,7 +74,7 @@ public class AccountControllerIntegrationTests extends BaseTests {
 
         mockMvc.perform(post("/accounts/")
                         .content(getJsonAsString(TEST_DATA_FILE_PREFIX +
-                                        "/should_addAccount_toDb/addAccount_inputAccountDto.json"))
+                                "/should_addAccount_toDb/addAccount_inputAccountDto.json"))
                         .contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -64,9 +64,9 @@ public class AuthenticationService {
      */
     public JwtAuthenticationResponse signIn(SignInRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUsername(),
-                    loginRequest.getPassword()
-            ));
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+        ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -80,7 +80,7 @@ public class AuthenticationService {
         return response;
     }
 
-    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest request){
+    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest request) {
         Optional<?> refreshedToken = refreshTokenService.findByToken(request.getRefreshToken());
         if (refreshedToken != null) {
             User user = userService.getByUsername(request.getUserDto().getUsername());
