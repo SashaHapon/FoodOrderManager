@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient("receipt")
 public interface ReceiptClient {
-    @GetMapping("/receipt")
+    @PostMapping("/receipt")
     ReceiptResponse print(ReceiptRequest request);
 }
