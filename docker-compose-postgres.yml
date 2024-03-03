@@ -25,6 +25,22 @@ services:
       - common-network
     ports:
       - 8090:8090
+  kitchen:
+    build:
+      context: /kitchen-service
+      dockerfile: Dockerfile
+    networks:
+      - common-network
+    ports:
+      - 8070:8070
+  kafka:
+    image: apache/kafka:latest
+    hostname: kafka
+    restart: always
+    networks:
+      - common-network
+    ports:
+      - 9092:9092
   postgres:
     image: postgres:latest
     restart: always

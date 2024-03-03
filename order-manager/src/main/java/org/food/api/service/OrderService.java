@@ -10,13 +10,15 @@ public interface OrderService {
 
     OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList);
 
-    OrderDto getOrder(Integer accountId);
+    OrderDto getOrder(Integer orderId);
 
-    ReceiptDto printReceipt(Integer id);
+    ReceiptDto printReceipt(Integer orderId);
 
     void addMeals(Integer orderId, List<MealDto> mealDtos);
 
     OrderDto removeMeals(Integer orderId, List<MealDto> mealDtosToRemove);
 
     List<MealDto> getAllMeals(Integer orderId);
+
+    void updateOrder(OrderDto orderDto);
 }

@@ -1,9 +1,11 @@
 package org.food.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.food.api.repository.AccountRepository;
 import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
+import org.food.api.service.KitchenService;
 import org.food.api.service.OrderService;
 import org.food.clients.feign.ReceiptClient;
 import org.food.clients.feign.dto.ReceiptRequest;
@@ -17,6 +19,7 @@ import org.food.model.Meal;
 import org.food.model.Order;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final ModelMapper modelMapper;
@@ -42,10 +46,12 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderToReceiptRequestMapper customMapper;
 
+    private final KitchenService kitchenService;
+
     @Override
     public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
-        Order order = new Order();
+        Order order = new org.food.model.Order();
         order.setAccount(accountRepository.findById(accountId));
         List<Meal> meals = mealDtoList.stream()
                 .map(mealDto -> mealRepository.findById(mealDto.getId()))
@@ -53,8 +59,8 @@ public class OrderServiceImpl implements OrderService {
 
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
-        order.setCookingTimeSum(cookingTimeSum(meals));
 
+        kitchenService.sendToKitchen(order);
         return modelMapper.map(orderRepository.create(order), OrderDto.class);
     }
 
@@ -123,6 +129,13 @@ public class OrderServiceImpl implements OrderService {
         Type listType = new TypeToken<List<MealDto>>() {
         }.getType();
         return modelMapper.map(order.getMeals(), listType);
+    }
+
+    @Override
+    public void updateOrder(OrderDto orderDto) {
+
+        Order order = modelMapper.map(orderDto, Order.class);
+        orderRepository.update(order);
     }
 
     private int cookingTimeSum(List<Meal> mealList) {

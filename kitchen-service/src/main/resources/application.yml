@@ -1,0 +1,35 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group-id
+      auto-offset-reset: earliest
+    producer:
+      retries: 3
+    listener:
+      ack-mode: manual_immediate
+    topics:
+      kitchen-response:
+        partitions: 3
+        replication-factor: 1
+        config:
+          cleanup.policy: delete
+          retention.ms: 604800000
+          segment.ms: 60000
+      order-message:
+        partitions: 3
+        replication-factor: 1
+        config:
+          cleanup.policy: delete
+          retention.ms: 604800000
+          segment.ms: 60000
+server:
+  port: 8070
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,auditevents"
+        exclude: "env,beans,shutdown,mappings"
+  server:
+    port: 8094

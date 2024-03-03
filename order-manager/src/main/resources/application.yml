@@ -5,7 +5,6 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
-
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
@@ -19,6 +18,31 @@ spring:
             readTimeout: 5000
             loggerLevel: full
             retryer: feign.Retryer.Default
+  kafka:
+    kafka:
+      bootstrap-servers: localhost:9092
+      consumer:
+        group-id: my-group-id
+        auto-offset-reset: earliest
+      producer:
+        retries: 3
+      listener:
+        ack-mode: manual_immediate
+      topics:
+        kitchen-response:
+          partitions: 3
+          replication-factor: 1
+          config:
+            cleanup.policy: delete
+            retention.ms: 604800000
+            segment.ms: 60000
+        order-message:
+          partitions: 3
+          replication-factor: 1
+          config:
+            cleanup.policy: delete
+            retention.ms: 604800000
+            segment.ms: 60000
 management:
   endpoints:
     web:

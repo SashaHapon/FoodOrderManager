@@ -3,6 +3,7 @@ package org.food.service;
 import org.food.api.repository.AccountRepository;
 import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
+import org.food.api.service.KitchenService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.exception.classes.NotFoundException;
@@ -15,8 +16,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -27,6 +30,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +44,8 @@ public class OrderServiceImplTests {
     private AccountRepository accountRepository;
     @Mock
     private MealRepository mealRepository;
+    @Mock
+    private KitchenService kitchenService;
     @InjectMocks
     private OrderServiceImpl orderService;
 
@@ -52,6 +59,7 @@ public class OrderServiceImplTests {
         OrderDto expectedOrderDtoOutput = new OrderDto();
         when(accountRepository.findById(1)).thenReturn(new Account());
         when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenReturn(expectedOrderDtoOutput);
+        doNothing().when(kitchenService).sendToKitchen(any(Order.class));
 
         OrderDto returnedOrderDto = orderService.createOrder(1, mealDtoList);
 
@@ -71,6 +79,7 @@ public class OrderServiceImplTests {
 
         when(accountRepository.findById(1)).thenReturn(account);
         when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenThrow(IllegalArgumentException.class);
+        doNothing().when(kitchenService).sendToKitchen(any(Order.class));
 
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> orderService.createOrder(id, mealDtoList));
