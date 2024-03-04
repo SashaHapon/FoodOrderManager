@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
@@ -39,6 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("h2")
 @Transactional
 @Rollback
+@EmbeddedKafka(partitions = 1,
+        topics = {
+                "kitchen-response",
+                "order-message" })
 public class OrderControllerIntegrationTests extends BaseTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/OrderControllerIntegrationTest";
 
@@ -48,6 +54,8 @@ public class OrderControllerIntegrationTests extends BaseTests {
     private ObjectMapper objectMapper;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private EmbeddedKafkaBroker embeddedKafka;
 
     @Test
     @WithMockUser

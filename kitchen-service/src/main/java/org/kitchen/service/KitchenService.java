@@ -18,19 +18,13 @@ public class KitchenService {
 
     private Integer time;
 
-    @KafkaListener(topics = "kitchen")
+    @KafkaListener(topics = "order-message")
     public void listen(OrderMessage kitchenRequest) {
         Optional<Integer> integer = kitchenRequest.getItemList().stream()
                 .map(OrderMessage.Item::getCookingTime)
                 .max(Comparator.naturalOrder());
         integer.ifPresent(value -> time = value);
 
-        template.send("kitchen", new KitchenResponse(kitchenRequest.getOrderId(), time));
-        //todo typemapping
-        //java config
+        template.send("kitchen-response", new KitchenResponse(kitchenRequest.getOrderId(), time));
     }
-
-
-
-    //todo application yml
 }

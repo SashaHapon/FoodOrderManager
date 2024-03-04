@@ -1,6 +1,7 @@
 package org.food.service;
 
 import lombok.RequiredArgsConstructor;
+import org.food.api.repository.OrderRepository;
 import org.food.api.service.KitchenService;
 import org.food.api.service.OrderService;
 import org.food.clients.kafka.service.ItemMapper;
@@ -16,9 +17,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public abstract class KitchenServiceImpl implements KitchenService {
+public class KitchenServiceImpl implements KitchenService {
 
-    private final OrderService orderService;
+    private final OrderRepository orderRepository;
 
     private final KafkaTemplate<Object, Object> template;
 
@@ -27,13 +28,13 @@ public abstract class KitchenServiceImpl implements KitchenService {
     public void sendToKitchen(Order order) {
         List<OrderMessage.Item> itemList = mapper.itemMapper(order.getMeals());
         OrderMessage orderMessage = new OrderMessage(order.getId(), itemList);
-        template.send("kitchen", order.getId(), order);
+        template.send("order-message", order.getId(), order);
     }
 
-    @KafkaListener(topics = "kitchenResponse")
+    @KafkaListener(topics = "kitchen-response")
     public void listen(KitchenResponse kitchenResponse) {
-        OrderDto orderDto = orderService.getOrder(kitchenResponse.getOrderId());
-        orderDto.setCookingTimeSum(kitchenResponse.getCookingTime());
-        orderService.updateOrder(orderDto);
+        Order order = orderRepository.findById(kitchenResponse.getOrderId());
+        order.setCookingTimeSum(kitchenResponse.getCookingTime());
+        orderRepository.update(order);
     }
 }

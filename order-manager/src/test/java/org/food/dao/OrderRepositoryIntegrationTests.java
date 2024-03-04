@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class OrderRepositoryIntegrationTests {
     private MealRepository mealRepository;
     @Autowired
     private JdbcDatabaseContainer<?> databaseContainer;
+
 
     @Test
     @DisplayName("New order must be created")

@@ -19,7 +19,6 @@ import org.food.model.Meal;
 import org.food.model.Order;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
-        Order order = new org.food.model.Order();
+        Order order = new Order();
         order.setAccount(accountRepository.findById(accountId));
         List<Meal> meals = mealDtoList.stream()
                 .map(mealDto -> mealRepository.findById(mealDto.getId()))
@@ -59,9 +58,9 @@ public class OrderServiceImpl implements OrderService {
 
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
-
-        kitchenService.sendToKitchen(order);
-        return modelMapper.map(orderRepository.create(order), OrderDto.class);
+        Order returnedOrder = orderRepository.create(order);
+        kitchenService.sendToKitchen(returnedOrder);
+        return modelMapper.map(returnedOrder, OrderDto.class);
     }
 
     @Transactional(readOnly = true)
