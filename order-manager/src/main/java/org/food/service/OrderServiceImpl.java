@@ -1,6 +1,5 @@
 package org.food.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.food.api.repository.AccountRepository;
@@ -11,7 +10,7 @@ import org.food.api.service.OrderService;
 import org.food.clients.feign.ReceiptClient;
 import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.clients.feign.dto.ReceiptResponse;
-import org.food.clients.feign.service.OrderToReceiptRequestMapper;
+import org.food.service.mapper.OrderToReceiptRequestMapper;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.dto.ReceiptDto;
@@ -60,11 +59,7 @@ public class OrderServiceImpl implements OrderService {
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
         Order returnedOrder = orderRepository.create(order);
-        try {
-            kitchenService.sendToKitchen(returnedOrder);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        kitchenService.sendToKitchen(returnedOrder);
         return modelMapper.map(returnedOrder, OrderDto.class);
     }
 

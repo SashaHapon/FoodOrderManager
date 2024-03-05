@@ -1,13 +1,13 @@
-package org.food.clients.kafka.service;
+package org.food.service.mapper;
 
 import org.food.dto.OrderMessage;
 import org.food.model.Meal;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 public class ItemMapper {
     public List<OrderMessage.Item> itemMapper(List<Meal> meals){
         List<OrderMessage.Item> items = new ArrayList<>();

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
@@ -25,12 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.kafka.test.utils.KafkaTestUtils.consumerProps;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -45,10 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("h2")
 @Transactional
 @Rollback
-@EmbeddedKafka(partitions = 1,
-        topics = {
-                "kitchen-response",
-                "order-message" })
+@EmbeddedKafka
 @Import(ContainerConfiguration.class)
 public class OrderControllerIntegrationTests extends BaseTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/OrderControllerIntegrationTest";
@@ -58,41 +52,18 @@ public class OrderControllerIntegrationTests extends BaseTests {
     private ObjectMapper objectMapper;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private EmbeddedKafkaBroker embeddedKafkaBroker;
 
     @Test
     @WithMockUser
     @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_createOrder/testdata.sql")
     public void should_createOrder() throws Exception {
-
-//        KitchenResponse response = new KitchenResponse();
-//        response.setOrderId(1);
-//        response.setCookingTime(20);
-//        String string = objectMapper.writeValueAsString(response);
-//
-//        Map<String, Object> configs = KafkaTestUtils.consumerProps("consumer", "false", embeddedKafkaBroker);
-//        Consumer<Integer, String> consumer = new DefaultKafkaConsumerFactory<>(configs, new IntegerDeserializer(), new StringDeserializer()).createConsumer();
-//        consumer.subscribe(singleton("order-message"));
-//
-//        Map<String, Object> configsProd = KafkaTestUtils.producerProps(embeddedKafkaBroker);
-//        Producer<Integer, String> producer = new DefaultKafkaProducerFactory<>(configsProd, new IntegerSerializer(), new StringSerializer()).createProducer();
-
-        MvcResult result = mockMvc.perform(post("/orders/").param("id", "1")
-                    .contentType(APPLICATION_JSON)
-                    .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_inputMealsDtoList.json")))
-            .andDo(print())
+        mockMvc.perform(post("/orders/").param("id", "1")
+                        .contentType(APPLICATION_JSON)
+                        .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_inputMealsDtoList.json")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_expectedJson.json")))
                 .andReturn();
-//            .andExpect(status().isOk())
-//            .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_expectedJson.json")))
-//            .andReturn();
-//        ConsumerRecord<Integer, String> singleRecord = KafkaTestUtils.getSingleRecord(consumer, "order-message", Duration.of(5, ChronoUnit.SECONDS));
-//
-//        producer.send(new ProducerRecord<>("kitchen-response", 1, string));
-//        producer.flush();
-//
-//        assertThat(singleRecord).isNotNull();
-        System.out.println(orderService.getOrder(1));
     }
 
     @Test
