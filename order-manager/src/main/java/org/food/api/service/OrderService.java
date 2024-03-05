@@ -1,5 +1,6 @@
 package org.food.api.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.dto.ReceiptDto;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList);
+    OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) throws JsonProcessingException;
 
     OrderDto getOrder(Integer orderId);
 

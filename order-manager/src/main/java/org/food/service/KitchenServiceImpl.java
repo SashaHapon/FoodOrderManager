@@ -1,6 +1,9 @@
 package org.food.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.food.api.repository.OrderRepository;
 import org.food.api.service.KitchenService;
 import org.food.api.service.OrderService;
@@ -21,20 +24,34 @@ public class KitchenServiceImpl implements KitchenService {
 
     private final OrderRepository orderRepository;
 
-    private final KafkaTemplate<Object, Object> template;
+    private final KafkaTemplate<Integer, String> template;
 
     private final ItemMapper mapper;
+
+    private final ObjectMapper objectMapper;
     @Override
     public void sendToKitchen(Order order) {
         List<OrderMessage.Item> itemList = mapper.itemMapper(order.getMeals());
         OrderMessage orderMessage = new OrderMessage(order.getId(), itemList);
-        template.send("order-message", order.getId(), order);
+        String mappedOrder;
+        try {
+            mappedOrder = objectMapper.writeValueAsString(order);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        template.send("order-message", order.getId(), mappedOrder);
     }
 
     @KafkaListener(topics = "kitchen-response")
-    public void listen(KitchenResponse kitchenResponse) {
-        Order order = orderRepository.findById(kitchenResponse.getOrderId());
-        order.setCookingTimeSum(kitchenResponse.getCookingTime());
+    public void listen(String kitchenResponse) {
+        KitchenResponse response;
+        try {
+             response = objectMapper.readValue(kitchenResponse, KitchenResponse.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        Order order = orderRepository.findById(response.getOrderId());
+        order.setCookingTimeSum(response.getCookingTime());
         orderRepository.update(order);
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.kafka.support.converter.JsonMessageConverter;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
 import org.springframework.util.backoff.FixedBackOff;
 
-@Configuration
+//@Configuration
 public class KafkaConfig {
 
     @Bean
