@@ -10,13 +10,13 @@ import org.food.api.service.OrderService;
 import org.food.clients.feign.ReceiptClient;
 import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.clients.feign.dto.ReceiptResponse;
-import org.food.service.mapper.OrderToReceiptRequestMapper;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.dto.ReceiptDto;
 import org.food.exception.classes.NotFoundException;
 import org.food.model.Meal;
 import org.food.model.Order;
+import org.food.service.mapper.OrderToReceiptRequestMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     private final KitchenService kitchenService;
 
     @Override
-    public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList){
+    public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
         Order order = new Order();
         order.setAccount(accountRepository.findById(accountId));

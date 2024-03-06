@@ -37,7 +37,6 @@ public class OrderRepositoryIntegrationTests {
     @Autowired
     private JdbcDatabaseContainer<?> databaseContainer;
 
-
     @Test
     @DisplayName("New order must be created")
     @Sql(TEST_DATA_FILE_PREFIX + "/should_create_new_Order/insert_data_for_order.sql")

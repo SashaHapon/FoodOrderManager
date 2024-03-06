@@ -51,7 +51,7 @@ public class OrderServiceImplTests {
 
     @Test
     @DisplayName("Return order after create")
-    public void should_returnOrder_whenTryToCreateOrder(){
+    public void should_returnOrder_whenTryToCreateOrder() {
 
         Account account = new Account();
         AccountDto accountDto = modelMapper.map(account, AccountDto.class);

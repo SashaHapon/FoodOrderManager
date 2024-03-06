@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 public class ItemMapper {
-    public List<OrderMessage.Item> itemMapper(List<Meal> meals){
+    public List<OrderMessage.Item> itemMapper(List<Meal> meals) {
         List<OrderMessage.Item> items = new ArrayList<>();
 
         for (Meal meal : meals) {
