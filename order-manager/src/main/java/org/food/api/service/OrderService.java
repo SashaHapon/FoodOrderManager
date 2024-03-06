@@ -1,6 +1,5 @@
 package org.food.api.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.dto.ReceiptDto;
@@ -20,6 +19,4 @@ public interface OrderService {
     OrderDto removeMeals(Integer orderId, List<MealDto> mealDtosToRemove);
 
     List<MealDto> getAllMeals(Integer orderId);
-
-    void updateOrder(OrderDto orderDto);
 }

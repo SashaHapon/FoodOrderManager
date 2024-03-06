@@ -130,17 +130,6 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(order.getMeals(), listType);
     }
 
-    @Override
-    public void updateOrder(OrderDto orderDto) {
-        Order managedOrder = orderRepository.findById(orderDto.getId());
-        Order order = modelMapper.map(orderDto, Order.class);
-
-        managedOrder.setMeals(order.getMeals());
-        managedOrder.setOrderSum(orderPriceSum(order.getMeals()));
-        managedOrder.setCookingTimeSum(order.getCookingTimeSum());
-        orderRepository.update(order);
-    }
-
     private int cookingTimeSum(List<Meal> mealList) {
 
         int cookingTimeSum = 0;
