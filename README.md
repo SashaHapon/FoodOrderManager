@@ -2,12 +2,16 @@
 
 ## Business Purpose of the Project:
 
-Food Order Manager is a web application designed to manage the food ordering process. The project provides a user-friendly platform for users, allowing them to view available dishes, place orders, and track their order history. And printing receipts.
+Food Order Manager is a web application designed to manage the food ordering process. 
+The project provides a user-friendly platform for users, allowing them to view available dishes,
+place orders, and track their order history, and printing receipts, 
+And calculating the time it takes to prepare the ordered dishes
 
 ## Services
 The project consists of the following services:
 - [Order manager](order-manager/README.md): Designed to manage the food ordering process.
 - [Receipt](receipt-service/README.md): Designed to manage the receipt printing process.
+- [Kitchen](kitchen-service/README.md): Designed to manage cooking time in the kitchen.
 
 ## Project Requirements
 
