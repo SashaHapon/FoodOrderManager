@@ -1,7 +1,10 @@
 # Order Manager
 
 ## Project Overview
-Order Manager is a web application designed to manage the food ordering process. The project provides a user-friendly platform for users, allowing them to view available dishes, place orders, and track their order history.
+Order Manager is a web application designed to manage the food ordering process.
+The project provides a user-friendly platform for users, allowing them to view available dishes, 
+place orders, and track their order history.  It also sends a request to the kitchen service
+to determine the time of the order.
 
 
 ## Technology Stack Used
@@ -10,6 +13,7 @@ Order Manager is a web application designed to manage the food ordering process.
 - **Spring Boot:** A framework for quickly creating applications in Java.
 - **Spring Data JPA:** Makes it easy to interact with your database using the Java Persistence API.
 - **Spring Security:** Provides application security, including authentication and authorization.
+- **Spring Kafka:** A framework for integrating with Apache Kafka.
 
 **Database:**
 - **MySQL:** Relational database for storing order and user information.
