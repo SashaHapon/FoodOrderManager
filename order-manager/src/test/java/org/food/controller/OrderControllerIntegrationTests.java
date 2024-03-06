@@ -6,13 +6,11 @@ import org.food.BaseTests;
 import org.food.api.service.OrderService;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
-import org.food.testconfig.ContainerConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
@@ -43,7 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Rollback
 @EmbeddedKafka
-@Import(ContainerConfiguration.class)
 public class OrderControllerIntegrationTests extends BaseTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/OrderControllerIntegrationTest";
     @Autowired
@@ -62,8 +59,7 @@ public class OrderControllerIntegrationTests extends BaseTests {
                         .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_inputMealsDtoList.json")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_expectedJson.json")))
-                .andReturn();
+                .andExpect(content().json(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_expectedJson.json")));
     }
 
     @Test

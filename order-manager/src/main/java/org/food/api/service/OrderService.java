@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) throws JsonProcessingException;
+    OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList);
 
     OrderDto getOrder(Integer orderId);
 

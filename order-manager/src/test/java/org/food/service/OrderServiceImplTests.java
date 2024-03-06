@@ -18,10 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -54,7 +52,7 @@ public class OrderServiceImplTests {
 
     @Test
     @DisplayName("Return order after create")
-    public void should_returnOrder_whenTryToCreateOrder() throws JsonProcessingException {
+    public void should_returnOrder_whenTryToCreateOrder(){
 
         Account account = new Account();
         AccountDto accountDto = modelMapper.map(account, AccountDto.class);

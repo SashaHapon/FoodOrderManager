@@ -40,7 +40,7 @@ public class OrderController {
                                 @Parameter(description = "Индентификатор аккаунта") Integer accountId,
                                 @RequestBody
                                 @Parameter(description = "Список блюд")
-                                List<MealDto> mealDtoList) throws JsonProcessingException {
+                                List<MealDto> mealDtoList) {
 
         return orderService.createOrder(accountId, mealDtoList);
     }

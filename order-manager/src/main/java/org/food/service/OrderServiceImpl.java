@@ -132,8 +132,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void updateOrder(OrderDto orderDto) {
-
+        Order managedOrder = orderRepository.findById(orderDto.getId());
         Order order = modelMapper.map(orderDto, Order.class);
+
+        managedOrder.setMeals(order.getMeals());
+        managedOrder.setOrderSum(orderPriceSum(order.getMeals()));
+        managedOrder.setCookingTimeSum(order.getCookingTimeSum());
         orderRepository.update(order);
     }
 
