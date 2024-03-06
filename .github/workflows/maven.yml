@@ -20,20 +20,23 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '17'
           cache: maven
       - name: Make maven wrapper script executable for Order Manager
         run: chmod +x ./order-manager/mvnw
-      - name: Build and run tests for Order Manager
+      - name: Build order manager
         run: ./order-manager/mvnw -f order-manager/pom.xml package
-      - name: Publish Order Manager test reports
-        if: success() || failure()
-        uses: scacap/action-surefire-report@v1
 
-      - name: Make maven wrapper script executable for Receipt
+      - name: Make maven wrapper script executable for Receipt Service
         run: chmod +x ./receipt-service/mvnw
-      - name: Build receipt project
+      - name: Build receipt service
         run: ./receipt-service/mvnw -f receipt-service/pom.xml package
+
+      - name: Make maven wrapper script executable for Kitchen Service
+        run: chmod +x ./kitchen-service/mvnw
+      - name: Build kitchen service
+        run: ./kitchen-service/mvnw -f kitchen-service/pom.xml package
+
       - name: Publish test reports
         if: success() || failure()
         uses: scacap/action-surefire-report@v1

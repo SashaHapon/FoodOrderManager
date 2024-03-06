@@ -7,6 +7,6 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-EXPOSE 8090
-COPY --from=builder /app/target/receipt-service-1.0-SNAPSHOT.jar receipt.jar
-ENTRYPOINT ["java", "-jar", "/app/receipt.jar"]
+EXPOSE 8070
+COPY --from=builder /app/target/kitchen-service-1.0-SNAPSHOT.jar kitchen-service.jar
+ENTRYPOINT ["java", "-jar", "/app/kitchen-service.jar"]

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
@@ -39,9 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("h2")
 @Transactional
 @Rollback
+@EmbeddedKafka
 public class OrderControllerIntegrationTests extends BaseTests {
     private static final String TEST_DATA_FILE_PREFIX = "classpath:data/org/food/controller/OrderControllerIntegrationTest";
-
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -53,7 +54,6 @@ public class OrderControllerIntegrationTests extends BaseTests {
     @WithMockUser
     @Sql("classpath:data/org/food/controller/OrderControllerIntegrationTest/should_createOrder/testdata.sql")
     public void should_createOrder() throws Exception {
-
         mockMvc.perform(post("/orders/").param("id", "1")
                         .contentType(APPLICATION_JSON)
                         .content(getJsonAsString(TEST_DATA_FILE_PREFIX + "/should_createOrder/createOrder_inputMealsDtoList.json")))

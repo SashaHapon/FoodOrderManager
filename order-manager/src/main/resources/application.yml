@@ -1,11 +1,12 @@
 spring:
+  application:
+    name: order-manager
   profiles:
     active: "postgres"
   jpa:
     hibernate:
       ddl-auto: validate
     show-sql: true
-
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
@@ -19,6 +20,32 @@ spring:
             readTimeout: 5000
             loggerLevel: full
             retryer: feign.Retryer.Default
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost}:29092
+    consumer:
+      group-id: ${spring.application.name}
+      key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: kitchen-response:org.food.dto.KitchenResponse
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: order-message:org.food.dto.OrderMessage
+
+order-manager:
+  kafka:
+    topic:
+      in: kitchen-response
+      out: order-message
+
 management:
   endpoints:
     web:

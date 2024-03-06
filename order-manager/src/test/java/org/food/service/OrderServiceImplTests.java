@@ -3,6 +3,8 @@ package org.food.service;
 import org.food.api.repository.AccountRepository;
 import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
+import org.food.api.service.KitchenService;
+import org.food.dto.AccountDto;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.exception.classes.NotFoundException;
@@ -27,6 +29,9 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +44,8 @@ public class OrderServiceImplTests {
     private AccountRepository accountRepository;
     @Mock
     private MealRepository mealRepository;
+    @Mock
+    private KitchenService kitchenService;
     @InjectMocks
     private OrderServiceImpl orderService;
 
@@ -46,12 +53,21 @@ public class OrderServiceImplTests {
     @DisplayName("Return order after create")
     public void should_returnOrder_whenTryToCreateOrder() {
 
-        Order order = new Order();
+        Account account = new Account();
+        AccountDto accountDto = modelMapper.map(account, AccountDto.class);
         List<Meal> mealList = new ArrayList<>();
         List<MealDto> mealDtoList = new ArrayList<>();
         OrderDto expectedOrderDtoOutput = new OrderDto();
-        when(accountRepository.findById(1)).thenReturn(new Account());
-        when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenReturn(expectedOrderDtoOutput);
+        expectedOrderDtoOutput.setAccount(accountDto);
+        Order returnedOrder = new Order();
+        returnedOrder.setAccount(account);
+
+
+        when(accountRepository.findById(1)).thenReturn(account);
+        when(orderRepository.create(any(Order.class))).thenReturn(returnedOrder);
+        doNothing().when(kitchenService).sendToKitchen(returnedOrder);
+        when(modelMapper.map(returnedOrder, OrderDto.class)).thenReturn(expectedOrderDtoOutput);
+
 
         OrderDto returnedOrderDto = orderService.createOrder(1, mealDtoList);
 
@@ -63,14 +79,13 @@ public class OrderServiceImplTests {
     public void should_throwException_whenTryToCreateOrder() {
 
         Account account = new Account();
-        Order order = new Order();
 
         Integer id = 1;
         List<Meal> mealList = new ArrayList<>(3);
         List<MealDto> mealDtoList = new ArrayList<>(3);
 
-        when(accountRepository.findById(1)).thenReturn(account);
-        when(modelMapper.map(orderRepository.create(order), OrderDto.class)).thenThrow(IllegalArgumentException.class);
+        when(accountRepository.findById(anyInt())).thenReturn(account);
+        when(orderRepository.create(any(Order.class))).thenThrow(IllegalArgumentException.class);
 
         assertThatExceptionOfType(IllegalArgumentException.class)
                 .isThrownBy(() -> orderService.createOrder(id, mealDtoList));

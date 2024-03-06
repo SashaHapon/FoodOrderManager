@@ -1,15 +1,15 @@
-package org.food.clients.feign.service;
+package org.food.service.mapper;
 
 import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.clients.feign.dto.ReceiptRequest.Item;
 import org.food.model.Meal;
 import org.food.model.Order;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 public class OrderToReceiptRequestMapper {
 
     public ReceiptRequest map(Order order) {

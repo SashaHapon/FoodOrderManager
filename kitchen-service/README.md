@@ -1,24 +1,18 @@
-# Receipt service
+# Kitchen service
 
 ## Business Purpose of the Project:
 
-Receipt service is a web application designed to manage the process of generating receipts for orders.
+Kitchen service is a web application designed to manage the process of calculating cooking times.
 
 ## Technology Stack Used
 
 **Backend technologies (Java/Spring):**
 
 - **Spring Boot:** A framework for quickly creating applications in Java.
-
-**Frontend technologies:**
-
-- **Thymeleaf:** Allows you to create animated websites using HTML, XML or other web markup formats. It allows you to
-  make changes to Thymeleaf expressions directly in the HTML code, making it easier to work with data and logic in web
-  applications.
+- **Spring Kafka:** A framework for integrating with Apache Kafka.
 
 **Tools and Libraries:**
 
-- **ModelMapper:** For simple mapping between objects.
 - **Lombok:** Simplifies the creation of Java classes by reducing boilerplate code.
 
 **Infrastructure:**
@@ -29,7 +23,7 @@ Receipt service is a web application designed to manage the process of generatin
 
 **Functional requirements:**
 
-- Generating reports on completed orders.
+- Calculation of cooking time.
 
 ### Prerequisites:
 

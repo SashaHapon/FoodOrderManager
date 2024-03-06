@@ -5,16 +5,18 @@ services:
     environment:
       - "POSTGRES_HOST=postgres"
       - "RECEIPT_SERVICE_HOST=receipt"
+      - "KAFKA_HOST=kafka"
     build:
       context: /order-manager
       dockerfile: Dockerfile
-
     depends_on:
       - postgres
+      - kafka
     networks:
       - common-network
     ports:
       - 8080:8080
+
   receipt:
     build:
       context: /receipt-service
@@ -25,6 +27,47 @@ services:
       - common-network
     ports:
       - 8090:8090
+
+  kitchen:
+    environment:
+      - "KAFKA_HOST=kafka"
+    build:
+      context: /kitchen-service
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka
+    networks:
+      - common-network
+    ports:
+      - 8070:8070
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - common-network
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    networks:
+      - common-network
+    hostname: kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
   postgres:
     image: postgres:latest
     restart: always
@@ -38,6 +81,7 @@ services:
       - common-network
     volumes:
       - postgres:/var/lib/postgresql/data
+
 volumes:
   postgres:
 

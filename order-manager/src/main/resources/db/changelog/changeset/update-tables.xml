@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="1342" author="Alexandr Hapon">
-        <renameTable  catalogName="mydb"
-                      newTableName="orders"
-                      oldTableName="order"
-                      schemaName="public"/>
+        <renameTable catalogName="mydb"
+                     newTableName="orders"
+                     oldTableName="order"
+                     schemaName="public"/>
     </changeSet>
 
 
     <changeSet author="Alexandr Hapon" id="5" dbms="mysql">
         <dropForeignKeyConstraint
-                                   baseTableName="order_meals"
-                                   constraintName="fk_order_meal_order"/>
-        <sql> ALTER TABLE orders MODIFY COLUMN id INT AUTO_INCREMENT;</sql>
+                baseTableName="order_meals"
+                constraintName="fk_order_meal_order"/>
+        <sql>ALTER TABLE orders MODIFY COLUMN id INT AUTO_INCREMENT;</sql>
         <addForeignKeyConstraint baseTableName="order_meals"
                                  baseColumnNames="order_id"
                                  constraintName="fk_order_meal_order"

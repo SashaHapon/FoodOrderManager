@@ -1,20 +1,22 @@
 package org.food.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.food.api.repository.AccountRepository;
 import org.food.api.repository.MealRepository;
 import org.food.api.repository.OrderRepository;
+import org.food.api.service.KitchenService;
 import org.food.api.service.OrderService;
 import org.food.clients.feign.ReceiptClient;
 import org.food.clients.feign.dto.ReceiptRequest;
 import org.food.clients.feign.dto.ReceiptResponse;
-import org.food.clients.feign.service.OrderToReceiptRequestMapper;
 import org.food.dto.MealDto;
 import org.food.dto.OrderDto;
 import org.food.dto.ReceiptDto;
 import org.food.exception.classes.NotFoundException;
 import org.food.model.Meal;
 import org.food.model.Order;
+import org.food.service.mapper.OrderToReceiptRequestMapper;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final ModelMapper modelMapper;
@@ -42,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderToReceiptRequestMapper customMapper;
 
+    private final KitchenService kitchenService;
+
     @Override
     public OrderDto createOrder(Integer accountId, List<MealDto> mealDtoList) {
 
@@ -53,9 +58,9 @@ public class OrderServiceImpl implements OrderService {
 
         order.setMeals(meals);
         order.setOrderSum(orderPriceSum(meals));
-        order.setCookingTimeSum(cookingTimeSum(meals));
-
-        return modelMapper.map(orderRepository.create(order), OrderDto.class);
+        Order returnedOrder = orderRepository.create(order);
+        kitchenService.sendToKitchen(returnedOrder);
+        return modelMapper.map(returnedOrder, OrderDto.class);
     }
 
     @Transactional(readOnly = true)
