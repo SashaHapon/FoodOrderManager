@@ -1,0 +1,16 @@
+# Chart.yaml
+apiVersion: v2 # Версия API Helm. v2 — актуальная для Helm 3.
+name: my-chart  # Название вашего чарта.
+description: A Helm chart for deploying my application # Краткое описание.
+type: application # Тип чарта: application (по умолчанию) или library.
+
+# Версии
+version: 1.0.0    # Версия самого чарта. Должна быть обновлена при изменении содержимого чарта.
+appVersion: 1.0.0 # Версия приложения, которое разворачивается этим чартом.
+
+# Автор и контактная информация
+maintainers:
+  - name: Alex      # Имя автора чарта.
+    email: alex@example.com # Email автора чарта.
+
+
